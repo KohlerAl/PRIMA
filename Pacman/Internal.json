@@ -17,6 +17,40 @@
       }
     }
   },
+  "MeshSphere|2022-03-22T15:52:44.268Z|06100": {
+    "ƒ.MeshSphere": {
+      "idResource": "MeshSphere|2022-03-22T15:52:44.268Z|06100",
+      "name": "MeshSphere",
+      "type": "MeshSphere",
+      "shape": {
+        "ƒ.Vector2": [
+          "[0, 0.5]",
+          "[0.19134171307086945, 0.4619397521018982]",
+          "[0.3535533845424652, 0.3535533845424652]",
+          "[0.4619397521018982, 0.19134171307086945]",
+          "[0.5, 0]",
+          "[0.4619397521018982, -0.19134171307086945]",
+          "[0.3535533845424652, -0.3535533845424652]",
+          "[0.19134171307086945, -0.4619397521018982]",
+          "[0, -0.5]"
+        ]
+      },
+      "longitudes": 8,
+      "latitudes": 8
+    }
+  },
+  "Material|2022-03-22T15:52:55.585Z|21197": {
+    "ƒ.Material": {
+      "name": "ShaderLit",
+      "idResource": "Material|2022-03-22T15:52:55.585Z|21197",
+      "shader": "ShaderLit",
+      "coat": {
+        "ƒ.CoatColored": {
+          "color": "[0.9803921568627451, 0.9490196078431372, 0.0392156862745098, 1]"
+        }
+      }
+    }
+  },
   "Graph|2022-03-17T14:08:03.670Z|98238": {
     "ƒ.Graph": {
       "name": "Game",
@@ -59,7 +93,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -115,7 +149,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -171,7 +205,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -227,7 +261,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -283,7 +317,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -339,7 +373,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -395,7 +429,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -451,7 +485,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -507,7 +541,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -563,7 +597,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -643,7 +677,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -699,7 +733,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -755,7 +789,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -811,7 +845,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -867,7 +901,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -923,7 +957,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -979,7 +1013,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1035,7 +1069,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1091,7 +1125,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1147,7 +1181,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1227,7 +1261,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1283,7 +1317,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1339,7 +1373,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1395,7 +1429,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1451,7 +1485,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1507,7 +1541,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1563,7 +1597,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1619,7 +1653,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1675,7 +1709,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1731,7 +1765,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1811,7 +1845,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1867,7 +1901,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1923,7 +1957,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -1979,7 +2013,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2035,7 +2069,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2091,7 +2125,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2147,7 +2181,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2203,7 +2237,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2259,7 +2293,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2315,7 +2349,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2395,7 +2429,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2451,7 +2485,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2507,7 +2541,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2563,7 +2597,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2619,7 +2653,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2675,7 +2709,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2731,7 +2765,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2787,7 +2821,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2843,7 +2877,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2899,7 +2933,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -2979,7 +3013,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3035,7 +3069,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3091,7 +3125,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3147,7 +3181,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3203,7 +3237,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3259,7 +3293,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3315,7 +3349,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3371,7 +3405,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3427,7 +3461,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3483,7 +3517,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3563,7 +3597,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3619,7 +3653,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3675,7 +3709,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3731,7 +3765,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3787,7 +3821,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3843,7 +3877,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3899,7 +3933,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -3955,7 +3989,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4011,7 +4045,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4067,7 +4101,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4147,7 +4181,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4203,7 +4237,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3568627450980392, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4259,7 +4293,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4315,7 +4349,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3568627450980392, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4371,7 +4405,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4427,7 +4461,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4483,7 +4517,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4539,7 +4573,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4595,7 +4629,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4651,7 +4685,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4731,7 +4765,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4787,7 +4821,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3568627450980392, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4843,7 +4877,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4899,7 +4933,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -4955,7 +4989,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5011,7 +5045,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5067,7 +5101,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5123,7 +5157,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5179,7 +5213,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5235,7 +5269,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5315,7 +5349,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5371,7 +5405,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5427,7 +5461,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5483,7 +5517,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5539,7 +5573,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5595,7 +5629,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.043137254901960784, 0.13725490196078433, 0.3176470588235294, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5651,7 +5685,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5707,7 +5741,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5763,7 +5797,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[0.10196078431372549, 0.4549019607843137, 0.43137254901960786, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5819,7 +5853,7 @@
                             {
                               "ƒ.ComponentMaterial": {
                                 "sortForAlpha": false,
-                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrPrimary": "[0.1803921568627451, 0.1803921568627451, 0.1803921568627451, 1]",
                                 "clrSecondary": "[1, 1, 1, 1]",
                                 "pivot": {
                                   "translation": "[0, 0]",
@@ -5855,6 +5889,62 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "ƒ.Node": {
+            "name": "Pacman",
+            "active": true,
+            "components": {
+              "ComponentMesh": [
+                {
+                  "ƒ.ComponentMesh": {
+                    "idMesh": "MeshSphere|2022-03-22T15:52:44.268Z|06100",
+                    "pivot": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[0.7999999523162842, 0.7999999523162842, 0.7999999523162842]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentMaterial": [
+                {
+                  "ƒ.ComponentMaterial": {
+                    "sortForAlpha": false,
+                    "clrPrimary": "[1, 0.7647058823529411, 0.3607843137254902, 1]",
+                    "clrSecondary": "[1, 1, 1, 1]",
+                    "pivot": {
+                      "translation": "[0, 0]",
+                      "rotation": 0,
+                      "scaling": "[1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    },
+                    "idMaterial": "Material|2022-03-22T15:52:55.585Z|21197"
+                  }
+                }
+              ],
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ]
+            },
+            "children": []
           }
         }
       ],
