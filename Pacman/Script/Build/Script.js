@@ -56,18 +56,44 @@ var Script;
         // ƒ.Physics.simulate();  // if physics is included and used
         // Check if pacman is on the middle of the one tile if yes, he can walk in the direction of the pressed key
         if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_RIGHT, ƒ.KEYBOARD_CODE.D]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05) {
-            speed.set(1 / 60, 0, 0);
-            let ok = checkTile(0, 0);
-            console.log(ok);
+            let x = Math.round(pacman.mtxLocal.translation.x + 0.515);
+            let y = Math.round(pacman.mtxLocal.translation.y);
+            if (checkTile(x, y) == true) {
+                speed.set(1 / 60, 0, 0);
+            }
+            else {
+                speed.set(0, speed.y, 0);
+            }
         }
-        else if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_LEFT, ƒ.KEYBOARD_CODE.A]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05) {
-            speed.set(-1 / 60, 0, 0);
+        if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_LEFT, ƒ.KEYBOARD_CODE.A]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05) {
+            let x = Math.round(pacman.mtxLocal.translation.x - 0.515);
+            let y = Math.round(pacman.mtxLocal.translation.y);
+            if (checkTile(x, y) == true) {
+                speed.set(-1 / 60, 0, 0);
+            }
+            else {
+                speed.set(0, speed.y, 0);
+            }
         }
-        else if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_UP, ƒ.KEYBOARD_CODE.W]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05) {
-            speed.set(0, 1 / 60, 0);
+        if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_UP, ƒ.KEYBOARD_CODE.W]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05) {
+            let x = Math.round(pacman.mtxLocal.translation.x);
+            let y = Math.round(pacman.mtxLocal.translation.y + 0.515);
+            if (checkTile(x, y) == true) {
+                speed.set(0, 1 / 60, 0);
+            }
+            else {
+                speed.set(speed.x, 0, 0);
+            }
         }
-        else if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_DOWN, ƒ.KEYBOARD_CODE.S]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05) {
-            speed.set(0, -1 / 60, 0);
+        if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_DOWN, ƒ.KEYBOARD_CODE.S]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05) {
+            let x = Math.round(pacman.mtxLocal.translation.x);
+            let y = Math.round(pacman.mtxLocal.translation.y - 0.515);
+            if (checkTile(x, y) == true) {
+                speed.set(0, -1 / 60, 0);
+            }
+            else {
+                speed.set(speed.x, 0, 0);
+            }
         }
         pacman.mtxLocal.translate(speed);
         viewport.draw();
@@ -78,21 +104,23 @@ var Script;
         let parent = graph.getChildrenByName("Grid")[0];
         //get the row which pacman is about to enter (y-coordinate)
         let row = parent.getChildren()[_y];
-        //get the tile via the x-coordinate
-        let tile = row.getChild(_x);
-        //get the material and the color of the tile 
-        let material = tile.getComponent(ƒ.ComponentMaterial);
-        let color = material.clrPrimary;
-        let colorR = +color.r.toFixed(2);
-        let colorG = +color.g.toFixed(2);
-        let colorB = +color.b.toFixed(2);
-        //!!!! change here if color of walking tiles is changed !!!!
-        if (colorR == 0.18 && colorG == 0.18 && colorB == 0.18) {
-            return true;
+        if (row) {
+            //get the tile via the x-coordinate
+            let tile = row.getChild(_x);
+            if (tile) {
+                //get the material and the color of the tile 
+                let material = tile.getComponent(ƒ.ComponentMaterial);
+                let color = material.clrPrimary;
+                let colorR = +color.r.toFixed(2);
+                let colorG = +color.g.toFixed(2);
+                let colorB = +color.b.toFixed(2);
+                //!!!! change here if color of walking tiles is changed !!!!
+                if (colorR == 0.18 && colorG == 0.18 && colorB == 0.18) {
+                    return true;
+                }
+            }
         }
-        else {
-            return false;
-        }
+        return false;
     }
 })(Script || (Script = {}));
 //# sourceMappingURL=Script.js.map
