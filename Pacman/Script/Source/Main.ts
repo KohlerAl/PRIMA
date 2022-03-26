@@ -29,7 +29,7 @@ namespace Script {
         speed.set(1 / 60, 0, 0);
       }
       else {
-        speed.set(0, speed.y, 0);
+        speed.set(0, 0, 0);
       }
     }
 
@@ -40,7 +40,7 @@ namespace Script {
         speed.set(- 1 / 60, 0, 0);
       }
       else {
-        speed.set(0, speed.y, 0);
+        speed.set(0, 0, 0);
       }
     }
 
@@ -51,7 +51,7 @@ namespace Script {
         speed.set(0, 1 / 60, 0);
       }
       else {
-        speed.set(speed.x, 0, 0);
+        speed.set(0, 0, 0);
       }
     }
 
@@ -62,11 +62,11 @@ namespace Script {
         speed.set(0, -1 / 60, 0);
       }
       else {
-        speed.set(speed.x, 0, 0);
+        speed.set(0, 0, 0);
       }
     }
 
-
+    console.log(speed.x, speed.y); 
     pacman.mtxLocal.translate(speed);
     viewport.draw();
     ƒ.AudioManager.default.update();

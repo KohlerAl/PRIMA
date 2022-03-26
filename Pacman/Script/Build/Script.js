@@ -62,7 +62,7 @@ var Script;
                 speed.set(1 / 60, 0, 0);
             }
             else {
-                speed.set(0, speed.y, 0);
+                speed.set(0, 0, 0);
             }
         }
         if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_LEFT, ƒ.KEYBOARD_CODE.A]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05) {
@@ -72,7 +72,7 @@ var Script;
                 speed.set(-1 / 60, 0, 0);
             }
             else {
-                speed.set(0, speed.y, 0);
+                speed.set(0, 0, 0);
             }
         }
         if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_UP, ƒ.KEYBOARD_CODE.W]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05) {
@@ -82,7 +82,7 @@ var Script;
                 speed.set(0, 1 / 60, 0);
             }
             else {
-                speed.set(speed.x, 0, 0);
+                speed.set(0, 0, 0);
             }
         }
         if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_DOWN, ƒ.KEYBOARD_CODE.S]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05) {
@@ -92,9 +92,10 @@ var Script;
                 speed.set(0, -1 / 60, 0);
             }
             else {
-                speed.set(speed.x, 0, 0);
+                speed.set(0, 0, 0);
             }
         }
+        console.log(speed.x, speed.y);
         pacman.mtxLocal.translate(speed);
         viewport.draw();
         ƒ.AudioManager.default.update();
