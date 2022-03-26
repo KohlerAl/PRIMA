@@ -23,50 +23,49 @@ namespace Script {
 
     // Check if pacman is on the middle of the one tile if yes, he can walk in the direction of the pressed key
     if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_RIGHT, ƒ.KEYBOARD_CODE.D]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05) {
-      let x: number = Math.round(pacman.mtxLocal.translation.x + 0.515);
-      let y: number = Math.round(pacman.mtxLocal.translation.y);
-      if (checkTile(x, y) == true) {
-        speed.set(1 / 60, 0, 0);
-      }
-      else {
-        speed.set(0, 0, 0);
-      }
+      speed.set(1 / 60, 0, 0);
     }
 
     if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_LEFT, ƒ.KEYBOARD_CODE.A]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05) {
-      let x: number = Math.round(pacman.mtxLocal.translation.x - 0.515);
-      let y: number = Math.round(pacman.mtxLocal.translation.y);
-      if (checkTile(x, y) == true) {
-        speed.set(- 1 / 60, 0, 0);
-      }
-      else {
-        speed.set(0, 0, 0);
-      }
+      speed.set(- 1 / 60, 0, 0);
     }
 
     if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_UP, ƒ.KEYBOARD_CODE.W]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05) {
-      let x: number = Math.round(pacman.mtxLocal.translation.x);
-      let y: number = Math.round(pacman.mtxLocal.translation.y + 0.515);
-      if (checkTile(x, y) == true) {
-        speed.set(0, 1 / 60, 0);
-      }
-      else {
-        speed.set(0, 0, 0);
-      }
+      speed.set(0, 1 / 60, 0);
     }
 
     if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_DOWN, ƒ.KEYBOARD_CODE.S]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05) {
-      let x: number = Math.round(pacman.mtxLocal.translation.x);
-      let y: number = Math.round(pacman.mtxLocal.translation.y - 0.515);
-      if (checkTile(x, y) == true) {
-        speed.set(0, -1 / 60, 0);
-      }
-      else {
-        speed.set(0, 0, 0);
-      }
+      speed.set(0, -1 / 60, 0);
     }
 
-    console.log(speed.x, speed.y); 
+    if (Math.sign(speed.x) == 1) {
+      let x: number = Math.round(pacman.mtxLocal.translation.x + 0.515);
+      let y: number = Math.round(pacman.mtxLocal.translation.y);
+      if (checkTile(x, y) == false) {
+        speed.set(0, speed.y, 0);
+      }
+    }
+    if (Math.sign(speed.x) == -1) {
+      let x: number = Math.round(pacman.mtxLocal.translation.x - 0.515);
+      let y: number = Math.round(pacman.mtxLocal.translation.y);
+      if (checkTile(x, y) == false) {
+        speed.set(0, speed.y, 0);
+      }
+    }
+    if (Math.sign(speed.y) == 1) {
+      let x: number = Math.round(pacman.mtxLocal.translation.x);
+      let y: number = Math.round(pacman.mtxLocal.translation.y + 0.515);
+      if (checkTile(x, y) == false) {
+        speed.set(speed.x, 0, 0);
+      }
+    }
+    if (Math.sign(speed.y) == -1) {
+      let x: number = Math.round(pacman.mtxLocal.translation.x);
+      let y: number = Math.round(pacman.mtxLocal.translation.y - 0.515);
+      if (checkTile(x, y) == false) {
+        speed.set(speed.x, 0, 0);
+      }
+    }
     pacman.mtxLocal.translate(speed);
     viewport.draw();
     ƒ.AudioManager.default.update();
