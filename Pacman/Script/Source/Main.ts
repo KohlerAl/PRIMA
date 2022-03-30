@@ -7,12 +7,18 @@ namespace Script {
   let speed: ƒ.Vector3 = new ƒ.Vector3(0, 0, 0);
   let graph: ƒ.Node;
 
+
+
   document.addEventListener("interactiveViewportStarted", <EventListener>start);
 
   function start(_event: CustomEvent): void {
     viewport = _event.detail;
     graph = viewport.getBranch();
     pacman = graph.getChildrenByName("Pacman")[0];
+    
+    
+    viewport.camera.mtxPivot.translate(new ƒ.Vector3(2.5, 2.5, 15));
+    viewport.camera.mtxPivot.rotateY(180);
 
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
     ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a

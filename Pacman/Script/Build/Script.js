@@ -49,6 +49,8 @@ var Script;
         viewport = _event.detail;
         graph = viewport.getBranch();
         pacman = graph.getChildrenByName("Pacman")[0];
+        viewport.camera.mtxPivot.translate(new ƒ.Vector3(2.5, 2.5, 15));
+        viewport.camera.mtxPivot.rotateY(180);
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
