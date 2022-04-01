@@ -3,13 +3,57 @@ namespace Script {
   ƒ.Debug.info("Main Program Template running!");
 
   let viewport: ƒ.Viewport;
+  let dialog: HTMLDialogElement;
+
   let pacman: ƒ.Node;
   let speed: ƒ.Vector3 = new ƒ.Vector3(0, 0, 0);
   let graph: ƒ.Node;
   let chomp: ƒ.ComponentAudio;
 
+  window.addEventListener("load", handleLoad);
   document.addEventListener("interactiveViewportStarted", <EventListener>start);
 
+  function handleLoad(_event: Event): void {
+    console.log("Hello");
+    dialog = document.querySelector("dialog");
+    dialog.querySelector("h1").textContent = document.title;
+    dialog.addEventListener("click", function (_event: Event): void {
+      // @ts-ignore until HTMLDialog is implemented by all browsers and available in dom.d.ts
+      dialog.close();
+      startInteractiveViewport();
+    });
+    // @ts-ignore
+    dialog.showModal();
+  }
+
+  async function startInteractiveViewport(): Promise<void> {
+    await ƒ.Project.loadResourcesFromHTML();
+    ƒ.Debug.log("Project:", ƒ.Project.resources);
+    let graph: ƒ.Graph = <ƒ.Graph>ƒ.Project.resources["Graph|2022-03-17T14:08:03.670Z|98238"];
+    ƒ.Debug.log("Graph:", graph);
+    if (!graph) {
+      alert(
+        "Nothing to render. Create a graph with at least a mesh, material and probably some light"
+      );
+      return;
+    }
+    let cmpCamera: ƒ.ComponentCamera = new ƒ.ComponentCamera();
+    let canvas: HTMLCanvasElement = document.querySelector("canvas");
+    let viewport: ƒ.Viewport = new ƒ.Viewport();
+    viewport.initialize("InteractiveViewport", graph, cmpCamera, canvas);
+    ƒ.Debug.log("Viewport:", viewport);
+
+    viewport.draw();
+    canvas.dispatchEvent(
+      new CustomEvent("interactiveViewportStarted", {
+        bubbles: true,
+        detail: viewport
+      })
+    );
+  }
+
+
+  
   function start(_event: CustomEvent): void {
     viewport = _event.detail;
     graph = viewport.getBranch();
@@ -41,7 +85,7 @@ namespace Script {
     if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_DOWN, ƒ.KEYBOARD_CODE.S]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05)
       speed.set(0, -1 / 60, 0);
 
-    checkDirection(speed); 
+    checkDirection(speed);
 
     pacman.mtxLocal.translate(speed);
     viewport.draw();

@@ -41,11 +41,45 @@ var Script;
     var ƒ = FudgeCore;
     ƒ.Debug.info("Main Program Template running!");
     let viewport;
+    let dialog;
     let pacman;
     let speed = new ƒ.Vector3(0, 0, 0);
     let graph;
     let chomp;
+    window.addEventListener("load", handleLoad);
     document.addEventListener("interactiveViewportStarted", start);
+    function handleLoad(_event) {
+        console.log("Hello");
+        dialog = document.querySelector("dialog");
+        dialog.querySelector("h1").textContent = document.title;
+        dialog.addEventListener("click", function (_event) {
+            // @ts-ignore until HTMLDialog is implemented by all browsers and available in dom.d.ts
+            dialog.close();
+            startInteractiveViewport();
+        });
+        // @ts-ignore
+        dialog.showModal();
+    }
+    async function startInteractiveViewport() {
+        await ƒ.Project.loadResourcesFromHTML();
+        ƒ.Debug.log("Project:", ƒ.Project.resources);
+        let graph = ƒ.Project.resources["Graph|2022-03-17T14:08:03.670Z|98238"];
+        ƒ.Debug.log("Graph:", graph);
+        if (!graph) {
+            alert("Nothing to render. Create a graph with at least a mesh, material and probably some light");
+            return;
+        }
+        let cmpCamera = new ƒ.ComponentCamera();
+        let canvas = document.querySelector("canvas");
+        let viewport = new ƒ.Viewport();
+        viewport.initialize("InteractiveViewport", graph, cmpCamera, canvas);
+        ƒ.Debug.log("Viewport:", viewport);
+        viewport.draw();
+        canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", {
+            bubbles: true,
+            detail: viewport
+        }));
+    }
     function start(_event) {
         viewport = _event.detail;
         graph = viewport.getBranch();
