@@ -5946,10 +5946,62 @@
             },
             "children": []
           }
+        },
+        {
+          "ƒ.Node": {
+            "name": "Sound",
+            "active": true,
+            "components": {
+              "ComponentAudioListener": [
+                {
+                  "ƒ.ComponentAudioListener": {
+                    "active": true
+                  }
+                }
+              ],
+              "ComponentAudio": [
+                {
+                  "ƒ.ComponentAudio": {
+                    "active": true,
+                    "idResource": "Audio|2022-03-31T12:47:40.633Z|83667",
+                    "playing": true,
+                    "loop": false,
+                    "volume": 1
+                  }
+                },
+                {
+                  "ƒ.ComponentAudio": {
+                    "active": true,
+                    "idResource": "Audio|2022-03-31T12:46:38.700Z|37783",
+                    "playing": false,
+                    "loop": false,
+                    "volume": 1
+                  }
+                }
+              ]
+            },
+            "children": []
+          }
         }
       ],
       "idResource": "Graph|2022-03-17T14:08:03.670Z|98238",
       "type": "Graph"
+    }
+  },
+  "Audio|2022-03-31T12:46:38.700Z|37783": {
+    "ƒ.Audio": {
+      "url": "Sounds\\pacman_chomp.wav",
+      "idResource": "Audio|2022-03-31T12:46:38.700Z|37783",
+      "name": "chomp.wav",
+      "type": "Audio"
+    }
+  },
+  "Audio|2022-03-31T12:47:40.633Z|83667": {
+    "ƒ.Audio": {
+      "url": "Sounds\\pacman_beginning.wav",
+      "idResource": "Audio|2022-03-31T12:47:40.633Z|83667",
+      "name": "intro.wav",
+      "type": "Audio"
     }
   }
 }

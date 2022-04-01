@@ -44,6 +44,7 @@ var Script;
     let pacman;
     let speed = new ƒ.Vector3(0, 0, 0);
     let graph;
+    let chomp;
     document.addEventListener("interactiveViewportStarted", start);
     function start(_event) {
         viewport = _event.detail;
@@ -51,75 +52,66 @@ var Script;
         pacman = graph.getChildrenByName("Pacman")[0];
         viewport.camera.mtxPivot.translate(new ƒ.Vector3(2.5, 2.5, 15));
         viewport.camera.mtxPivot.rotateY(180);
+        chomp = graph.getChildrenByName("Sound")[0].getComponents(ƒ.ComponentAudio)[1];
+        //chomp = audioChomp.getComponent(ƒ.ComponentAudio);
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
     function update(_event) {
         // ƒ.Physics.simulate();  // if physics is included and used
         // Check if pacman is on the middle of the one tile if yes, he can walk in the direction of the pressed key
-        if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_RIGHT, ƒ.KEYBOARD_CODE.D]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05) {
+        if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_RIGHT, ƒ.KEYBOARD_CODE.D]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05)
             speed.set(1 / 60, 0, 0);
-        }
-        if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_LEFT, ƒ.KEYBOARD_CODE.A]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05) {
+        if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_LEFT, ƒ.KEYBOARD_CODE.A]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05)
             speed.set(-1 / 60, 0, 0);
-        }
-        if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_UP, ƒ.KEYBOARD_CODE.W]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05) {
+        if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_UP, ƒ.KEYBOARD_CODE.W]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05)
             speed.set(0, 1 / 60, 0);
-        }
-        if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_DOWN, ƒ.KEYBOARD_CODE.S]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05) {
+        if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_DOWN, ƒ.KEYBOARD_CODE.S]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05)
             speed.set(0, -1 / 60, 0);
-        }
-        if (Math.sign(speed.x) == 1) {
-            let x = Math.round(pacman.mtxLocal.translation.x + 0.515);
-            let y = Math.round(pacman.mtxLocal.translation.y);
-            if (checkTile(x, y) == false) {
-                speed.set(0, speed.y, 0);
-            }
-        }
-        if (Math.sign(speed.x) == -1) {
-            let x = Math.round(pacman.mtxLocal.translation.x - 0.515);
-            let y = Math.round(pacman.mtxLocal.translation.y);
-            if (checkTile(x, y) == false) {
-                speed.set(0, speed.y, 0);
-            }
-        }
-        if (Math.sign(speed.y) == 1) {
-            let x = Math.round(pacman.mtxLocal.translation.x);
-            let y = Math.round(pacman.mtxLocal.translation.y + 0.515);
-            if (checkTile(x, y) == false) {
-                speed.set(speed.x, 0, 0);
-            }
-        }
-        if (Math.sign(speed.y) == -1) {
-            let x = Math.round(pacman.mtxLocal.translation.x);
-            let y = Math.round(pacman.mtxLocal.translation.y - 0.515);
-            if (checkTile(x, y) == false) {
-                speed.set(speed.x, 0, 0);
-            }
-        }
+        checkDirection(speed);
         pacman.mtxLocal.translate(speed);
         viewport.draw();
         ƒ.AudioManager.default.update();
     }
+    function checkDirection(_speed) {
+        if (Math.sign(_speed.x) == 1) {
+            if (!checkTile(Math.round(pacman.mtxLocal.translation.x + 0.515), Math.round(pacman.mtxLocal.translation.y))) {
+                speed.set(0, speed.y, 0);
+                return false;
+            }
+        }
+        if (Math.sign(_speed.x) == -1) {
+            if (!checkTile(Math.round(pacman.mtxLocal.translation.x - 0.515), Math.round(pacman.mtxLocal.translation.y))) {
+                speed.set(0, speed.y, 0);
+                return false;
+            }
+        }
+        if (Math.sign(_speed.y) == 1) {
+            if (!checkTile(Math.round(pacman.mtxLocal.translation.x), Math.round(pacman.mtxLocal.translation.y + 0.515))) {
+                speed.set(speed.x, 0, 0);
+                return false;
+            }
+        }
+        if (Math.sign(_speed.y) == -1) {
+            if (!checkTile(Math.round(pacman.mtxLocal.translation.x), Math.round(pacman.mtxLocal.translation.y - 0.515))) {
+                speed.set(speed.x, 0, 0);
+                return false;
+            }
+        }
+        return true;
+    }
     function checkTile(_x, _y) {
-        //get the Grid as parent of all rows
-        let parent = graph.getChildrenByName("Grid")[0];
         //get the row which pacman is about to enter (y-coordinate)
-        let row = parent.getChildren()[_y];
+        let row = graph.getChildrenByName("Grid")[0].getChildren()[_y];
         if (row) {
             //get the tile via the x-coordinate
             let tile = row.getChild(_x);
             if (tile) {
-                //get the material and the color of the tile 
-                let material = tile.getComponent(ƒ.ComponentMaterial);
-                let color = material.clrPrimary;
-                let colorR = +color.r.toFixed(2);
-                let colorG = +color.g.toFixed(2);
-                let colorB = +color.b.toFixed(2);
+                //get the color of the tile 
+                let color = tile.getComponent(ƒ.ComponentMaterial).clrPrimary;
                 //!!!! change here if color of walking tiles is changed !!!!
-                if (colorR == 0.18 && colorG == 0.18 && colorB == 0.18) {
+                if (+color.r.toFixed(2) == 0.18 && +color.g.toFixed(2) == 0.18 && +color.b.toFixed(2) == 0.18)
                     return true;
-                }
             }
         }
         return false;
