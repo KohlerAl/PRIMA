@@ -49,7 +49,6 @@ var Script;
     window.addEventListener("load", handleLoad);
     document.addEventListener("interactiveViewportStarted", start);
     function handleLoad(_event) {
-        console.log("Hello");
         dialog = document.querySelector("dialog");
         dialog.querySelector("h1").textContent = document.title;
         dialog.addEventListener("click", function (_event) {
@@ -88,6 +87,7 @@ var Script;
         viewport.camera.mtxPivot.rotateY(180);
         chomp = graph.getChildrenByName("Sound")[0].getComponents(ƒ.ComponentAudio)[1];
         //chomp = audioChomp.getComponent(ƒ.ComponentAudio);
+        ƒ.AudioManager.default.listenTo(graph);
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
@@ -109,30 +109,21 @@ var Script;
     }
     function checkDirection(_speed) {
         if (Math.sign(_speed.x) == 1) {
-            if (!checkTile(Math.round(pacman.mtxLocal.translation.x + 0.515), Math.round(pacman.mtxLocal.translation.y))) {
+            if (!checkTile(Math.round(pacman.mtxLocal.translation.x + 0.515), Math.round(pacman.mtxLocal.translation.y)))
                 speed.set(0, speed.y, 0);
-                return false;
-            }
         }
         if (Math.sign(_speed.x) == -1) {
-            if (!checkTile(Math.round(pacman.mtxLocal.translation.x - 0.515), Math.round(pacman.mtxLocal.translation.y))) {
+            if (!checkTile(Math.round(pacman.mtxLocal.translation.x - 0.515), Math.round(pacman.mtxLocal.translation.y)))
                 speed.set(0, speed.y, 0);
-                return false;
-            }
         }
         if (Math.sign(_speed.y) == 1) {
-            if (!checkTile(Math.round(pacman.mtxLocal.translation.x), Math.round(pacman.mtxLocal.translation.y + 0.515))) {
+            if (!checkTile(Math.round(pacman.mtxLocal.translation.x), Math.round(pacman.mtxLocal.translation.y + 0.515)))
                 speed.set(speed.x, 0, 0);
-                return false;
-            }
         }
         if (Math.sign(_speed.y) == -1) {
-            if (!checkTile(Math.round(pacman.mtxLocal.translation.x), Math.round(pacman.mtxLocal.translation.y - 0.515))) {
+            if (!checkTile(Math.round(pacman.mtxLocal.translation.x), Math.round(pacman.mtxLocal.translation.y - 0.515)))
                 speed.set(speed.x, 0, 0);
-                return false;
-            }
         }
-        return true;
     }
     function checkTile(_x, _y) {
         //get the row which pacman is about to enter (y-coordinate)

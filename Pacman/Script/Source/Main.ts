@@ -14,7 +14,6 @@ namespace Script {
   document.addEventListener("interactiveViewportStarted", <EventListener>start);
 
   function handleLoad(_event: Event): void {
-    console.log("Hello");
     dialog = document.querySelector("dialog");
     dialog.querySelector("h1").textContent = document.title;
     dialog.addEventListener("click", function (_event: Event): void {
@@ -53,7 +52,7 @@ namespace Script {
   }
 
 
-  
+
   function start(_event: CustomEvent): void {
     viewport = _event.detail;
     graph = viewport.getBranch();
@@ -64,7 +63,7 @@ namespace Script {
 
     chomp = graph.getChildrenByName("Sound")[0].getComponents(ƒ.ComponentAudio)[1];
     //chomp = audioChomp.getComponent(ƒ.ComponentAudio);
-
+    ƒ.AudioManager.default.listenTo(graph);
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
     ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
   }
@@ -73,16 +72,16 @@ namespace Script {
     // ƒ.Physics.simulate();  // if physics is included and used
 
     // Check if pacman is on the middle of the one tile if yes, he can walk in the direction of the pressed key
-    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_RIGHT, ƒ.KEYBOARD_CODE.D]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05)
+    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_RIGHT, ƒ.KEYBOARD_CODE.D]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05) 
       speed.set(1 / 60, 0, 0);
 
-    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_LEFT, ƒ.KEYBOARD_CODE.A]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05)
+    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_LEFT, ƒ.KEYBOARD_CODE.A]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05) 
       speed.set(- 1 / 60, 0, 0);
 
-    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_UP, ƒ.KEYBOARD_CODE.W]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05)
+    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_UP, ƒ.KEYBOARD_CODE.W]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05) 
       speed.set(0, 1 / 60, 0);
 
-    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_DOWN, ƒ.KEYBOARD_CODE.S]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05)
+    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_DOWN, ƒ.KEYBOARD_CODE.S]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05) 
       speed.set(0, -1 / 60, 0);
 
     checkDirection(speed);
@@ -92,33 +91,26 @@ namespace Script {
     ƒ.AudioManager.default.update();
   }
 
-  function checkDirection(_speed: ƒ.Vector3): boolean {
+  function checkDirection(_speed: ƒ.Vector3): void {
     if (Math.sign(_speed.x) == 1) {
-      if (!checkTile(Math.round(pacman.mtxLocal.translation.x + 0.515), Math.round(pacman.mtxLocal.translation.y))) {
+      if (!checkTile(Math.round(pacman.mtxLocal.translation.x + 0.515), Math.round(pacman.mtxLocal.translation.y)))
         speed.set(0, speed.y, 0);
-        return false;
-      }
-    }
-    if (Math.sign(_speed.x) == -1) {
-      if (!checkTile(Math.round(pacman.mtxLocal.translation.x - 0.515), Math.round(pacman.mtxLocal.translation.y))) {
-        speed.set(0, speed.y, 0);
-        return false;
-      }
-    }
-    if (Math.sign(_speed.y) == 1) {
-      if (!checkTile(Math.round(pacman.mtxLocal.translation.x), Math.round(pacman.mtxLocal.translation.y + 0.515))) {
-        speed.set(speed.x, 0, 0);
-        return false;
-      }
-    }
-    if (Math.sign(_speed.y) == -1) {
-      if (!checkTile(Math.round(pacman.mtxLocal.translation.x), Math.round(pacman.mtxLocal.translation.y - 0.515))) {
-        speed.set(speed.x, 0, 0);
-        return false;
-      }
     }
 
-    return true;
+    if (Math.sign(_speed.x) == -1) {
+      if (!checkTile(Math.round(pacman.mtxLocal.translation.x - 0.515), Math.round(pacman.mtxLocal.translation.y)))
+        speed.set(0, speed.y, 0);
+    }
+
+    if (Math.sign(_speed.y) == 1) {
+      if (!checkTile(Math.round(pacman.mtxLocal.translation.x), Math.round(pacman.mtxLocal.translation.y + 0.515)))
+        speed.set(speed.x, 0, 0);
+    }
+
+    if (Math.sign(_speed.y) == -1) {
+      if (!checkTile(Math.round(pacman.mtxLocal.translation.x), Math.round(pacman.mtxLocal.translation.y - 0.515)))
+        speed.set(speed.x, 0, 0);
+    }
   }
 
   function checkTile(_x: number, _y: number): boolean {
