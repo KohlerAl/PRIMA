@@ -1,5 +1,7 @@
 namespace Script {
   import ƒ = FudgeCore;
+  import ƒAid = FudgeAid;
+
   ƒ.Debug.info("Main Program Template running!");
 
   let viewport: ƒ.Viewport;
@@ -7,8 +9,12 @@ namespace Script {
 
   let pacman: ƒ.Node;
   let speed: ƒ.Vector3 = new ƒ.Vector3(0, 0, 0);
+  let oldSpeed: ƒ.Vector3 = new ƒ.Vector3(0, 0, 0);
   let graph: ƒ.Node;
   let chomp: ƒ.ComponentAudio;
+
+  let animations: ƒAid.SpriteSheetAnimations;
+  let sprite: ƒAid.NodeSprite;
 
   window.addEventListener("load", handleLoad);
   document.addEventListener("interactiveViewportStarted", <EventListener>start);
@@ -42,6 +48,8 @@ namespace Script {
     viewport.initialize("InteractiveViewport", graph, cmpCamera, canvas);
     ƒ.Debug.log("Viewport:", viewport);
 
+    await loadSprites();
+
     viewport.draw();
     canvas.dispatchEvent(
       new CustomEvent("interactiveViewportStarted", {
@@ -62,7 +70,11 @@ namespace Script {
     viewport.camera.mtxPivot.rotateY(180);
 
     chomp = graph.getChildrenByName("Sound")[0].getComponents(ƒ.ComponentAudio)[1];
-    //chomp = audioChomp.getComponent(ƒ.ComponentAudio);
+    oldSpeed.x = speed.x;
+    oldSpeed.y = speed.y;
+
+    createSprite();
+
     ƒ.AudioManager.default.listenTo(graph);
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
     ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
@@ -72,19 +84,25 @@ namespace Script {
     // ƒ.Physics.simulate();  // if physics is included and used
 
     // Check if pacman is on the middle of the one tile if yes, he can walk in the direction of the pressed key
-    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_RIGHT, ƒ.KEYBOARD_CODE.D]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05) 
+    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_RIGHT, ƒ.KEYBOARD_CODE.D]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05)
       speed.set(1 / 60, 0, 0);
 
-    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_LEFT, ƒ.KEYBOARD_CODE.A]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05) 
+    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_LEFT, ƒ.KEYBOARD_CODE.A]) && (pacman.mtxLocal.translation.y + 0.025) % 1 < 0.05)
       speed.set(- 1 / 60, 0, 0);
 
-    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_UP, ƒ.KEYBOARD_CODE.W]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05) 
+    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_UP, ƒ.KEYBOARD_CODE.W]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05)
       speed.set(0, 1 / 60, 0);
 
-    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_DOWN, ƒ.KEYBOARD_CODE.S]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05) 
+    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_DOWN, ƒ.KEYBOARD_CODE.S]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05)
       speed.set(0, -1 / 60, 0);
 
     checkDirection(speed);
+
+    if (speed.x != 0 && !chomp.isPlaying || speed.y != 0 && !chomp.isPlaying)
+      chomp.play(true);
+
+    if (speed.x != oldSpeed.x || speed.y != oldSpeed.y)
+      rotateSprite(speed);
 
     pacman.mtxLocal.translate(speed);
     viewport.draw();
@@ -128,5 +146,65 @@ namespace Script {
       }
     }
     return false;
+  }
+
+  function createSprite(): void {
+    sprite = new ƒAid.NodeSprite("Sprite");
+    sprite.addComponent(new ƒ.ComponentTransform(new ƒ.Matrix4x4()));
+    sprite.setAnimation(<ƒAid.SpriteSheetAnimation>animations["pacman"]);
+    sprite.setFrameDirection(1);
+    sprite.mtxLocal.translateZ(0.5);
+    sprite.framerate = 15;
+
+    pacman.addChild(sprite);
+    pacman.getComponent(ƒ.ComponentMaterial).clrPrimary = new ƒ.Color(0, 0, 0, 0);
+    sprite.mtxLocal.rotateZ(90);
+  }
+
+  async function loadSprites(): Promise<void> {
+    let imgSpriteSheet: ƒ.TextureImage = new ƒ.TextureImage();
+    await imgSpriteSheet.load("Assets/texture.png");
+
+    let spriteSheet: ƒ.CoatTextured = new ƒ.CoatTextured(undefined, imgSpriteSheet);
+    generateSprite(spriteSheet);
+  }
+
+  function generateSprite(_spritesheet: ƒ.CoatTextured): void {
+    animations = {};
+    let name: string = "pacman";
+
+    let sprite: ƒAid.SpriteSheetAnimation = new ƒAid.SpriteSheetAnimation(name, _spritesheet);
+    sprite.generateByGrid(ƒ.Rectangle.GET(0, 0, 64, 64), 8, 70, ƒ.ORIGIN2D.CENTER, ƒ.Vector2.X(64));
+
+    animations[name] = sprite;
+  }
+
+  function rotateSprite(_speed: ƒ.Vector3): void {
+    if (_speed.x != 0 || _speed.y != 0) {
+      let currentValue: number = sprite.mtxLocal.rotation.z;
+      let rotateValue: number = 360 - currentValue;
+
+      sprite.mtxLocal.rotateZ(rotateValue);
+
+      if (Math.sign(_speed.x) == 1) {
+        sprite.mtxLocal.rotateZ(0);
+      }
+
+      if (Math.sign(_speed.x) == -1) {
+        sprite.mtxLocal.rotateZ(180);
+      }
+
+      if (Math.sign(_speed.y) == 1) {
+        sprite.mtxLocal.rotateZ(90);
+      }
+
+      if (Math.sign(_speed.y) == -1) {
+        sprite.mtxLocal.rotateZ(270);
+      }
+
+      oldSpeed.x = speed.x;
+      oldSpeed.y = speed.y;
+    }
+
   }
 }

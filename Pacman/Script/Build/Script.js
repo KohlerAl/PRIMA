@@ -39,13 +39,17 @@ var Script;
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
+    var ƒAid = FudgeAid;
     ƒ.Debug.info("Main Program Template running!");
     let viewport;
     let dialog;
     let pacman;
     let speed = new ƒ.Vector3(0, 0, 0);
+    let oldSpeed = new ƒ.Vector3(0, 0, 0);
     let graph;
     let chomp;
+    let animations;
+    let sprite;
     window.addEventListener("load", handleLoad);
     document.addEventListener("interactiveViewportStarted", start);
     function handleLoad(_event) {
@@ -73,6 +77,7 @@ var Script;
         let viewport = new ƒ.Viewport();
         viewport.initialize("InteractiveViewport", graph, cmpCamera, canvas);
         ƒ.Debug.log("Viewport:", viewport);
+        await loadSprites();
         viewport.draw();
         canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", {
             bubbles: true,
@@ -86,7 +91,9 @@ var Script;
         viewport.camera.mtxPivot.translate(new ƒ.Vector3(2.5, 2.5, 15));
         viewport.camera.mtxPivot.rotateY(180);
         chomp = graph.getChildrenByName("Sound")[0].getComponents(ƒ.ComponentAudio)[1];
-        //chomp = audioChomp.getComponent(ƒ.ComponentAudio);
+        oldSpeed.x = speed.x;
+        oldSpeed.y = speed.y;
+        createSprite();
         ƒ.AudioManager.default.listenTo(graph);
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
@@ -103,6 +110,10 @@ var Script;
         if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ARROW_DOWN, ƒ.KEYBOARD_CODE.S]) && (pacman.mtxLocal.translation.x + 0.025) % 1 < 0.05)
             speed.set(0, -1 / 60, 0);
         checkDirection(speed);
+        if (speed.x != 0 && !chomp.isPlaying || speed.y != 0 && !chomp.isPlaying)
+            chomp.play(true);
+        if (speed.x != oldSpeed.x || speed.y != oldSpeed.y)
+            rotateSprite(speed);
         pacman.mtxLocal.translate(speed);
         viewport.draw();
         ƒ.AudioManager.default.update();
@@ -140,6 +151,51 @@ var Script;
             }
         }
         return false;
+    }
+    function createSprite() {
+        sprite = new ƒAid.NodeSprite("Sprite");
+        sprite.addComponent(new ƒ.ComponentTransform(new ƒ.Matrix4x4()));
+        sprite.setAnimation(animations["pacman"]);
+        sprite.setFrameDirection(1);
+        sprite.mtxLocal.translateZ(0.5);
+        sprite.framerate = 15;
+        pacman.addChild(sprite);
+        pacman.getComponent(ƒ.ComponentMaterial).clrPrimary = new ƒ.Color(0, 0, 0, 0);
+        sprite.mtxLocal.rotateZ(90);
+    }
+    async function loadSprites() {
+        let imgSpriteSheet = new ƒ.TextureImage();
+        await imgSpriteSheet.load("Assets/texture.png");
+        let spriteSheet = new ƒ.CoatTextured(undefined, imgSpriteSheet);
+        generateSprite(spriteSheet);
+    }
+    function generateSprite(_spritesheet) {
+        animations = {};
+        let name = "pacman";
+        let sprite = new ƒAid.SpriteSheetAnimation(name, _spritesheet);
+        sprite.generateByGrid(ƒ.Rectangle.GET(0, 0, 64, 64), 8, 70, ƒ.ORIGIN2D.CENTER, ƒ.Vector2.X(64));
+        animations[name] = sprite;
+    }
+    function rotateSprite(_speed) {
+        if (_speed.x != 0 || _speed.y != 0) {
+            let currentValue = sprite.mtxLocal.rotation.z;
+            let rotateValue = 360 - currentValue;
+            sprite.mtxLocal.rotateZ(rotateValue);
+            if (Math.sign(_speed.x) == 1) {
+                sprite.mtxLocal.rotateZ(0);
+            }
+            if (Math.sign(_speed.x) == -1) {
+                sprite.mtxLocal.rotateZ(180);
+            }
+            if (Math.sign(_speed.y) == 1) {
+                sprite.mtxLocal.rotateZ(90);
+            }
+            if (Math.sign(_speed.y) == -1) {
+                sprite.mtxLocal.rotateZ(270);
+            }
+            oldSpeed.x = speed.x;
+            oldSpeed.y = speed.y;
+        }
     }
 })(Script || (Script = {}));
 //# sourceMappingURL=Script.js.map

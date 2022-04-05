@@ -51,6 +51,22 @@
       }
     }
   },
+  "Audio|2022-03-31T12:47:40.633Z|83667": {
+    "ƒ.Audio": {
+      "url": "Sounds\\pacman_beginning.wav",
+      "idResource": "Audio|2022-03-31T12:47:40.633Z|83667",
+      "name": "intro.wav",
+      "type": "Audio"
+    }
+  },
+  "Audio|2022-03-31T12:46:38.700Z|37783": {
+    "ƒ.Audio": {
+      "url": "Sounds\\pacman_chomp.wav",
+      "idResource": "Audio|2022-03-31T12:46:38.700Z|37783",
+      "name": "chomp.wav",
+      "type": "Audio"
+    }
+  },
   "Graph|2022-03-17T14:08:03.670Z|98238": {
     "ƒ.Graph": {
       "name": "Game",
@@ -5903,7 +5919,7 @@
                     "pivot": {
                       "translation": "[0, 0, 0]",
                       "rotation": "[0, 0, 0]",
-                      "scaling": "[0.7999999523162842, 0.7999999523162842, 0.7999999523162842]"
+                      "scaling": "[1, 1, 0.9999998807907104]"
                     },
                     "Component": {
                       "active": true
@@ -5964,7 +5980,7 @@
                   "ƒ.ComponentAudio": {
                     "active": true,
                     "idResource": "Audio|2022-03-31T12:47:40.633Z|83667",
-                    "playing": true,
+                    "playing": false,
                     "loop": false,
                     "volume": 1
                   }
@@ -5986,22 +6002,6 @@
       ],
       "idResource": "Graph|2022-03-17T14:08:03.670Z|98238",
       "type": "Graph"
-    }
-  },
-  "Audio|2022-03-31T12:46:38.700Z|37783": {
-    "ƒ.Audio": {
-      "url": "Sounds\\pacman_chomp.wav",
-      "idResource": "Audio|2022-03-31T12:46:38.700Z|37783",
-      "name": "chomp.wav",
-      "type": "Audio"
-    }
-  },
-  "Audio|2022-03-31T12:47:40.633Z|83667": {
-    "ƒ.Audio": {
-      "url": "Sounds\\pacman_beginning.wav",
-      "idResource": "Audio|2022-03-31T12:47:40.633Z|83667",
-      "name": "intro.wav",
-      "type": "Audio"
     }
   }
 }
