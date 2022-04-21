@@ -116,7 +116,7 @@ var Script;
             else if (this.walkDirection == "up") {
                 this.speed.set(0, 1 / 60, 0);
             }
-            else if (this.walkDirection == "down" || this.walkDirection == "o") {
+            else if (this.walkDirection == "down") {
                 this.speed.set(0, -1 / 60, 0);
             }
         }

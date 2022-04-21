@@ -46,7 +46,7 @@ namespace Script {
             }
             this.walk();
         }
-
+        
         checkNextTile(): void {
             if (checkTile(Math.round(this.mtxLocal.translation.x + 0.515), Math.round(this.mtxLocal.translation.y))) {
                 if (this.lastDirection == "right")
@@ -88,7 +88,7 @@ namespace Script {
             else if (this.walkDirection == "up") {
                 this.speed.set(0, 1 / 60, 0);
             }
-            else if (this.walkDirection == "down" || this.walkDirection == "o") {
+            else if (this.walkDirection == "down") {
                 this.speed.set(0, -1 / 60, 0);
             }
         }
