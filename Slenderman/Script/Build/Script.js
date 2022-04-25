@@ -43,11 +43,12 @@ var Script;
     let viewport;
     let avatar;
     let cmpCamera;
-    let speedRotY = -0.05;
+    let speedRotY = -0.2;
     let speedRotX = 0.2;
     let rotationX = 0;
-    let cntWalk = new ƒ.Control("cntWalk", 6, 0 /* PROPORTIONAL */);
-    cntWalk.setDelay(500);
+    let cntWalk = new ƒ.Control("cntWalk", 2, 0 /* PROPORTIONAL */, 500);
+    let exhaustion = 0;
+    let canSprint = true;
     document.addEventListener("interactiveViewportStarted", start);
     function start(_event) {
         viewport = _event.detail;
@@ -62,22 +63,41 @@ var Script;
     function update(_event) {
         // ƒ.Physics.simulate();  // if physics is included and used
         controlWalk();
+        controlSpeed();
         viewport.draw();
         ƒ.AudioManager.default.update();
     }
     function controlWalk() {
         let input = ƒ.Keyboard.mapToTrit([ƒ.KEYBOARD_CODE.W, ƒ.KEYBOARD_CODE.ARROW_UP], [ƒ.KEYBOARD_CODE.S, ƒ.KEYBOARD_CODE.ARROW_DOWN]);
         cntWalk.setInput(input);
+        console.log(canSprint);
+        if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.SHIFT_LEFT]) && canSprint == true)
+            cntWalk.setFactor(8);
+        else
+            cntWalk.setFactor(2);
         avatar.mtxLocal.translateZ(cntWalk.getOutput() * ƒ.Loop.timeFrameGame / 1000);
         let strafe = ƒ.Keyboard.mapToTrit([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT], [ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]);
-        cntWalk.setInput(strafe);
-        avatar.mtxLocal.translateX(cntWalk.getOutput() * ƒ.Loop.timeFrameGame / 1000);
+        avatar.mtxLocal.translateX((1.5 * strafe * ƒ.Loop.timeFrameGame) / 1000);
+        /* cntWalk.setInput(strafe);
+        avatar.mtxLocal.translateX(cntWalk.getOutput() * ƒ.Loop.timeFrameGame / 1000); */
     }
     function hndPointerMove(_event) {
         avatar.mtxLocal.rotateY(_event.movementX * speedRotY);
         rotationX += _event.movementY * speedRotX;
         rotationX = Math.min(60, Math.max(-60, rotationX));
         cmpCamera.mtxPivot.rotation = ƒ.Vector3.X(rotationX);
+    }
+    function controlSpeed() {
+        if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.SHIFT_LEFT]) && canSprint == true) {
+            exhaustion += ƒ.Loop.timeFrameGame / 1000;
+            if (exhaustion > 4) {
+                canSprint = false;
+                setTimeout(function () {
+                    canSprint = true;
+                    exhaustion = 0;
+                }, 7000);
+            }
+        }
     }
 })(Script || (Script = {}));
 //# sourceMappingURL=Script.js.map
