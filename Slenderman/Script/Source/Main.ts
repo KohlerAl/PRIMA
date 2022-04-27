@@ -1,8 +1,8 @@
 namespace Script {
   import ƒ = FudgeCore;
   ƒ.Debug.info("Main Program Template running!");
-
-  let viewport: ƒ.Viewport;
+  
+  export let viewport: ƒ.Viewport;
   let avatar: ƒ.Node;
   let cmpCamera: ƒ.ComponentCamera;
   let speedRotY: number = -0.2;
@@ -16,11 +16,10 @@ namespace Script {
 
   function start(_event: CustomEvent): void {
     viewport = _event.detail;
-    avatar = viewport.getBranch().getChildrenByName("Avatar")[0];
-    console.log(avatar);
 
+    //get Avatar and Camera to walk and look around
+    avatar = viewport.getBranch().getChildrenByName("Avatar")[0];
     viewport.camera = cmpCamera = avatar.getChild(0).getComponent(ƒ.ComponentCamera);
-    console.log(viewport.camera);
 
     viewport.getCanvas().addEventListener("pointermove", hndPointerMove);
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
@@ -39,7 +38,6 @@ namespace Script {
     let input: number = ƒ.Keyboard.mapToTrit([ƒ.KEYBOARD_CODE.W, ƒ.KEYBOARD_CODE.ARROW_UP], [ƒ.KEYBOARD_CODE.S, ƒ.KEYBOARD_CODE.ARROW_DOWN]);
     cntWalk.setInput(input);
 
-    console.log(canSprint);
     if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.SHIFT_LEFT]) && canSprint == true)
       cntWalk.setFactor(8);
     else

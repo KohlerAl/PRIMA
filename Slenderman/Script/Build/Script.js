@@ -39,8 +39,42 @@ var Script;
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
+    ƒ.Project.registerScriptNamespace(Script); // Register the namespace to FUDGE for serialization
+    class DropToGroundInitial extends ƒ.ComponentScript {
+        // Register the script as component for use in the editor via drag&drop
+        static iSubclass = ƒ.Component.registerSubclass(DropToGroundInitial);
+        // Properties may be mutated by users in the editor via the automatically created user interface
+        graph;
+        ground;
+        cmpMeshGround;
+        meshTerrain;
+        constructor() {
+            super();
+            // Don't start when running in editor
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+            document.addEventListener("interactiveViewportStarted", this.setHeight);
+        }
+        setHeight = (_event) => {
+            //find the terrain mesh 
+            this.graph = Script.viewport.getBranch();
+            this.ground = this.graph.getChildrenByName("Environment")[0].getChildrenByName("Ground")[0];
+            this.cmpMeshGround = this.ground.getComponent(ƒ.ComponentMesh);
+            this.meshTerrain = this.cmpMeshGround.mesh;
+            this.node.mtxLocal.translateY(5);
+            let distance = this.meshTerrain.getTerrainInfo(this.node.mtxLocal.translation, this.cmpMeshGround.mtxWorld).distance;
+            if (Math.sign(distance) == 1)
+                this.node.mtxLocal.translateY(-distance);
+            else if (Math.sign(distance) == -1 || Math.sign(distance) == 0)
+                this.node.mtxLocal.translateY(distance);
+        };
+    }
+    Script.DropToGroundInitial = DropToGroundInitial;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
     ƒ.Debug.info("Main Program Template running!");
-    let viewport;
     let avatar;
     let cmpCamera;
     let speedRotY = -0.2;
@@ -51,12 +85,11 @@ var Script;
     let canSprint = true;
     document.addEventListener("interactiveViewportStarted", start);
     function start(_event) {
-        viewport = _event.detail;
-        avatar = viewport.getBranch().getChildrenByName("Avatar")[0];
-        console.log(avatar);
-        viewport.camera = cmpCamera = avatar.getChild(0).getComponent(ƒ.ComponentCamera);
-        console.log(viewport.camera);
-        viewport.getCanvas().addEventListener("pointermove", hndPointerMove);
+        Script.viewport = _event.detail;
+        //get Avatar and Camera to walk and look around
+        avatar = Script.viewport.getBranch().getChildrenByName("Avatar")[0];
+        Script.viewport.camera = cmpCamera = avatar.getChild(0).getComponent(ƒ.ComponentCamera);
+        Script.viewport.getCanvas().addEventListener("pointermove", hndPointerMove);
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
@@ -64,13 +97,12 @@ var Script;
         // ƒ.Physics.simulate();  // if physics is included and used
         controlWalk();
         controlSpeed();
-        viewport.draw();
+        Script.viewport.draw();
         ƒ.AudioManager.default.update();
     }
     function controlWalk() {
         let input = ƒ.Keyboard.mapToTrit([ƒ.KEYBOARD_CODE.W, ƒ.KEYBOARD_CODE.ARROW_UP], [ƒ.KEYBOARD_CODE.S, ƒ.KEYBOARD_CODE.ARROW_DOWN]);
         cntWalk.setInput(input);
-        console.log(canSprint);
         if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.SHIFT_LEFT]) && canSprint == true)
             cntWalk.setFactor(8);
         else
