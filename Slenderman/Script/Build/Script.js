@@ -53,20 +53,23 @@ var Script;
             // Don't start when running in editor
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
-            document.addEventListener("interactiveViewportStarted", this.setHeight);
+            //render-event und dann beim ersten aufruf der funktion den listener löschen 
+            this.addEventListener("componentAdd" /* COMPONENT_ADD */, this.addComponent);
         }
+        addComponent = (_event) => {
+            this.node.addEventListener("renderPrepare" /* RENDER_PREPARE */, this.setHeight);
+        };
         setHeight = (_event) => {
-            //find the terrain mesh 
-            this.graph = Script.viewport.getBranch();
+            this.graph = ƒ.Project.resources["Graph|2022-04-14T13:06:10.990Z|08163"];
             this.ground = this.graph.getChildrenByName("Environment")[0].getChildrenByName("Ground")[0];
             this.cmpMeshGround = this.ground.getComponent(ƒ.ComponentMesh);
             this.meshTerrain = this.cmpMeshGround.mesh;
-            this.node.mtxLocal.translateY(5);
-            let distance = this.meshTerrain.getTerrainInfo(this.node.mtxLocal.translation, this.cmpMeshGround.mtxWorld).distance;
-            if (Math.sign(distance) == 1)
-                this.node.mtxLocal.translateY(-distance);
-            else if (Math.sign(distance) == -1 || Math.sign(distance) == 0)
-                this.node.mtxLocal.translateY(distance);
+            if (this.meshTerrain) {
+                let distance = this.meshTerrain.getTerrainInfo(this.node.mtxLocal.translation, this.cmpMeshGround.mtxWorld).distance;
+                if (distance)
+                    this.node.mtxLocal.translateY(-distance);
+            }
+            //this.node.removeEventListener(ƒ.EVENT.RENDER_PREPARE, this.setHeight);
         };
     }
     Script.DropToGroundInitial = DropToGroundInitial;
@@ -83,13 +86,18 @@ var Script;
     let cntWalk = new ƒ.Control("cntWalk", 2, 0 /* PROPORTIONAL */, 500);
     let exhaustion = 0;
     let canSprint = true;
+    let numTrees = 50;
+    Script.treePositions = [];
     document.addEventListener("interactiveViewportStarted", start);
     function start(_event) {
         Script.viewport = _event.detail;
         //get Avatar and Camera to walk and look around
         avatar = Script.viewport.getBranch().getChildrenByName("Avatar")[0];
         Script.viewport.camera = cmpCamera = avatar.getChild(0).getComponent(ƒ.ComponentCamera);
-        Script.viewport.getCanvas().addEventListener("pointermove", hndPointerMove);
+        let canvas = document.querySelector("canvas");
+        canvas.requestPointerLock();
+        canvas.addEventListener("pointermove", hndPointerMove);
+        createTrees();
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
@@ -131,5 +139,93 @@ var Script;
             }
         }
     }
+    function createTrees() {
+        let parentTrees = Script.viewport.getBranch().getChildrenByName("Environment")[0].getChildrenByName("Trees")[0];
+        for (let i = 0; i < numTrees; i++) {
+            let tree = new Script.Tree();
+            parentTrees.addChild(tree);
+        }
+    }
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    ƒ.Project.registerScriptNamespace(Script);
+    class Slenderman extends ƒ.ComponentScript {
+        static iSubclass = ƒ.Component.registerSubclass(Slenderman);
+        change = 0;
+        target = new ƒ.Vector3();
+        position = new ƒ.Vector3(0, 0, 0);
+        constructor() {
+            super();
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+            //
+            this.addEventListener("componentAdd" /* COMPONENT_ADD */, this.hndEvent);
+        }
+        hndEvent = (_event) => {
+            switch (_event.type) {
+                case "componentAdd" /* COMPONENT_ADD */:
+                    this.node.addEventListener("renderPrepare" /* RENDER_PREPARE */, this.walkSlendi);
+                    //this.node.mtxLocal.translate(this.position);
+                    break;
+            }
+        };
+        walkSlendi = (_event) => {
+            this.position.add(ƒ.Vector3.SCALE(this.target, ƒ.Loop.timeFrameGame / 1000));
+            if (this.position.x > -30 && this.position.x < 30 && this.position.y > -30 && this.position.y < 30)
+                this.node.mtxLocal.translate(ƒ.Vector3.SCALE(this.target, ƒ.Loop.timeFrameGame / 1000));
+            if (this.change > ƒ.Time.game.get())
+                return;
+            this.change = ƒ.Time.game.get() + 1000;
+            this.target = ƒ.Random.default.getVector3(new ƒ.Vector3(-1, 0, -1), new ƒ.Vector3(1, 0, 1));
+        };
+    }
+    Script.Slenderman = Slenderman;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    class Tree extends ƒ.Node {
+        treeGraph = ƒ.Project.resources["Graph|2022-04-26T14:47:00.339Z|52413"];
+        ownGraph;
+        position;
+        size;
+        constructor() {
+            super("Tree");
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+            this.ownGraph = new ƒ.GraphInstance(this.treeGraph);
+            this.ownGraph.reset();
+            this.addChild(this.ownGraph);
+            this.addComponent(new ƒ.ComponentTransform());
+            this.addComponent(new Script.DropToGroundInitial());
+            this.createPosition();
+            this.scaleTree();
+        }
+        createPosition() {
+            let xPos = this.createRandom(-30, 30);
+            let zPos = this.createRandom(-30, 30);
+            this.position = new ƒ.Vector3(xPos, 0, zPos);
+            /* if (treePositions.length > 0) {
+                for (let treePos of treePositions) {
+                    if (this.position.equals(treePos, 1)) {
+                    }
+                }
+            } */
+            this.mtxLocal.translateX(xPos);
+            this.mtxLocal.translateZ(zPos);
+        }
+        scaleTree() {
+            let scaleY = this.createRandom(0.5, 1.5);
+            this.size = new ƒ.Vector3(1, scaleY, 1);
+            this.mtxLocal.scale(this.size);
+        }
+        createRandom(_min, _max) {
+            let randomNumber = Math.random() * (_max - _min) + _min;
+            return randomNumber;
+        }
+    }
+    Script.Tree = Tree;
 })(Script || (Script = {}));
 //# sourceMappingURL=Script.js.map

@@ -1,7 +1,7 @@
 namespace Script {
   import ƒ = FudgeCore;
   ƒ.Debug.info("Main Program Template running!");
-  
+
   export let viewport: ƒ.Viewport;
   let avatar: ƒ.Node;
   let cmpCamera: ƒ.ComponentCamera;
@@ -12,6 +12,11 @@ namespace Script {
   let exhaustion: number = 0;
   let canSprint: boolean = true;
 
+
+  let numTrees: number = 50;
+  export let treePositions: ƒ.Vector3[] = [];
+
+
   document.addEventListener("interactiveViewportStarted", <EventListener>start);
 
   function start(_event: CustomEvent): void {
@@ -21,7 +26,12 @@ namespace Script {
     avatar = viewport.getBranch().getChildrenByName("Avatar")[0];
     viewport.camera = cmpCamera = avatar.getChild(0).getComponent(ƒ.ComponentCamera);
 
-    viewport.getCanvas().addEventListener("pointermove", hndPointerMove);
+    let canvas: HTMLCanvasElement = <HTMLCanvasElement>document.querySelector("canvas");
+    canvas.requestPointerLock();
+    canvas.addEventListener("pointermove", hndPointerMove);
+
+    createTrees();
+
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
     ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
   }
@@ -71,6 +81,15 @@ namespace Script {
           },
           7000);
       }
+    }
+  }
+
+  function createTrees(): void {
+    let parentTrees: ƒ.Node = viewport.getBranch().getChildrenByName("Environment")[0].getChildrenByName("Trees")[0];
+
+    for (let i: number = 0; i < numTrees; i++) {
+      let tree: Tree = new Tree();
+      parentTrees.addChild(tree);
     }
   }
 }
