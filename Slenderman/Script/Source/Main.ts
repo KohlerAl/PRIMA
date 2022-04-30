@@ -13,9 +13,9 @@ namespace Script {
   let canSprint: boolean = true;
 
 
-  let numTrees: number = 50;
+  let numTrees: number = 150;
   export let treePositions: ƒ.Vector3[] = [];
-
+  let treeTypes: string[] = ["Graph|2022-04-26T14:47:00.339Z|52413", "Graph|2022-04-29T19:03:07.678Z|58333"];
 
   document.addEventListener("interactiveViewportStarted", <EventListener>start);
 
@@ -88,7 +88,9 @@ namespace Script {
     let parentTrees: ƒ.Node = viewport.getBranch().getChildrenByName("Environment")[0].getChildrenByName("Trees")[0];
 
     for (let i: number = 0; i < numTrees; i++) {
-      let tree: Tree = new Tree();
+      let type: string = treeTypes[Math.floor(Math.random() * treeTypes.length)];
+      let tree: Tree = new Tree(type);
+      treePositions.push(tree.position);
       parentTrees.addChild(tree);
     }
   }

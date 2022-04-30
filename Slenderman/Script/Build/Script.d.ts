@@ -44,7 +44,8 @@ declare namespace Script {
         ownGraph: ƒ.GraphInstance;
         position: ƒ.Vector3;
         size: ƒ.Vector3;
-        constructor();
+        type: string;
+        constructor(_type: string);
         createPosition(): void;
         scaleTree(): void;
         createRandom(_min: number, _max: number): number;

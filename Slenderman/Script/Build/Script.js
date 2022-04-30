@@ -86,8 +86,9 @@ var Script;
     let cntWalk = new ƒ.Control("cntWalk", 2, 0 /* PROPORTIONAL */, 500);
     let exhaustion = 0;
     let canSprint = true;
-    let numTrees = 50;
+    let numTrees = 150;
     Script.treePositions = [];
+    let treeTypes = ["Graph|2022-04-26T14:47:00.339Z|52413", "Graph|2022-04-29T19:03:07.678Z|58333"];
     document.addEventListener("interactiveViewportStarted", start);
     function start(_event) {
         Script.viewport = _event.detail;
@@ -142,7 +143,9 @@ var Script;
     function createTrees() {
         let parentTrees = Script.viewport.getBranch().getChildrenByName("Environment")[0].getChildrenByName("Trees")[0];
         for (let i = 0; i < numTrees; i++) {
-            let tree = new Script.Tree();
+            let type = treeTypes[Math.floor(Math.random() * treeTypes.length)];
+            let tree = new Script.Tree(type);
+            Script.treePositions.push(tree.position);
             parentTrees.addChild(tree);
         }
     }
@@ -187,14 +190,17 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     class Tree extends ƒ.Node {
-        treeGraph = ƒ.Project.resources["Graph|2022-04-26T14:47:00.339Z|52413"];
+        treeGraph;
         ownGraph;
         position;
         size;
-        constructor() {
+        type;
+        constructor(_type) {
             super("Tree");
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
+            this.type = _type;
+            this.treeGraph = ƒ.Project.resources[_type];
             this.ownGraph = new ƒ.GraphInstance(this.treeGraph);
             this.ownGraph.reset();
             this.addChild(this.ownGraph);
@@ -207,15 +213,20 @@ var Script;
             let xPos = this.createRandom(-30, 30);
             let zPos = this.createRandom(-30, 30);
             this.position = new ƒ.Vector3(xPos, 0, zPos);
-            /* if (treePositions.length > 0) {
-                for (let treePos of treePositions) {
-                    if (this.position.equals(treePos, 1)) {
-                    }
-                }
+            /* if (this.checkPosition() == false) {
+                console.log("false");
             } */
-            this.mtxLocal.translateX(xPos);
-            this.mtxLocal.translateZ(zPos);
+            this.mtxLocal.translateX(this.position.x);
+            this.mtxLocal.translateZ(this.position.z);
         }
+        /* checkPosition(): boolean {
+            for (let treePos of treePositions) {
+                if (this.position.equals(treePos, 1)) {
+                    return false;
+                }
+            }
+            return true;
+        } */
         scaleTree() {
             let scaleY = this.createRandom(0.5, 1.5);
             this.size = new ƒ.Vector3(1, scaleY, 1);

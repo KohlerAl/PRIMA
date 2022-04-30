@@ -179,6 +179,44 @@
                           }
                         ]
                       }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "Tree",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[0, 0, 0]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ],
+                          "DropToGroundInitial": [
+                            {
+                              "Script.DropToGroundInitial": {
+                                "active": true
+                              }
+                            }
+                          ]
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "name": "PineTree",
+                              "idSource": "Graph|2022-04-29T19:03:07.678Z|58333"
+                            }
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -493,7 +531,7 @@
                     "pivot": {
                       "translation": "[0, 0, 0]",
                       "rotation": "[0, 0, 0]",
-                      "scaling": "[0.3999999165534973, 10, 0.3999999165534973]"
+                      "scaling": "[0.5999999046325684, 10, 0.5999999046325684]"
                     },
                     "Component": {
                       "active": true
@@ -647,29 +685,7 @@
     "ƒ.Graph": {
       "name": "PineTree",
       "active": true,
-      "components": {
-        "ComponentTransform": [
-          {
-            "ƒ.ComponentTransform": {
-              "local": {
-                "translation": "[0, 0.20000001788139343, 0]",
-                "rotation": "[0, 0, 0]",
-                "scaling": "[3, 4, 3]"
-              },
-              "Component": {
-                "active": true
-              }
-            }
-          }
-        ],
-        "DropToGroundInitial": [
-          {
-            "Script.DropToGroundInitial": {
-              "active": true
-            }
-          }
-        ]
-      },
+      "components": {},
       "children": [
         {
           "ƒ.Node": {
@@ -681,9 +697,9 @@
                   "ƒ.ComponentMesh": {
                     "idMesh": "MeshPyramid|2022-04-29T18:48:48.986Z|87182",
                     "pivot": {
-                      "translation": "[0, 0.19999998807907104, 0]",
+                      "translation": "[0, 1.2999995946884155, 0]",
                       "rotation": "[0, 0, 0]",
-                      "scaling": "[1, 2, 1]"
+                      "scaling": "[3, 12, 3]"
                     },
                     "Component": {
                       "active": true
@@ -725,7 +741,7 @@
                     "pivot": {
                       "translation": "[0, 0, 0]",
                       "rotation": "[0, 0, 0]",
-                      "scaling": "[0.2999999225139618, 0.4999999403953552, 0.29999998211860657]"
+                      "scaling": "[0.7000000476837158, 3, 0.699999988079071]"
                     },
                     "Component": {
                       "active": true
@@ -758,6 +774,28 @@
       ],
       "idResource": "Graph|2022-04-29T19:03:07.678Z|58333",
       "type": "Graph"
+    }
+  },
+  "MeshSphere|2022-04-29T19:12:04.847Z|78206": {
+    "ƒ.MeshSphere": {
+      "idResource": "MeshSphere|2022-04-29T19:12:04.847Z|78206",
+      "name": "MeshSphere",
+      "type": "MeshSphere",
+      "shape": {
+        "ƒ.Vector2": [
+          "[0, 0.5]",
+          "[0.19134171307086945, 0.4619397521018982]",
+          "[0.3535533845424652, 0.3535533845424652]",
+          "[0.4619397521018982, 0.19134171307086945]",
+          "[0.5, 0]",
+          "[0.4619397521018982, -0.19134171307086945]",
+          "[0.3535533845424652, -0.3535533845424652]",
+          "[0.19134171307086945, -0.4619397521018982]",
+          "[0, -0.5]"
+        ]
+      },
+      "longitudes": 8,
+      "latitudes": 8
     }
   }
 }
