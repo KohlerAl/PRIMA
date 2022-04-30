@@ -17,6 +17,8 @@ namespace Script {
   export let treePositions: ƒ.Vector3[] = [];
   let treeTypes: string[] = ["Graph|2022-04-26T14:47:00.339Z|52413", "Graph|2022-04-29T19:03:07.678Z|58333"];
 
+  let numStones: number = 20;
+
   document.addEventListener("interactiveViewportStarted", <EventListener>start);
 
   function start(_event: CustomEvent): void {
@@ -31,6 +33,7 @@ namespace Script {
     canvas.addEventListener("pointermove", hndPointerMove);
 
     createTrees();
+    createStones(); 
 
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
     ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
@@ -92,6 +95,15 @@ namespace Script {
       let tree: Tree = new Tree(type);
       treePositions.push(tree.position);
       parentTrees.addChild(tree);
+    }
+  }
+
+  function createStones(): void {
+    let parentStones: ƒ.Node = viewport.getBranch().getChildrenByName("Environment")[0].getChildrenByName("Stones")[0];
+
+    for (let i: number = 0; i < numStones; i++) {
+      let stone: Stone = new Stone();
+      parentStones.addChild(stone);
     }
   }
 }

@@ -189,7 +189,7 @@
                             {
                               "ƒ.ComponentTransform": {
                                 "local": {
-                                  "translation": "[0, 0, 0]",
+                                  "translation": "[4, 0, 0]",
                                   "rotation": "[0, 0, 0]",
                                   "scaling": "[1, 1, 1]"
                                 },
@@ -213,6 +213,47 @@
                               "deserializeFromSource": true,
                               "name": "PineTree",
                               "idSource": "Graph|2022-04-29T19:03:07.678Z|58333"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "ƒ.Node": {
+                  "name": "Stones",
+                  "active": true,
+                  "components": {},
+                  "children": [
+                    {
+                      "ƒ.Node": {
+                        "name": "Stone",
+                        "active": true,
+                        "components": {
+                          "ComponentTransform": [
+                            {
+                              "ƒ.ComponentTransform": {
+                                "local": {
+                                  "translation": "[0, 0, 0]",
+                                  "rotation": "[0, 0, 0]",
+                                  "scaling": "[1, 1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ],
+                          "DropToGroundInitial": []
+                        },
+                        "children": [
+                          {
+                            "ƒ.GraphInstance": {
+                              "deserializeFromSource": true,
+                              "name": "Stone",
+                              "idSource": "Graph|2022-04-30T09:42:26.880Z|52399"
                             }
                           }
                         ]
@@ -796,6 +837,107 @@
       },
       "longitudes": 8,
       "latitudes": 8
+    }
+  },
+  "TextureImage|2022-04-30T09:38:38.533Z|81324": {
+    "ƒ.TextureImage": {
+      "url": "Assets\\Rock.jpg",
+      "type": "TextureImage",
+      "Texture": {
+        "idResource": "TextureImage|2022-04-30T09:38:38.533Z|81324",
+        "name": "Assets\\Rock.jpg",
+        "mipmap": "CRISP"
+      }
+    }
+  },
+  "Material|2022-04-30T09:38:42.072Z|27492": {
+    "ƒ.Material": {
+      "name": "Rock",
+      "idResource": "Material|2022-04-30T09:38:42.072Z|27492",
+      "shader": "ShaderGouraudTextured",
+      "coat": {
+        "ƒ.CoatRemissiveTextured": {
+          "color": "[1, 1, 1, 1]",
+          "idTexture": "TextureImage|2022-04-30T09:38:38.533Z|81324",
+          "diffuse": 1,
+          "specular": 0
+        }
+      }
+    }
+  },
+  "MeshSphere|2022-04-30T09:40:06.248Z|46455": {
+    "ƒ.MeshSphere": {
+      "idResource": "MeshSphere|2022-04-30T09:40:06.248Z|46455",
+      "name": "Rock",
+      "type": "MeshSphere",
+      "shape": {
+        "ƒ.Vector2": [
+          "[0, 0.5]",
+          "[0.19134171307086945, 0.4619397521018982]",
+          "[0.3535533845424652, 0.3535533845424652]",
+          "[0.4619397521018982, 0.19134171307086945]",
+          "[0.5, 0]",
+          "[0.4619397521018982, -0.19134171307086945]",
+          "[0.3535533845424652, -0.3535533845424652]",
+          "[0.19134171307086945, -0.4619397521018982]",
+          "[0, -0.5]"
+        ]
+      },
+      "longitudes": 8,
+      "latitudes": 8
+    }
+  },
+  "Graph|2022-04-30T09:42:26.880Z|52399": {
+    "ƒ.Graph": {
+      "name": "Stone",
+      "active": true,
+      "components": {},
+      "children": [
+        {
+          "ƒ.Node": {
+            "name": "Rock",
+            "active": true,
+            "components": {
+              "ComponentMesh": [
+                {
+                  "ƒ.ComponentMesh": {
+                    "idMesh": "MeshSphere|2022-04-30T09:40:06.248Z|46455",
+                    "pivot": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[0.6999999284744263, 0.49999991059303284, 1.100000023841858]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentMaterial": [
+                {
+                  "ƒ.ComponentMaterial": {
+                    "sortForAlpha": false,
+                    "clrPrimary": "[1, 1, 1, 1]",
+                    "clrSecondary": "[1, 1, 1, 1]",
+                    "pivot": {
+                      "translation": "[0, 0]",
+                      "rotation": 0,
+                      "scaling": "[1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    },
+                    "idMaterial": "Material|2022-04-30T09:38:42.072Z|27492"
+                  }
+                }
+              ]
+            },
+            "children": []
+          }
+        }
+      ],
+      "idResource": "Graph|2022-04-30T09:42:26.880Z|52399",
+      "type": "Graph"
     }
   }
 }

@@ -39,6 +39,19 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
+    class Stone extends ƒ.Node {
+        stoneGraph: ƒ.Graph;
+        ownGraph: ƒ.GraphInstance;
+        position: ƒ.Vector3;
+        size: ƒ.Vector3;
+        constructor();
+        createPosition(): void;
+        scaleTree(): void;
+        createRandom(_min: number, _max: number): number;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
     class Tree extends ƒ.Node {
         treeGraph: ƒ.Graph;
         ownGraph: ƒ.GraphInstance;
