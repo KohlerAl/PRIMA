@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Slenderman</title>
+<title>PhysicsTest</title>
 <meta charset="utf-8" />
 <link rel="stylesheet" href="styles.css" />
 
 <!--Editor settings of this project-->
-<meta type="settings" autoview="Graph|2022-04-14T13:06:10.990Z|08163" project="{'name':'Slenderman','includeAutoViewScript':true,'graphAutoView':'Graph|2022-04-14T13:06:10.990Z|08163'}" panels="[{'type':'PanelProject','state':{}},{'type':'PanelGraph','state':{'graph':'Graph|2022-04-14T13:06:10.990Z|08163'}}]" />
+<meta type="settings" autoview="Graph|2022-05-03T14:22:09.610Z|07321" project="{'name':'PhysicsTest','includeAutoViewScript':true,'graphAutoView':'Graph|2022-05-03T14:22:09.610Z|07321'}" panels="[{'type':'PanelProject','state':{}},{'type':'PanelGraph','state':{'graph':'Graph|2022-05-03T14:22:09.610Z|07321'}}]" />
 
 <!--Activate the following line to include the FUDGE-version of Oimo-Physics. You may want to download a local copy to work offline and be independent from future changes!-->
 <script type="text/javascript" src="https://jirkadelloro.github.io/FUDGE/Physics/OimoPhysics.js"></script>
@@ -60,13 +60,13 @@
                     viewport.initialize("InteractiveViewport", graph, cmpCamera, canvas);
                     FudgeCore.Debug.log("Viewport:", viewport);
                     // hide the cursor when interacting, also suppressing right-click menu
-                    /* canvas.addEventListener("mousedown", canvas.requestPointerLock);
-                    canvas.addEventListener("mouseup", function () { document.exitPointerLock(); }); */
+                    canvas.addEventListener("mousedown", canvas.requestPointerLock);
+                    canvas.addEventListener("mouseup", function () { document.exitPointerLock(); });
                     // make the camera interactive (complex method in FudgeAid)
-                    // FudgeAid.Viewport.expandCameraToInteractiveOrbit(viewport);
+                    FudgeAid.Viewport.expandCameraToInteractiveOrbit(viewport);
                     // setup audio
                     let cmpListener = new ƒ.ComponentAudioListener();
-                    // cmpCamera.node.addComponent(cmpListener);
+                    cmpCamera.node.addComponent(cmpListener);
                     FudgeCore.AudioManager.default.listenWith(cmpListener);
                     FudgeCore.AudioManager.default.listenTo(graph);
                     FudgeCore.Debug.log("Audio:", FudgeCore.AudioManager.default);
@@ -86,25 +86,6 @@
 <!--Canvas for FUDGE to render to-->
 <canvas class="fullscreen">
 </canvas>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 </body>

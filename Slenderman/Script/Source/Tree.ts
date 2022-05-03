@@ -8,6 +8,9 @@ namespace Script {
         size: ƒ.Vector3;
         type: string;
 
+        stem: ƒ.Node; 
+        rigidTree: ƒ.ComponentRigidbody; 
+
         constructor(_type: string) {
             super("Tree");
 
@@ -22,6 +25,14 @@ namespace Script {
 
             this.addComponent(new ƒ.ComponentTransform());
             this.addComponent(new DropToGroundInitial());
+
+            this.rigidTree = new ƒ.ComponentRigidbody(); 
+            this.stem = this.treeGraph.getChildrenByName("Stem")[0]; 
+
+            this.stem.addComponent(this.rigidTree);
+            this.rigidTree.initialization = ƒ.BODY_INIT.TO_NODE; 
+            this.rigidTree.typeCollider = ƒ.COLLIDER_TYPE.CYLINDER; 
+            
 
             this.createPosition();
             this.scaleTree();

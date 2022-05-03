@@ -11,7 +11,7 @@ namespace Script {
   let cntWalk: ƒ.Control = new ƒ.Control("cntWalk", 2, ƒ.CONTROL_TYPE.PROPORTIONAL, 500);
   let exhaustion: number = 0;
   let canSprint: boolean = true;
-
+  let rigidAvatar: ƒ.ComponentRigidbody; 
 
   let numTrees: number = 150;
   export let treePositions: ƒ.Vector3[] = [];
@@ -26,6 +26,7 @@ namespace Script {
 
     //get Avatar and Camera to walk and look around
     avatar = viewport.getBranch().getChildrenByName("Avatar")[0];
+    rigidAvatar = avatar.getComponent(ƒ.ComponentRigidbody); 
     viewport.camera = cmpCamera = avatar.getChild(0).getComponent(ƒ.ComponentCamera);
 
     let canvas: HTMLCanvasElement = <HTMLCanvasElement>document.querySelector("canvas");
@@ -40,7 +41,7 @@ namespace Script {
   }
 
   function update(_event: Event): void {
-    // ƒ.Physics.simulate();  // if physics is included and used
+    ƒ.Physics.simulate();  // if physics is included and used
     controlWalk();
     controlSpeed();
     viewport.draw();
