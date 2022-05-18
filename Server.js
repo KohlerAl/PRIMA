@@ -9,6 +9,7 @@ var Script;
     if (port == undefined)
         port = 5001;
     console.log("Server starting on port:" + port);
+    console.log("hello slendi :)"); 
     server.listen(port);
     server.addListener("request", handleRequest);
     function handleRequest(_request, _response) {
