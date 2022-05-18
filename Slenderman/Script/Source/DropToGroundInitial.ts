@@ -31,10 +31,11 @@ namespace Script {
       this.cmpMeshGround = this.ground.getComponent(ƒ.ComponentMesh);
       this.meshTerrain = <ƒ.MeshTerrain>this.cmpMeshGround.mesh;
 
+      /* console.log(this.meshTerrain) */
       if (this.meshTerrain) {
 
         let distance: number = this.meshTerrain.getTerrainInfo(this.node.mtxLocal.translation, this.cmpMeshGround.mtxWorld).distance;
-
+        /* console.log(distance) */
         if (distance)
           this.node.mtxLocal.translateY(-distance);
       }

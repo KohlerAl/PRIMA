@@ -1,0 +1,25 @@
+{
+  "name": "primaserver",
+  "version": "1.0.0",
+  "description": "EIA2",
+  "main": "",
+  "dependencies": {
+    "@types/mongodb": "^3.5.20",
+    "@types/node": "^14.0.5",
+    "mongodb": "^3.5.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node Server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KohlerAl/PRIMA.git"
+  },
+  "author": "Alida",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KohlerAl/PRIMA/issues"
+  },
+  "homepage": "https://github.com/KohlerAl/PRIMA#readme"
+}

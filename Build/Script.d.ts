@@ -1,3 +1,7 @@
+declare module "Server" {
+    export namespace L06_Household {
+    }
+}
 declare namespace Script {
     import ƒ = FudgeCore;
     class CustomComponentScript extends ƒ.ComponentScript {
