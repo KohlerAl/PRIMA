@@ -10,6 +10,7 @@ var Script;
         port = 5001;
     console.log("Server starting on port:" + port);
     console.log("hello slendi :)"); 
+    console.log("Hello world :)")
     server.listen(port);
     server.addListener("request", handleRequest);
     function handleRequest(_request, _response) {
