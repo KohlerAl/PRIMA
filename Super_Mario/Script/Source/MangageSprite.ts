@@ -4,7 +4,7 @@ namespace Script {
 
     export async function setupSprite(_name: string, _position: number[], _frames: number): Promise<ƒAid.NodeSprite> {
         let imgSpriteSheet: ƒ.TextureImage = new ƒ.TextureImage();
-        await imgSpriteSheet.load("Sprites/texture.png");
+        await imgSpriteSheet.load("Sprites/sprites.png");
 
         let coat: ƒ.CoatTextured = new ƒ.CoatTextured(undefined, imgSpriteSheet);
         console.log(coat); 

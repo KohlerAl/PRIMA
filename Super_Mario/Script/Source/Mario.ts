@@ -33,8 +33,8 @@ namespace Script {
 
         public async spriteSetup(): Promise<void> {
             //let sprite: ƒAid.NodeSprite = await setupSprite("Mario", [1250, 0, 24, 44], 10);
-            let sprite: ƒAid.NodeSprite = await setupSprite("Mario", [512, 0, 64, 64], 4);
-            sprite.mtxLocal.scale(new ƒ.Vector3(3, 1.48, 1));
+            let sprite: ƒAid.NodeSprite = await setupSprite("Mario", [818, 0, 24, 44], 4);
+            sprite.mtxLocal.scale(new ƒ.Vector3(3, 1.57, 1));
             this.addChild(sprite);
         }
 

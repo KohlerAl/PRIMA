@@ -80,7 +80,7 @@ var Script;
     var ƒAid = FudgeAid;
     async function setupSprite(_name, _position, _frames) {
         let imgSpriteSheet = new ƒ.TextureImage();
-        await imgSpriteSheet.load("Sprites/texture.png");
+        await imgSpriteSheet.load("Sprites/sprites.png");
         let coat = new ƒ.CoatTextured(undefined, imgSpriteSheet);
         console.log(coat);
         let animation = new ƒAid.SpriteSheetAnimation(_name, coat);
@@ -128,8 +128,8 @@ var Script;
         }
         async spriteSetup() {
             //let sprite: ƒAid.NodeSprite = await setupSprite("Mario", [1250, 0, 24, 44], 10);
-            let sprite = await Script.setupSprite("Mario", [512, 0, 64, 64], 4);
-            sprite.mtxLocal.scale(new ƒ.Vector3(3, 1.48, 1));
+            let sprite = await Script.setupSprite("Mario", [818, 0, 24, 44], 4);
+            sprite.mtxLocal.scale(new ƒ.Vector3(3, 1.57, 1));
             this.addChild(sprite);
         }
         walk() {
