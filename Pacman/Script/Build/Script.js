@@ -146,6 +146,7 @@ var Script;
             Script.graph.addChild(ghosty);
             Script.ghostyGang.push(ghosty);
             ghosty.createSprite();
+            console.log(ghosty);
         }
     }
     Script.ghostySetup = ghostySetup;

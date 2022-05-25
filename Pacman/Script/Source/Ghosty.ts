@@ -121,6 +121,7 @@ namespace Script {
             graph.addChild(ghosty);
             ghostyGang.push(ghosty);
             ghosty.createSprite();
+            console.log(ghosty); 
         }
     }
 }
