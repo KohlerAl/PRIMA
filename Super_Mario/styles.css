@@ -1,16 +1,35 @@
-html, body {
+@font-face {
+  font-family: mario;
+  src: url(Font/SuperMario256.ttf); 
+}
+
+html,
+body {
+  font-family: mario;
   padding: 0px;
   margin: 0px;
   width: 100%;
   height: 100%;
- overflow: hidden;
+  overflow: hidden;
+  /* background-image: url("Sprites/background.png");
+  background-repeat: no-repeat;
+  background-size: cover; */
 }
 
-dialog { 
-  text-align: center; 
+dialog {
+  text-align: center;
+  
 }
 
-canvas.fullscreen { 
-  width: 100vw; 
-  height: 100vh; 
+canvas.fullscreen {
+  width: 100vw;
+  height: 100vh;
+}
+
+#vui {
+  position: absolute;
+  top: 10px;
+  z-index: 1000;
+  padding: 15px;
+  color: whitesmoke;
 }

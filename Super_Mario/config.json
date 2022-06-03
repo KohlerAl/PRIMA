@@ -1,5 +1,5 @@
 {
     "countdown": 250, 
-    "numCoins": 5, 
+    "numBoxes": 5, 
     "numOpponents": 5
 }
