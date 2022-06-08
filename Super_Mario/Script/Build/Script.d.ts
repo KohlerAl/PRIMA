@@ -42,8 +42,15 @@ declare namespace Script {
         rigidGoomba: ƒ.ComponentRigidbody;
         goombaStatemachine: ƒAid.ComponentStateMachine<JOB>;
         sprite: ƒAid.NodeSprite;
+        direction: string;
+        groundPart: number;
+        position: number;
+        minXPos: number;
+        maxXPos: number;
         constructor();
-        spriteSetup(): Promise<void>;
+        flipSprite(): void;
+        private spriteSetup;
+        private findPosition;
     }
 }
 declare namespace Script {
@@ -62,6 +69,9 @@ declare namespace Script {
     import ƒAid = FudgeAid;
     let animations: ƒAid.SpriteSheetAnimations;
     let groundPositions: number[][];
+    function createRandomNumber(_min: number, _max: number): number;
+    function createRandomDirection(): string;
+    function isBetween(_x: number, _min: number, _max: number): boolean;
 }
 declare namespace Script {
     import ƒAid = FudgeAid;

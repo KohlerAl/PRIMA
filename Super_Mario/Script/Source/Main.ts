@@ -12,7 +12,7 @@ namespace Script {
   let gameState: GameState;
 
   export let animations: ƒAid.SpriteSheetAnimations;
-  export let groundPositions: number[][] = []; 
+  export let groundPositions: number[][] = [];
 
   interface ExternalData {
     [name: string]: number;
@@ -28,7 +28,7 @@ namespace Script {
     viewport = _event.detail;
     graph = viewport.getBranch();
     getExternalData();
-    getGroundParts(); 
+    getGroundParts();
 
     viewport.camera.projectCentral(5, 2);
     /* viewport.camera.mtxPivot.translateZ(-455);
@@ -65,10 +65,10 @@ namespace Script {
     countdownTime = config["countdown"];
     numberBoxes = config["numBoxes"];
     numberOpponents = config["numOpponents"];
-    console.log(numberOpponents); 
+    console.log(numberOpponents);
 
     gameState = new GameState(countdownTime);
-    console.log(gameState); 
+    console.log(gameState);
 
     let boxParent: ƒ.Node = graph.getChildrenByName("Environment")[0].getChildrenByName("Boxes")[0];
     //let environment: ƒ.Node = graph.getChildrenByName("Environment")[0].getChildrenByName("GroundParts")[0];
@@ -79,7 +79,7 @@ namespace Script {
 
       for (let i: number = 0; i < blockedNumbers.length; i++) {
         if (randomPosX == blockedNumbers[i]) {
-          randomPosX -= 5; 
+          randomPosX -= 5;
         }
       }
 
@@ -94,19 +94,35 @@ namespace Script {
   }
 
   function getGroundParts(): void {
-    let groundParts: ƒ.Node[] = graph.getChildrenByName("Environment")[0].getChildrenByName("GroundParts")[0].getChildren(); 
+    let groundParts: ƒ.Node[] = graph.getChildrenByName("Environment")[0].getChildrenByName("GroundParts")[0].getChildren();
 
     for (let groundPart of groundParts) {
-      let translateGround: number = groundPart.mtxLocal.translation.x; 
-      let scaleGround: number = groundPart.mtxLocal.scaling.x; 
+      let translateGround: number = groundPart.mtxLocal.translation.x;
+      let scaleGround: number = groundPart.mtxLocal.scaling.x;
 
-      groundPositions.push([translateGround - scaleGround / 2, translateGround + scaleGround / 2]); 
+      groundPositions.push([(translateGround - scaleGround / 2) + 1, (translateGround + scaleGround / 2) - 1]);
     }
-
-    console.log(groundPositions); 
   }
 
-  function createRandomNumber(_min: number, _max: number): number {
+  export function createRandomNumber(_min: number, _max: number): number {
     return Math.floor(Math.random() * (_max - _min + 1)) + _min;
+  }
+
+  export function createRandomDirection(): string {
+    let randomNmbr: number = createRandomNumber(0, 1);
+    if (randomNmbr == 0) {
+      return "left";
+    }
+    else {
+      return "right";
+    }
+  }
+
+  export function isBetween(_x: number, _min: number, _max: number): boolean {
+    if (_x >= _min && _x <= _max)
+      return true;
+
+    else
+      return false;
   }
 }

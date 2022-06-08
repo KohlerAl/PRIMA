@@ -4,6 +4,12 @@ namespace Script {
         rigidGoomba: ƒ.ComponentRigidbody;
         goombaStatemachine: ƒAid.ComponentStateMachine<JOB>;
         sprite: ƒAid.NodeSprite;
+        direction: string; 
+        groundPart: number = 0; 
+        position: number; 
+        minXPos: number; 
+        maxXPos: number; 
+
         constructor() {
             super("Goomba");
 
@@ -16,7 +22,10 @@ namespace Script {
             this.addComponent(new ƒ.ComponentMesh(mesh));
             this.addComponent(cmpMaterial);
 
-            this.mtxLocal.translateX(8);
+            this.findPosition(); 
+
+            this.mtxLocal.reset();
+            this.mtxLocal.translateX(this.position - 1);
 
             this.rigidGoomba = new ƒ.ComponentRigidbody();
             this.addComponent(this.rigidGoomba);
@@ -28,6 +37,8 @@ namespace Script {
 
             this.spriteSetup();
 
+            //this.direction = createRandomDirection(); 
+            this.direction = "right"; 
             this.rigidGoomba.addEventListener(ƒ.EVENT_PHYSICS.COLLISION_ENTER, (_event: ƒ.EventPhysics) => {
                 if (_event.cmpRigidbody.node.name == "Mario") {
                     this.goombaStatemachine.transit(JOB.FIGHT); 
@@ -35,10 +46,28 @@ namespace Script {
             });
         }
 
-        public async spriteSetup(): Promise<void> {
+        public flipSprite(): void {
+            this.sprite.mtxLocal.reset(); 
+            this.sprite.mtxLocal.scale(new ƒ.Vector3(2, 2, 1));
+
+            if (this.direction == "left") {
+                this.sprite.mtxLocal.rotateY(180); 
+            }
+        }
+
+        private async spriteSetup(): Promise<void> {
             this.sprite = await setupSprite("Goomba", [0, 0, 30, 30], 5, 32);
             this.sprite.mtxLocal.scale(new ƒ.Vector3(2, 2, 1));
             this.addChild(this.sprite);
+        }
+
+        private findPosition(): void {
+            //this.groundPart = createRandomNumber(0, groundPositions.length); 
+
+            this.position = createRandomNumber(groundPositions[this.groundPart][0], groundPositions[this.groundPart][1]);
+            console.log(this.position); 
+            this.minXPos = groundPositions[this.groundPart][0]; 
+            this.maxXPos = groundPositions[this.groundPart][1]; 
         }
     }
 }

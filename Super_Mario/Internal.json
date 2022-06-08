@@ -254,6 +254,8 @@
                   "name": "GroundParts",
                   "active": true,
                   "components": {
+                    "ComponentMesh": [],
+                    "ComponentMaterial": []
                   },
                   "children": [
                     {

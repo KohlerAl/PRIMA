@@ -46,7 +46,6 @@ var Script;
         JOB[JOB["FIGHT"] = 1] = "FIGHT";
         JOB[JOB["DIE"] = 2] = "DIE";
     })(JOB = Script.JOB || (Script.JOB = {}));
-    let direction = "right";
     ƒ.Project.registerScriptNamespace(Script);
     class Enemy extends ƒAid.ComponentStateMachine {
         static iSubclass = ƒ.Component.registerSubclass(Enemy);
@@ -75,18 +74,34 @@ var Script;
             console.log("FIGHT");
         }
         static actWalk(_machine) {
-            console.log(direction);
-            let vector = new ƒ.Vector3(0, 0, 0);
-            if (direction == "right") {
-                vector = new ƒ.Vector3((1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
+            let goomba = _machine.node;
+            let direction = goomba.direction;
+            if (Script.isBetween(goomba.position, goomba.minXPos + 1, goomba.maxXPos - 1)) {
+                let vector = new ƒ.Vector3(0, 0, 0);
+                if (direction == "right") {
+                    vector = new ƒ.Vector3((1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
+                    goomba.position += 1 / 60;
+                }
+                else if (direction == "left") {
+                    vector = new ƒ.Vector3(-(1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
+                    goomba.position -= 1 / 60;
+                }
+                vector.transform(_machine.node.mtxLocal, false);
+                let rigidGoomba = _machine.node.getComponent(ƒ.ComponentRigidbody);
+                rigidGoomba.setVelocity(vector);
+                _machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
             }
-            else if (direction == "left") {
-                vector = new ƒ.Vector3(-(1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
+            else {
+                if (goomba.direction == "left") {
+                    goomba.direction = "right";
+                    goomba.position += 1 / 60;
+                }
+                else {
+                    goomba.direction = "left";
+                    goomba.position -= 1 / 60;
+                }
+                goomba.flipSprite();
             }
-            vector.transform(_machine.node.mtxLocal, false);
-            let rigidGoomba = _machine.node.getComponent(ƒ.ComponentRigidbody);
-            rigidGoomba.setVelocity(vector);
-            _machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
         }
         static actDie() {
             console.log("Goomba die");
@@ -137,6 +152,11 @@ var Script;
         rigidGoomba;
         goombaStatemachine;
         sprite;
+        direction;
+        groundPart = 0;
+        position;
+        minXPos;
+        maxXPos;
         constructor() {
             super("Goomba");
             let mesh = new ƒ.MeshCube();
@@ -146,7 +166,9 @@ var Script;
             this.addComponent(new ƒ.ComponentTransform());
             this.addComponent(new ƒ.ComponentMesh(mesh));
             this.addComponent(cmpMaterial);
-            this.mtxLocal.translateX(8);
+            this.findPosition();
+            this.mtxLocal.reset();
+            this.mtxLocal.translateX(this.position - 1);
             this.rigidGoomba = new ƒ.ComponentRigidbody();
             this.addComponent(this.rigidGoomba);
             this.rigidGoomba.effectRotation = new ƒ.Vector3(0, 0, 0);
@@ -154,16 +176,32 @@ var Script;
             this.goombaStatemachine = new Script.Enemy();
             this.addComponent(this.goombaStatemachine);
             this.spriteSetup();
+            //this.direction = createRandomDirection(); 
+            this.direction = "right";
             this.rigidGoomba.addEventListener("ColliderEnteredCollision" /* COLLISION_ENTER */, (_event) => {
                 if (_event.cmpRigidbody.node.name == "Mario") {
                     this.goombaStatemachine.transit(Script.JOB.FIGHT);
                 }
             });
         }
+        flipSprite() {
+            this.sprite.mtxLocal.reset();
+            this.sprite.mtxLocal.scale(new ƒ.Vector3(2, 2, 1));
+            if (this.direction == "left") {
+                this.sprite.mtxLocal.rotateY(180);
+            }
+        }
         async spriteSetup() {
             this.sprite = await Script.setupSprite("Goomba", [0, 0, 30, 30], 5, 32);
             this.sprite.mtxLocal.scale(new ƒ.Vector3(2, 2, 1));
             this.addChild(this.sprite);
+        }
+        findPosition() {
+            //this.groundPart = createRandomNumber(0, groundPositions.length); 
+            this.position = Script.createRandomNumber(Script.groundPositions[this.groundPart][0], Script.groundPositions[this.groundPart][1]);
+            console.log(this.position);
+            this.minXPos = Script.groundPositions[this.groundPart][0];
+            this.maxXPos = Script.groundPositions[this.groundPart][1];
         }
     }
     Script.Goomba = Goomba;
@@ -281,13 +319,30 @@ var Script;
         for (let groundPart of groundParts) {
             let translateGround = groundPart.mtxLocal.translation.x;
             let scaleGround = groundPart.mtxLocal.scaling.x;
-            Script.groundPositions.push([translateGround - scaleGround / 2, translateGround + scaleGround / 2]);
+            Script.groundPositions.push([(translateGround - scaleGround / 2) + 1, (translateGround + scaleGround / 2) - 1]);
         }
-        console.log(Script.groundPositions);
     }
     function createRandomNumber(_min, _max) {
         return Math.floor(Math.random() * (_max - _min + 1)) + _min;
     }
+    Script.createRandomNumber = createRandomNumber;
+    function createRandomDirection() {
+        let randomNmbr = createRandomNumber(0, 1);
+        if (randomNmbr == 0) {
+            return "left";
+        }
+        else {
+            return "right";
+        }
+    }
+    Script.createRandomDirection = createRandomDirection;
+    function isBetween(_x, _min, _max) {
+        if (_x >= _min && _x <= _max)
+            return true;
+        else
+            return false;
+    }
+    Script.isBetween = isBetween;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
