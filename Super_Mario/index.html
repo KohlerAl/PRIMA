@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="styles.css" />
 
 <!--Editor settings of this project-->
-<meta type="settings" autoview="Graph|2022-05-24T17:31:01.983Z|19489" project="{'name':'Super_Mario','includeAutoViewScript':true,'graphAutoView':'Graph|2022-05-24T17:31:01.983Z|19489'}" panels="[{'type':'PanelProject','state':{}},{'type':'PanelGraph','state':{'graph':'Graph|2022-05-24T17:31:01.983Z|19489'}},{'type':'PanelGraph'}]" />
+<meta type="settings" autoview="Graph|2022-05-24T17:31:01.983Z|19489" project="{'name':'Super_Mario','includeAutoViewScript':false,'graphAutoView':'Graph|2022-05-24T17:31:01.983Z|19489'}" panels="[{'type':'PanelProject','state':{}},{'type':'PanelGraph','state':{'graph':'Graph|2022-05-24T17:31:01.983Z|19489'}}]" />
 
 <!-- <script type="text/javascript" src="https://jirkadelloro.github.io/FUDGE/Physics/OimoPhysics.js"></script> -->
 <script type="text/javascript" src="FudgeScripts/OimoPhysics.js"></script>
@@ -24,8 +24,7 @@
 
 <!--Load custom scripts-->
 <script type="text/javascript" src="Script/Build/Script.js" editor="true"></script>
-
-<script name="autoView">(function (_graphId) {
+<!-- <script name="autoView">(function (_graphId) {
                 /**
                  * AutoView-Script
                  * Loads and displays the selected graph and implements a basic orbit camera
@@ -65,7 +64,7 @@
                     FudgeCore.Debug.log("Viewport:", viewport);
                     // hide the cursor when interacting, also suppressing right-click menu
                     canvas.addEventListener("mousedown", canvas.requestPointerLock);
-                    //canvas.addEventListener("mouseup", function () { document.exitPointerLock(); });
+                    canvas.addEventListener("mouseup", function () { document.exitPointerLock(); });
                     // make the camera interactive (complex method in FudgeAid)
                     FudgeAid.Viewport.expandCameraToInteractiveOrbit(viewport);
                     // setup audio
@@ -79,8 +78,9 @@
                     canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", { bubbles: true, detail: viewport }));
                 }
             })(document.head.querySelector("meta[autoView]").getAttribute("autoView"));
-</script>
+</script> -->
 </head>
+
 <body>
 <!--Dialog shown at startup only-->
 <dialog>
@@ -95,6 +95,8 @@
     Time <input type="number" step="1" value="200" min="0" />
     Points <input type="number" step="1" value="0" min="0" disabled="" />
 </div>
+
+
 
 
 

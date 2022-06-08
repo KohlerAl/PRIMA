@@ -46,6 +46,7 @@ var Script;
         JOB[JOB["FIGHT"] = 1] = "FIGHT";
         JOB[JOB["DIE"] = 2] = "DIE";
     })(JOB = Script.JOB || (Script.JOB = {}));
+    let direction = "right";
     ƒ.Project.registerScriptNamespace(Script);
     class Enemy extends ƒAid.ComponentStateMachine {
         static iSubclass = ƒ.Component.registerSubclass(Enemy);
@@ -73,8 +74,19 @@ var Script;
         static actFight() {
             console.log("FIGHT");
         }
-        static actWalk() {
-            console.log("Goomba walk");
+        static actWalk(_machine) {
+            console.log(direction);
+            let vector = new ƒ.Vector3(0, 0, 0);
+            if (direction == "right") {
+                vector = new ƒ.Vector3((1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
+            }
+            else if (direction == "left") {
+                vector = new ƒ.Vector3(-(1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
+            }
+            vector.transform(_machine.node.mtxLocal, false);
+            let rigidGoomba = _machine.node.getComponent(ƒ.ComponentRigidbody);
+            rigidGoomba.setVelocity(vector);
+            _machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
         }
         static actDie() {
             console.log("Goomba die");
@@ -137,9 +149,10 @@ var Script;
             this.mtxLocal.translateX(8);
             this.rigidGoomba = new ƒ.ComponentRigidbody();
             this.addComponent(this.rigidGoomba);
+            this.rigidGoomba.effectRotation = new ƒ.Vector3(0, 0, 0);
             this.rigidGoomba.effectGravity = 10;
             this.goombaStatemachine = new Script.Enemy();
-            this.addComponent(new Script.Enemy());
+            this.addComponent(this.goombaStatemachine);
             this.spriteSetup();
             this.rigidGoomba.addEventListener("ColliderEnteredCollision" /* COLLISION_ENTER */, (_event) => {
                 if (_event.cmpRigidbody.node.name == "Mario") {
@@ -205,6 +218,7 @@ var Script;
     let graph;
     let mario;
     let gameState;
+    Script.groundPositions = [];
     let config;
     let countdownTime;
     let numberBoxes;
@@ -214,10 +228,14 @@ var Script;
         viewport = _event.detail;
         graph = viewport.getBranch();
         getExternalData();
+        getGroundParts();
         viewport.camera.projectCentral(5, 2);
-        viewport.camera.mtxPivot.translateZ(-455);
+        /* viewport.camera.mtxPivot.translateZ(-455);
         viewport.camera.mtxPivot.translateY(4.5);
-        viewport.camera.mtxPivot.translateX(-11.5);
+        viewport.camera.mtxPivot.translateX(-11.5); */
+        viewport.camera.mtxPivot.translate(new ƒ.Vector3(6, 5, 0));
+        viewport.camera.mtxPivot.rotateY(180);
+        viewport.camera.mtxPivot.translateZ(-400);
         mario = new Script.Mario();
         graph.appendChild(mario);
         let goomba = new Script.Goomba();
@@ -258,6 +276,15 @@ var Script;
             boxParent.appendChild(item);
         }
     }
+    function getGroundParts() {
+        let groundParts = graph.getChildrenByName("Environment")[0].getChildrenByName("GroundParts")[0].getChildren();
+        for (let groundPart of groundParts) {
+            let translateGround = groundPart.mtxLocal.translation.x;
+            let scaleGround = groundPart.mtxLocal.scaling.x;
+            Script.groundPositions.push([translateGround - scaleGround / 2, translateGround + scaleGround / 2]);
+        }
+        console.log(Script.groundPositions);
+    }
     function createRandomNumber(_min, _max) {
         return Math.floor(Math.random() * (_max - _min + 1)) + _min;
     }
@@ -296,7 +323,6 @@ var Script;
         sprite;
         direction;
         jumpcooldown = 1000;
-        //canjump: boolean = true;
         constructor() {
             super("Mario");
             let mesh = new ƒ.MeshCube();
@@ -311,33 +337,34 @@ var Script;
             this.rigidMario.effectRotation = new ƒ.Vector3(0, 0, 0);
             this.addComponent(this.rigidMario);
             this.rigidMario.friction = 0;
-            this.rigidMario.effectGravity = 10;
+            this.rigidMario.effectGravity = 15;
             this.mtxLocal.scale(new ƒ.Vector3(1, 2, 1));
             this.direction = "right";
             this.spriteSetup();
         }
         async spriteSetup() {
-            //let sprite: ƒAid.NodeSprite = await setupSprite("Mario", [1500, 250, 24, 44], 10);
             this.sprite = await Script.setupSprite("Mario", [22, 32, 24, 40], 3, 24);
             this.sprite.mtxLocal.scale(new ƒ.Vector3(3, 1.57, 1));
             this.addChild(this.sprite);
         }
         walk() {
-            //effect rotation 
             let strafe = ƒ.Keyboard.mapToTrit([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT], [ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]);
-            /* let vector: ƒ.Vector3 = new ƒ.Vector3(-(1.5 * strafe * ƒ.Loop.timeFrameGame) / 10, 0, (this.cntWalk.getOutput() * ƒ.Loop.timeFrameGame / 10)); */
             let vector = new ƒ.Vector3(-(1.5 * strafe * ƒ.Loop.timeFrameGame) / 10, 0, 0);
             vector.transform(this.mtxLocal, false);
             this.rigidMario.setVelocity(vector);
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT])) {
                 this.direction = "left";
+                this.sprite.mtxLocal.reset();
+                this.sprite.mtxLocal.scale(new ƒ.Vector3(3, 1.57, 1));
+                this.sprite.mtxLocal.rotateY(180);
             }
-            else if ([ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]) {
+            else if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT])) {
                 this.direction = "right";
+                this.sprite.mtxLocal.reset();
+                this.sprite.mtxLocal.scale(new ƒ.Vector3(3, 1.57, 1));
             }
         }
         jump() {
-            //jump
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.SPACE]) && canjump == true) {
                 canjump = false;
                 if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT]))
@@ -359,5 +386,41 @@ var Script;
         }
     }
     Script.Mario = Mario;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    window.addEventListener("load", init);
+    let dialog;
+    function init(_event) {
+        dialog = document.querySelector("dialog");
+        dialog.querySelector("h1").textContent = document.title;
+        dialog.addEventListener("click", function (_event) {
+            // @ts-ignore until HTMLDialog is implemented by all browsers and available in dom.d.ts
+            dialog.close();
+            startInteractiveViewport();
+        });
+        //@ts-ignore
+        dialog.showModal();
+    }
+    async function startInteractiveViewport() {
+        await ƒ.Project.loadResourcesFromHTML();
+        ƒ.Debug.log("Project:", ƒ.Project.resources);
+        let graph = ƒ.Project.resources["Graph|2022-05-24T17:31:01.983Z|19489"];
+        ƒ.Debug.log("Graph:", graph);
+        if (!graph) {
+            alert("Nothing to render. Create a graph with at least a mesh, material and probably some light");
+            return;
+        }
+        let cmpCamera = new ƒ.ComponentCamera();
+        let canvas = document.querySelector("canvas");
+        let viewport = new ƒ.Viewport();
+        viewport.initialize("InteractiveViewport", graph, cmpCamera, canvas);
+        ƒ.Debug.log("Viewport:", viewport);
+        viewport.draw();
+        canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", {
+            bubbles: true,
+            detail: viewport
+        }));
+    }
 })(Script || (Script = {}));
 //# sourceMappingURL=Script.js.map

@@ -5,7 +5,7 @@ namespace Script {
     export enum JOB {
         WALK, FIGHT, DIE
     }
-
+    let direction: string = "right"; 
     ƒ.Project.registerScriptNamespace(Script);
     export class Enemy extends ƒAid.ComponentStateMachine<JOB> {
         public static readonly iSubclass: number = ƒ.Component.registerSubclass(Enemy);
@@ -20,6 +20,7 @@ namespace Script {
 
             this.addEventListener(ƒ.EVENT.COMPONENT_ADD, this.hndEvent);
             this.addEventListener(ƒ.EVENT.COMPONENT_REMOVE, this.hndEvent);
+
         }
 
         public static get(): ƒAid.StateMachineInstructions<JOB> {
@@ -41,8 +42,24 @@ namespace Script {
             console.log("FIGHT");
         }
 
-        private static actWalk(): void {
-            console.log("Goomba walk");
+        private static actWalk(_machine: Enemy): void {
+            console.log(direction);
+            let vector: ƒ.Vector3 = new ƒ.Vector3(0, 0, 0); 
+
+            if (direction == "right") {
+                vector = new ƒ.Vector3((1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
+            }
+
+            else if (direction == "left") {
+                vector = new ƒ.Vector3(-(1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
+            }
+            
+            vector.transform(_machine.node.mtxLocal, false);
+            let rigidGoomba: ƒ.ComponentRigidbody = _machine.node.getComponent(ƒ.ComponentRigidbody); 
+            rigidGoomba.setVelocity(vector);
+
+
+            _machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
         }
 
         private static actDie(): void {

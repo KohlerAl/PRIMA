@@ -253,7 +253,8 @@
                 "ƒ.Node": {
                   "name": "GroundParts",
                   "active": true,
-                  "components": {},
+                  "components": {
+                  },
                   "children": [
                     {
                       "ƒ.Node": {
@@ -284,7 +285,7 @@
                                 "pivot": {
                                   "translation": "[0, 0.018000006675720215]",
                                   "rotation": 0,
-                                  "scaling": "[13, 1]"
+                                  "scaling": "[12, 1]"
                                 },
                                 "Component": {
                                   "active": true
@@ -299,7 +300,7 @@
                                 "local": {
                                   "translation": "[6, 0, 0]",
                                   "rotation": "[0, 0, 0]",
-                                  "scaling": "[13, 1, 1]"
+                                  "scaling": "[12, 1, 1]"
                                 },
                                 "Component": {
                                   "active": true
@@ -446,7 +447,7 @@
                                 "pivot": {
                                   "translation": "[0, 0]",
                                   "rotation": 0,
-                                  "scaling": "[3, 1]"
+                                  "scaling": "[4, 1]"
                                 },
                                 "Component": {
                                   "active": true
@@ -461,7 +462,7 @@
                                 "local": {
                                   "translation": "[31, 0, 0]",
                                   "rotation": "[0, 0, 0]",
-                                  "scaling": "[3, 1, 1]"
+                                  "scaling": "[4, 1, 1]"
                                 },
                                 "Component": {
                                   "active": true
@@ -689,7 +690,7 @@
                                 "pivot": {
                                   "translation": "[0, 0]",
                                   "rotation": 0,
-                                  "scaling": "[17, 1]"
+                                  "scaling": "[18, 1]"
                                 },
                                 "Component": {
                                   "active": true
@@ -704,7 +705,7 @@
                                 "local": {
                                   "translation": "[64, 0, 0]",
                                   "rotation": "[0, 0, 0]",
-                                  "scaling": "[17, 1, 1]"
+                                  "scaling": "[18, 1, 1]"
                                 },
                                 "Component": {
                                   "active": true
@@ -770,7 +771,7 @@
                                 "pivot": {
                                   "translation": "[0, 0]",
                                   "rotation": 0,
-                                  "scaling": "[9, 1]"
+                                  "scaling": "[10, 1]"
                                 },
                                 "Component": {
                                   "active": true
@@ -785,7 +786,7 @@
                                 "local": {
                                   "translation": "[84, 0, 0]",
                                   "rotation": "[0, 0, 0]",
-                                  "scaling": "[9, 1, 1]"
+                                  "scaling": "[10, 1, 1]"
                                 },
                                 "Component": {
                                   "active": true
@@ -851,7 +852,7 @@
                                 "pivot": {
                                   "translation": "[0, 0]",
                                   "rotation": 0,
-                                  "scaling": "[11, 1]"
+                                  "scaling": "[12, 1]"
                                 },
                                 "Component": {
                                   "active": true
@@ -866,7 +867,7 @@
                                 "local": {
                                   "translation": "[97, 0, 0]",
                                   "rotation": "[0, 0, 0]",
-                                  "scaling": "[11, 1, 1]"
+                                  "scaling": "[12, 1, 1]"
                                 },
                                 "Component": {
                                   "active": true

@@ -12,7 +12,7 @@ namespace Script {
   let gameState: GameState;
 
   export let animations: ƒAid.SpriteSheetAnimations;
-
+  export let groundPositions: number[][] = []; 
 
   interface ExternalData {
     [name: string]: number;
@@ -28,11 +28,18 @@ namespace Script {
     viewport = _event.detail;
     graph = viewport.getBranch();
     getExternalData();
+    getGroundParts(); 
 
     viewport.camera.projectCentral(5, 2);
-    viewport.camera.mtxPivot.translateZ(-455);
+    /* viewport.camera.mtxPivot.translateZ(-455);
     viewport.camera.mtxPivot.translateY(4.5);
-    viewport.camera.mtxPivot.translateX(-11.5);
+    viewport.camera.mtxPivot.translateX(-11.5); */
+
+    viewport.camera.mtxPivot.translate(new ƒ.Vector3(6, 5, 0));
+    viewport.camera.mtxPivot.rotateY(180);
+    viewport.camera.mtxPivot.translateZ(-400);
+
+
     mario = new Mario();
     graph.appendChild(mario);
 
@@ -84,6 +91,19 @@ namespace Script {
       boxParent.appendChild(item);
 
     }
+  }
+
+  function getGroundParts(): void {
+    let groundParts: ƒ.Node[] = graph.getChildrenByName("Environment")[0].getChildrenByName("GroundParts")[0].getChildren(); 
+
+    for (let groundPart of groundParts) {
+      let translateGround: number = groundPart.mtxLocal.translation.x; 
+      let scaleGround: number = groundPart.mtxLocal.scaling.x; 
+
+      groundPositions.push([translateGround - scaleGround / 2, translateGround + scaleGround / 2]); 
+    }
+
+    console.log(groundPositions); 
   }
 
   function createRandomNumber(_min: number, _max: number): number {

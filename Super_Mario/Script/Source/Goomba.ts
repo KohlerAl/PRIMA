@@ -20,10 +20,11 @@ namespace Script {
 
             this.rigidGoomba = new ƒ.ComponentRigidbody();
             this.addComponent(this.rigidGoomba);
+            this.rigidGoomba.effectRotation = new ƒ.Vector3(0, 0, 0); 
             this.rigidGoomba.effectGravity = 10;
 
             this.goombaStatemachine = new Enemy();
-            this.addComponent(new Enemy());
+            this.addComponent(this.goombaStatemachine);
 
             this.spriteSetup();
 

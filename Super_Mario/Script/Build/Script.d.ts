@@ -61,6 +61,7 @@ declare namespace Script {
 declare namespace Script {
     import ƒAid = FudgeAid;
     let animations: ƒAid.SpriteSheetAnimations;
+    let groundPositions: number[][];
 }
 declare namespace Script {
     import ƒAid = FudgeAid;
@@ -82,4 +83,6 @@ declare namespace Script {
         collectPowerUp(): void;
         playSounds(): void;
     }
+}
+declare namespace Script {
 }
