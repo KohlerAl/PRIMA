@@ -3,57 +3,62 @@ namespace Script {
   import ƒAid = FudgeAid;
   ƒ.Debug.info("Main Program Template running!");
 
-  let viewport: ƒ.Viewport;
-  document.addEventListener("interactiveViewportStarted", <EventListener>start);
+  export let viewport: ƒ.Viewport;
+  document.addEventListener("interactiveViewportStarted", <EventListener><unknown>start);
 
-  let graph: ƒ.Node;
-  let mario: Mario;
+  export let graph: ƒ.Node;
+  export let mario: Mario;
+  export let goombas: Goomba[] = [];
 
-  let gameState: GameState;
+  export let gameState: GameState;
+  export let numberPointsGoomba: number = 1000;
 
   export let animations: ƒAid.SpriteSheetAnimations;
   export let groundPositions: number[][] = [];
+  export let blockedPositions: number[];
 
   interface ExternalData {
     [name: string]: number;
   }
 
+  let time: ƒ.Time;
+  export let timer: ƒ.Timer;
+
   let config: ExternalData;
   let countdownTime: number;
   let numberBoxes: number;
   let numberOpponents: number;
-  let blockedNumbers: number[] = [22, 23, 24, 25, 26, 27, 34, 35, 36, 37, 47, 48, 49, 50];
+  export let blockedNumbers: number[] = [12, 13, 14, 15, 22, 23, 24, 25, 26, 27, 28, 29, 33, 34, 35, 36, 37, 45, 46, 47, 48, 49, 50, 53, 54, 55, 73, 74, 75, 76, 77, 78, 79, 89, 90, 91];
 
-  function start(_event: CustomEvent): void {
+  async function start(_event: CustomEvent): Promise<void> {
     viewport = _event.detail;
     graph = viewport.getBranch();
-    getExternalData();
+    await getExternalData();
     getGroundParts();
-
-    viewport.camera.projectCentral(5, 2);
-    /* viewport.camera.mtxPivot.translateZ(-455);
-    viewport.camera.mtxPivot.translateY(4.5);
-    viewport.camera.mtxPivot.translateX(-11.5); */
-
-    viewport.camera.mtxPivot.translate(new ƒ.Vector3(6, 5, 0));
-    viewport.camera.mtxPivot.rotateY(180);
-    viewport.camera.mtxPivot.translateZ(-400);
-
 
     mario = new Mario();
     graph.appendChild(mario);
+    mario.addComponent(createCamera());
+    //createCamera();
 
-    let goomba: Goomba = new Goomba();
-    graph.appendChild(goomba);
+    for (let i: number = 0; i < 1; i++) {
+      goombas.push(new Goomba());
+      graph.appendChild(goombas[i]);
+    }
 
-
+    time = new ƒ.Time();
+    timer = new ƒ.Timer(time, 1000, 0, updateTimer);
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
     ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
   }
 
-  function update(_event: Event): void {
-    mario.walk();
-    mario.jump();
+  export function update(_event: Event): void {
+    mario.update();
+    if (goombas.length > 0) {
+      for (let goomba of goombas)
+        goomba.update();
+    }
+
     ƒ.Physics.simulate();  // if physics is included and used
     viewport.draw();
     //ƒ.AudioManager.default.update();
@@ -102,6 +107,28 @@ namespace Script {
 
       groundPositions.push([(translateGround - scaleGround / 2) + 1, (translateGround + scaleGround / 2) - 1]);
     }
+  }
+
+  function updateTimer(): void {
+    gameState.timer -= 1;
+
+    if (gameState.timer <= 0) {
+      ƒ.Loop.removeEventListener(ƒ.EVENT.LOOP_FRAME, update);
+    }
+  }
+
+  function createCamera(): ƒ.ComponentCamera {
+    let newCam: ƒ.ComponentCamera = new ƒ.ComponentCamera();
+    //newCam.projectOrthographic(); 
+    viewport.camera = newCam;
+    viewport.camera.projectCentral(canvas.clientWidth / canvas.clientHeight, 5);
+    //viewport.camera.mtxPivot.translate(new ƒ.Vector3(0, 0, 0));
+    viewport.camera.mtxPivot.rotateY(180);
+    viewport.camera.mtxPivot.translateZ(-450);
+
+    viewport.camera.mtxPivot.scale(new ƒ.Vector3(2, 1, 2));
+
+    return newCam;
   }
 
   export function createRandomNumber(_min: number, _max: number): number {

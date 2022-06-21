@@ -32,6 +32,9 @@ namespace Script {
             this.addComponent(cmpTransform);
             this.addComponent(cmpMesh);
             this.addComponent(cmpMaterial);
+            let rigidItem: ƒ.ComponentRigidbody = new ƒ.ComponentRigidbody(0, ƒ.BODY_TYPE.STATIC); 
+            //rigidItem.typeBody = ƒ.BODY_TYPE.STATIC; 
+            this.addComponent(rigidItem); 
             this.mtxLocal.translateY(4); 
             this.mtxLocal.translateX(this.xPos); 
             //spawn a new box 

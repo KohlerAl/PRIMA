@@ -47,7 +47,10 @@ declare namespace Script {
         position: number;
         minXPos: number;
         maxXPos: number;
+        material: ƒ.ComponentMaterial;
         constructor();
+        update(): void;
+        die(): void;
         flipSprite(): void;
         private spriteSetup;
         private findPosition;
@@ -66,9 +69,20 @@ declare namespace Script {
     }
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
     import ƒAid = FudgeAid;
+    let viewport: ƒ.Viewport;
+    let graph: ƒ.Node;
+    let mario: Mario;
+    let goombas: Goomba[];
+    let gameState: GameState;
+    let numberPointsGoomba: number;
     let animations: ƒAid.SpriteSheetAnimations;
     let groundPositions: number[][];
+    let blockedPositions: number[];
+    let timer: ƒ.Timer;
+    let blockedNumbers: number[];
+    function update(_event: Event): void;
     function createRandomNumber(_min: number, _max: number): number;
     function createRandomDirection(): string;
     function isBetween(_x: number, _min: number, _max: number): boolean;
@@ -87,12 +101,25 @@ declare namespace Script {
         direction: string;
         jumpcooldown: number;
         constructor();
-        spriteSetup(): Promise<void>;
-        walk(): void;
-        jump(): void;
+        update(): void;
         collectPowerUp(): void;
         playSounds(): void;
+        private checkPosition;
+        private walk;
+        private jump;
+        private checkDeath;
+        private spriteSetup;
     }
 }
 declare namespace Script {
+    import ƒ = FudgeCore;
+    class SetPosition extends ƒ.ComponentScript {
+        static readonly iSubclass: number;
+        message: string;
+        constructor();
+        createPosition(_rangeStart: number, _rangeEnd: number): number;
+    }
+}
+declare namespace Script {
+    let canvas: HTMLCanvasElement;
 }

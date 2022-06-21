@@ -70,13 +70,35 @@ var Script;
         static actDefault() {
             console.log("Goomba default");
         }
-        static actFight() {
-            console.log("FIGHT");
+        static actFight(_machine) {
+            console.log("fight");
+            let goomba = _machine.node;
+            let direction = goomba.direction;
+            if (Script.mario.direction == "left")
+                direction = "left";
+            else
+                direction = "right";
+            let vector = new ƒ.Vector3(0, 0, 0);
+            if (direction == "right") {
+                vector = new ƒ.Vector3((1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
+                goomba.position += 1 / 60;
+            }
+            else if (direction == "left") {
+                vector = new ƒ.Vector3(-(1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
+                goomba.position -= 1 / 60;
+            }
+            vector.transform(_machine.node.mtxLocal, false);
+            let rigidGoomba = _machine.node.getComponent(ƒ.ComponentRigidbody);
+            rigidGoomba.setVelocity(vector);
+            _machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
+            //this.actWalk(_machine);
         }
         static actWalk(_machine) {
+            console.log("walk");
             let goomba = _machine.node;
             let direction = goomba.direction;
             if (Script.isBetween(goomba.position, goomba.minXPos + 1, goomba.maxXPos - 1)) {
+                console.log(direction);
                 let vector = new ƒ.Vector3(0, 0, 0);
                 if (direction == "right") {
                     vector = new ƒ.Vector3((1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
@@ -94,17 +116,23 @@ var Script;
             else {
                 if (goomba.direction == "left") {
                     goomba.direction = "right";
-                    goomba.position += 1 / 60;
+                    goomba.position += 1 / 30;
                 }
                 else {
                     goomba.direction = "left";
-                    goomba.position -= 1 / 60;
+                    goomba.position -= 1 / 30;
                 }
                 goomba.flipSprite();
             }
         }
-        static actDie() {
-            console.log("Goomba die");
+        static actDie(_machine) {
+            let goomba = _machine.node;
+            console.log("die");
+            goomba.removeComponent(goomba.goombaStatemachine);
+            goomba.removeComponent(goomba.rigidGoomba);
+            //graph.getChildrenByName("Opponents")[0].removeChild(goomba);
+            Script.graph.removeChild(goomba);
+            Script.gameState.points += Script.numberPointsGoomba;
         }
         static transitDefault(_machine) {
             console.log("Transit to", _machine.stateNext);
@@ -157,15 +185,19 @@ var Script;
         position;
         minXPos;
         maxXPos;
+        material;
         constructor() {
             super("Goomba");
             let mesh = new ƒ.MeshCube();
             let material = new ƒ.Material("MaterialGoomba", ƒ.ShaderLit, new ƒ.CoatColored());
-            let cmpMaterial = new ƒ.ComponentMaterial(material);
-            cmpMaterial.clrPrimary = new ƒ.Color(0, 0, 0, 0);
+            this.material = new ƒ.ComponentMaterial(material);
+            this.material.clrPrimary = new ƒ.Color(0, 0, 0, 0);
             this.addComponent(new ƒ.ComponentTransform());
             this.addComponent(new ƒ.ComponentMesh(mesh));
-            this.addComponent(cmpMaterial);
+            this.addComponent(this.material);
+            /* let pos: SetPosition = new SetPosition();
+            this.addComponent(pos);
+            this.position = pos.createPosition(5, 60);  */
             this.findPosition();
             this.mtxLocal.reset();
             this.mtxLocal.translateX(this.position - 1);
@@ -173,6 +205,7 @@ var Script;
             this.addComponent(this.rigidGoomba);
             this.rigidGoomba.effectRotation = new ƒ.Vector3(0, 0, 0);
             this.rigidGoomba.effectGravity = 10;
+            this.rigidGoomba.friction = 0;
             this.goombaStatemachine = new Script.Enemy();
             this.addComponent(this.goombaStatemachine);
             this.spriteSetup();
@@ -183,6 +216,20 @@ var Script;
                     this.goombaStatemachine.transit(Script.JOB.FIGHT);
                 }
             });
+        }
+        update() {
+            if (this.mtxLocal.translation.y < -5) {
+                this.goombaStatemachine.transit(Script.JOB.DIE);
+            }
+        }
+        die() {
+            /* gameState.points += numberPointsGoomba;
+            console.log("die");
+            this.removeComponent(this.goombaStatemachine);
+            this.removeComponent(this.rigidGoomba);
+            let index: number = goombas.indexOf(this);
+            goombas.splice(index, 1);
+            graph.getChildrenByName("Opponents")[0].removeChild(this); */
         }
         flipSprite() {
             this.sprite.mtxLocal.reset();
@@ -235,6 +282,9 @@ var Script;
             this.addComponent(cmpTransform);
             this.addComponent(cmpMesh);
             this.addComponent(cmpMaterial);
+            let rigidItem = new ƒ.ComponentRigidbody(0, ƒ.BODY_TYPE.STATIC);
+            //rigidItem.typeBody = ƒ.BODY_TYPE.STATIC; 
+            this.addComponent(rigidItem);
             this.mtxLocal.translateY(4);
             this.mtxLocal.translateX(this.xPos);
             //spawn a new box 
@@ -251,43 +301,45 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     ƒ.Debug.info("Main Program Template running!");
-    let viewport;
     document.addEventListener("interactiveViewportStarted", start);
-    let graph;
-    let mario;
-    let gameState;
+    Script.goombas = [];
+    Script.numberPointsGoomba = 1000;
     Script.groundPositions = [];
+    let time;
     let config;
     let countdownTime;
     let numberBoxes;
     let numberOpponents;
-    let blockedNumbers = [22, 23, 24, 25, 26, 27, 34, 35, 36, 37, 47, 48, 49, 50];
-    function start(_event) {
-        viewport = _event.detail;
-        graph = viewport.getBranch();
-        getExternalData();
+    Script.blockedNumbers = [12, 13, 14, 15, 22, 23, 24, 25, 26, 27, 28, 29, 33, 34, 35, 36, 37, 45, 46, 47, 48, 49, 50, 53, 54, 55, 73, 74, 75, 76, 77, 78, 79, 89, 90, 91];
+    async function start(_event) {
+        Script.viewport = _event.detail;
+        Script.graph = Script.viewport.getBranch();
+        await getExternalData();
         getGroundParts();
-        viewport.camera.projectCentral(5, 2);
-        /* viewport.camera.mtxPivot.translateZ(-455);
-        viewport.camera.mtxPivot.translateY(4.5);
-        viewport.camera.mtxPivot.translateX(-11.5); */
-        viewport.camera.mtxPivot.translate(new ƒ.Vector3(6, 5, 0));
-        viewport.camera.mtxPivot.rotateY(180);
-        viewport.camera.mtxPivot.translateZ(-400);
-        mario = new Script.Mario();
-        graph.appendChild(mario);
-        let goomba = new Script.Goomba();
-        graph.appendChild(goomba);
+        Script.mario = new Script.Mario();
+        Script.graph.appendChild(Script.mario);
+        Script.mario.addComponent(createCamera());
+        //createCamera();
+        for (let i = 0; i < 1; i++) {
+            Script.goombas.push(new Script.Goomba());
+            Script.graph.appendChild(Script.goombas[i]);
+        }
+        time = new ƒ.Time();
+        Script.timer = new ƒ.Timer(time, 1000, 0, updateTimer);
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
     function update(_event) {
-        mario.walk();
-        mario.jump();
+        Script.mario.update();
+        if (Script.goombas.length > 0) {
+            for (let goomba of Script.goombas)
+                goomba.update();
+        }
         ƒ.Physics.simulate(); // if physics is included and used
-        viewport.draw();
+        Script.viewport.draw();
         //ƒ.AudioManager.default.update();
     }
+    Script.update = update;
     async function getExternalData() {
         let response = await fetch("config.json");
         config = await response.json();
@@ -295,15 +347,15 @@ var Script;
         numberBoxes = config["numBoxes"];
         numberOpponents = config["numOpponents"];
         console.log(numberOpponents);
-        gameState = new Script.GameState(countdownTime);
-        console.log(gameState);
-        let boxParent = graph.getChildrenByName("Environment")[0].getChildrenByName("Boxes")[0];
+        Script.gameState = new Script.GameState(countdownTime);
+        console.log(Script.gameState);
+        let boxParent = Script.graph.getChildrenByName("Environment")[0].getChildrenByName("Boxes")[0];
         //let environment: ƒ.Node = graph.getChildrenByName("Environment")[0].getChildrenByName("GroundParts")[0];
         for (let i = 0; i < numberBoxes; i++) {
             let item;
             let randomPosX = createRandomNumber(5, 68);
-            for (let i = 0; i < blockedNumbers.length; i++) {
-                if (randomPosX == blockedNumbers[i]) {
+            for (let i = 0; i < Script.blockedNumbers.length; i++) {
+                if (randomPosX == Script.blockedNumbers[i]) {
                     randomPosX -= 5;
                 }
             }
@@ -315,12 +367,29 @@ var Script;
         }
     }
     function getGroundParts() {
-        let groundParts = graph.getChildrenByName("Environment")[0].getChildrenByName("GroundParts")[0].getChildren();
+        let groundParts = Script.graph.getChildrenByName("Environment")[0].getChildrenByName("GroundParts")[0].getChildren();
         for (let groundPart of groundParts) {
             let translateGround = groundPart.mtxLocal.translation.x;
             let scaleGround = groundPart.mtxLocal.scaling.x;
             Script.groundPositions.push([(translateGround - scaleGround / 2) + 1, (translateGround + scaleGround / 2) - 1]);
         }
+    }
+    function updateTimer() {
+        Script.gameState.timer -= 1;
+        if (Script.gameState.timer <= 0) {
+            ƒ.Loop.removeEventListener("loopFrame" /* LOOP_FRAME */, update);
+        }
+    }
+    function createCamera() {
+        let newCam = new ƒ.ComponentCamera();
+        //newCam.projectOrthographic(); 
+        Script.viewport.camera = newCam;
+        Script.viewport.camera.projectCentral(Script.canvas.clientWidth / Script.canvas.clientHeight, 5);
+        //viewport.camera.mtxPivot.translate(new ƒ.Vector3(0, 0, 0));
+        Script.viewport.camera.mtxPivot.rotateY(180);
+        Script.viewport.camera.mtxPivot.translateZ(-450);
+        Script.viewport.camera.mtxPivot.scale(new ƒ.Vector3(2, 1, 2));
+        return newCam;
     }
     function createRandomNumber(_min, _max) {
         return Math.floor(Math.random() * (_max - _min + 1)) + _min;
@@ -377,7 +446,7 @@ var Script;
         rigidMario;
         sprite;
         direction;
-        jumpcooldown = 1000;
+        jumpcooldown = 1500;
         constructor() {
             super("Mario");
             let mesh = new ƒ.MeshCube();
@@ -386,7 +455,8 @@ var Script;
             //cmpMaterial.clrPrimary = ƒ.Color.CSS("#33bb21");
             cmpMaterial.clrPrimary = new ƒ.Color(0, 0, 0, 0);
             this.addComponent(new ƒ.ComponentTransform());
-            this.addComponent(new ƒ.ComponentMesh(mesh));
+            let meshComponent = new ƒ.ComponentMesh(mesh);
+            this.addComponent(meshComponent);
             this.addComponent(cmpMaterial);
             this.rigidMario = new ƒ.ComponentRigidbody();
             this.rigidMario.effectRotation = new ƒ.Vector3(0, 0, 0);
@@ -397,10 +467,37 @@ var Script;
             this.direction = "right";
             this.spriteSetup();
         }
-        async spriteSetup() {
-            this.sprite = await Script.setupSprite("Mario", [22, 32, 24, 40], 3, 24);
-            this.sprite.mtxLocal.scale(new ƒ.Vector3(3, 1.57, 1));
-            this.addChild(this.sprite);
+        update() {
+            this.walk();
+            this.jump();
+            this.checkPosition();
+            this.checkDeath();
+        }
+        collectPowerUp() {
+            //collect PowerUp
+        }
+        playSounds() {
+            //play Sound
+        }
+        checkPosition() {
+            let canvas = document.querySelector("canvas");
+            let width = canvas.width;
+            let posX = this.mtxLocal.translation.x;
+            console.log();
+            if (!Script.isBetween(posX, 3, width - 3)) {
+                if (posX < 150) {
+                    this.dispatchEvent(new CustomEvent("moveCamera", {
+                        bubbles: true,
+                        detail: "left"
+                    }));
+                }
+                else {
+                    this.dispatchEvent(new CustomEvent("moveCamera", {
+                        bubbles: true,
+                        detail: "right"
+                    }));
+                }
+            }
         }
         walk() {
             let strafe = ƒ.Keyboard.mapToTrit([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT], [ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]);
@@ -423,24 +520,55 @@ var Script;
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.SPACE]) && canjump == true) {
                 canjump = false;
                 if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT]))
-                    this.rigidMario.applyLinearImpulse(new ƒ.Vector3(-50, 30, 0));
+                    this.rigidMario.applyLinearImpulse(new ƒ.Vector3(-50, 150, 0));
                 else if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]))
-                    this.rigidMario.applyLinearImpulse(new ƒ.Vector3(50, 30, 0));
+                    this.rigidMario.applyLinearImpulse(new ƒ.Vector3(50, 150, 0));
                 else
-                    this.rigidMario.applyLinearImpulse(new ƒ.Vector3(0, 100, 0));
+                    this.rigidMario.applyLinearImpulse(new ƒ.Vector3(0, 150, 0));
                 setTimeout(function () {
                     canjump = true;
                 }, this.jumpcooldown);
             }
         }
-        collectPowerUp() {
-            //collect PowerUp
+        checkDeath() {
+            if (this.mtxLocal.translation.y < -1) {
+                Script.graph.removeChild(this);
+                ƒ.Loop.removeEventListener("loopFrame" /* LOOP_FRAME */, Script.update);
+                Script.timer.clear();
+            }
         }
-        playSounds() {
-            //play Sound
+        async spriteSetup() {
+            this.sprite = await Script.setupSprite("Mario", [22, 32, 24, 40], 3, 24);
+            this.sprite.mtxLocal.scale(new ƒ.Vector3(3, 1.57, 1));
+            this.addChild(this.sprite);
         }
     }
     Script.Mario = Mario;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    ƒ.Project.registerScriptNamespace(Script); // Register the namespace to FUDGE for serialization
+    class SetPosition extends ƒ.ComponentScript {
+        // Register the script as component for use in the editor via drag&drop
+        static iSubclass = ƒ.Component.registerSubclass(Script.CustomComponentScript);
+        // Properties may be mutated by users in the editor via the automatically created user interface
+        message = "CustomComponentScript added to ";
+        constructor() {
+            super();
+            // Don't start when running in editor
+            if (ƒ.Project.mode == ƒ.MODE.EDITOR)
+                return;
+        }
+        createPosition(_rangeStart, _rangeEnd) {
+            let rand = null;
+            while (rand === null || Script.blockedNumbers.includes(rand)) {
+                rand = Math.round(Math.random() * (Script.createRandomNumber(_rangeStart, _rangeEnd)));
+            }
+            return rand;
+        }
+    }
+    Script.SetPosition = SetPosition;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
@@ -467,12 +595,12 @@ var Script;
             return;
         }
         let cmpCamera = new ƒ.ComponentCamera();
-        let canvas = document.querySelector("canvas");
+        Script.canvas = document.querySelector("canvas");
         let viewport = new ƒ.Viewport();
-        viewport.initialize("InteractiveViewport", graph, cmpCamera, canvas);
+        viewport.initialize("InteractiveViewport", graph, cmpCamera, Script.canvas);
         ƒ.Debug.log("Viewport:", viewport);
         viewport.draw();
-        canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", {
+        Script.canvas.dispatchEvent(new CustomEvent("interactiveViewportStarted", {
             bubbles: true,
             detail: viewport
         }));

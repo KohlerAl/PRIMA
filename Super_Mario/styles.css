@@ -33,3 +33,12 @@ canvas.fullscreen {
   padding: 15px;
   color: whitesmoke;
 }
+
+input {
+  border: none; 
+  font-family: mario;
+  font-size: 25px; 
+  width: 120px; 
+  color: #fdcd10; 
+  background: transparent;
+}

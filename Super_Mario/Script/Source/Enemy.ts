@@ -37,15 +37,43 @@ namespace Script {
             console.log("Goomba default");
         }
 
-        private static actFight(): void {
-            console.log("FIGHT");
-        }
-
-        private static actWalk(_machine: Enemy): void {
+        private static actFight(_machine: Enemy): void {
+            console.log("fight"); 
             let goomba: Goomba = <Goomba>_machine.node;
             let direction: string = goomba.direction;
 
+            if (mario.direction == "left")
+                direction = "left";
+
+            else
+                direction = "right";
+
+
+            let vector: ƒ.Vector3 = new ƒ.Vector3(0, 0, 0);
+            if (direction == "right") {
+                vector = new ƒ.Vector3((1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
+                goomba.position += 1 / 60;
+            }
+
+            else if (direction == "left") {
+                vector = new ƒ.Vector3(-(1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
+                goomba.position -= 1 / 60;
+            }
+
+            vector.transform(_machine.node.mtxLocal, false);
+            let rigidGoomba: ƒ.ComponentRigidbody = _machine.node.getComponent(ƒ.ComponentRigidbody);
+            rigidGoomba.setVelocity(vector);
+            _machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
+            //this.actWalk(_machine);
+        }
+
+        private static actWalk(_machine: Enemy): void {
+            console.log("walk");
+            let goomba: Goomba = <Goomba>_machine.node;
+            let direction: string = goomba.direction;
+            
             if (isBetween(goomba.position, goomba.minXPos + 1, goomba.maxXPos - 1)) {
+                console.log(direction); 
                 let vector: ƒ.Vector3 = new ƒ.Vector3(0, 0, 0);
                 if (direction == "right") {
                     vector = new ƒ.Vector3((1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
@@ -64,20 +92,27 @@ namespace Script {
             }
             else {
                 if (goomba.direction == "left") {
-                    goomba.direction = "right"; 
-                    goomba.position += 1 / 60;
+                    goomba.direction = "right";
+                    goomba.position += 1 / 30;
                 }
                 else {
-                    goomba.direction = "left"; 
-                    goomba.position -= 1 / 60;
+                    goomba.direction = "left";
+                    goomba.position -= 1 / 30;
                 }
 
-                goomba.flipSprite(); 
+                goomba.flipSprite();
             }
         }
 
-        private static actDie(): void {
-            console.log("Goomba die");
+        private static actDie(_machine: Enemy): void {
+            let goomba: Goomba = <Goomba>_machine.node;
+            console.log("die"); 
+            goomba.removeComponent(goomba.goombaStatemachine);
+            goomba.removeComponent(goomba.rigidGoomba);
+            //graph.getChildrenByName("Opponents")[0].removeChild(goomba);
+            graph.removeChild(goomba); 
+            gameState.points += numberPointsGoomba;
+
         }
 
         private static transitDefault(_machine: Enemy): void {
@@ -98,10 +133,8 @@ namespace Script {
             }
         }
 
-
         private update = (_event: Event): void => {
             this.act();
         }
-
     }
 }

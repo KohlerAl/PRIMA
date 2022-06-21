@@ -1,5 +1,6 @@
 namespace Script {
     window.addEventListener("load", init);
+    export let canvas: HTMLCanvasElement;
 
     let dialog: HTMLDialogElement;
     function init(_event: Event): void {
@@ -27,7 +28,7 @@ namespace Script {
             return;
         }
         let cmpCamera: ƒ.ComponentCamera = new ƒ.ComponentCamera();
-        let canvas: HTMLCanvasElement = document.querySelector("canvas");
+        canvas = document.querySelector("canvas");
         let viewport: ƒ.Viewport = new ƒ.Viewport();
         viewport.initialize("InteractiveViewport", graph, cmpCamera, canvas);
         ƒ.Debug.log("Viewport:", viewport);
