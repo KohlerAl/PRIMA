@@ -15,20 +15,18 @@ namespace Script {
             let mesh: ƒ.MeshCube = new ƒ.MeshCube();
             let material: ƒ.Material = new ƒ.Material("MaterialMario", ƒ.ShaderLit, new ƒ.CoatColored());
             let cmpMaterial: ƒ.ComponentMaterial = new ƒ.ComponentMaterial(material);
-
-            //cmpMaterial.clrPrimary = ƒ.Color.CSS("#33bb21");
             cmpMaterial.clrPrimary = new ƒ.Color(0, 0, 0, 0);
             this.addComponent(new ƒ.ComponentTransform());
-            let meshComponent: ƒ.ComponentMesh = new ƒ.ComponentMesh(mesh);
-            this.addComponent(meshComponent); 
+            this.addComponent( new ƒ.ComponentMesh(mesh)); 
             this.addComponent(cmpMaterial);
 
+            this.mtxLocal.translateX(1);
             this.rigidMario = new ƒ.ComponentRigidbody();
             this.rigidMario.effectRotation = new ƒ.Vector3(0, 0, 0);
             this.addComponent(this.rigidMario);
             this.rigidMario.friction = 0;
             this.rigidMario.effectGravity = 15;
-
+            this.rigidMario.setVelocity(new ƒ.Vector3(-1, 0, 0));
             this.mtxLocal.scale(new ƒ.Vector3(1, 2, 1));
 
             this.direction = "right";
@@ -39,7 +37,6 @@ namespace Script {
         public update(): void {
             this.walk();
             this.jump();
-            this.checkPosition(); 
             this.checkDeath();
         }
 
@@ -49,30 +46,6 @@ namespace Script {
 
         public playSounds(): void {
             //play Sound
-        }
-
-        private checkPosition(): void {
-            let canvas: HTMLCanvasElement = document.querySelector("canvas"); 
-            let width: number = canvas.width; 
-            let posX: number = this.mtxLocal.translation.x; 
-            console.log(); 
-
-            if (!isBetween(posX, 3, width - 3)) {
-                if (posX < 150) {
-                    this.dispatchEvent(
-                        new CustomEvent("moveCamera", {
-                            bubbles: true, 
-                            detail: "left"
-                        })); 
-                }
-                else {
-                    this.dispatchEvent(
-                        new CustomEvent("moveCamera", {
-                            bubbles: true, 
-                            detail: "right"
-                        }));
-                }
-            }
         }
 
         private walk(): void {
@@ -93,6 +66,8 @@ namespace Script {
                 this.sprite.mtxLocal.reset();
                 this.sprite.mtxLocal.scale(new ƒ.Vector3(3, 1.57, 1));
             }
+
+            moveCam(vector); 
         }
 
         private jump(): void {

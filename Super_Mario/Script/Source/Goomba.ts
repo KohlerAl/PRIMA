@@ -6,9 +6,6 @@ namespace Script {
         sprite: ƒAid.NodeSprite;
         direction: string;
         groundPart: number = 0;
-        position: number;
-        minXPos: number;
-        maxXPos: number;
 
         material: ƒ.ComponentMaterial; 
 
@@ -23,15 +20,12 @@ namespace Script {
             this.addComponent(new ƒ.ComponentTransform());
             this.addComponent(new ƒ.ComponentMesh(mesh));
             this.addComponent(this.material);
-
-            /* let pos: SetPosition = new SetPosition(); 
-            this.addComponent(pos); 
-            this.position = pos.createPosition(5, 60);  */
-
-            this.findPosition();
-
             this.mtxLocal.reset();
-            this.mtxLocal.translateX(this.position - 1);
+
+            /* let posComp: ƒ.Component = new SetPosition(); 
+            this.addComponent(posComp); */
+
+            this.mtxLocal.translateX(5);
 
             this.rigidGoomba = new ƒ.ComponentRigidbody();
             this.addComponent(this.rigidGoomba);
@@ -44,7 +38,6 @@ namespace Script {
 
             this.spriteSetup();
 
-            //this.direction = createRandomDirection(); 
             this.direction = "right";
             this.rigidGoomba.addEventListener(ƒ.EVENT_PHYSICS.COLLISION_ENTER, (_event: ƒ.EventPhysics) => {
                 if (_event.cmpRigidbody.node.name == "Mario") {
@@ -57,16 +50,6 @@ namespace Script {
             if (this.mtxLocal.translation.y < -5) {
                 this.goombaStatemachine.transit(JOB.DIE); 
             }
-        }
-
-        public die(): void {
-            /* gameState.points += numberPointsGoomba;
-            console.log("die");
-            this.removeComponent(this.goombaStatemachine);
-            this.removeComponent(this.rigidGoomba);
-            let index: number = goombas.indexOf(this); 
-            goombas.splice(index, 1); 
-            graph.getChildrenByName("Opponents")[0].removeChild(this); */
         }
 
         public flipSprite(): void {
@@ -82,15 +65,6 @@ namespace Script {
             this.sprite = await setupSprite("Goomba", [0, 0, 30, 30], 5, 32);
             this.sprite.mtxLocal.scale(new ƒ.Vector3(2, 2, 1));
             this.addChild(this.sprite);
-        }
-
-        private findPosition(): void {
-            //this.groundPart = createRandomNumber(0, groundPositions.length); 
-
-            this.position = createRandomNumber(groundPositions[this.groundPart][0], groundPositions[this.groundPart][1]);
-            console.log(this.position);
-            this.minXPos = groundPositions[this.groundPart][0];
-            this.maxXPos = groundPositions[this.groundPart][1];
         }
 
     }

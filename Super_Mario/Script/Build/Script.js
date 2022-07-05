@@ -1,6 +1,35 @@
 "use strict";
 var Script;
 (function (Script) {
+    function setUpCam() {
+        Script.camNode = new ƒ.Node("camNode");
+        Script.camNode.addComponent(createCamera());
+        Script.camNode.addComponent(new ƒ.ComponentTransform());
+        Script.camNode.mtxLocal.scale(new ƒ.Vector3(1, 2, 1));
+        let marioParent = Script.graph.getChildrenByName("Avatar")[0];
+        marioParent.addChild(Script.camNode);
+    }
+    Script.setUpCam = setUpCam;
+    function createCamera() {
+        let newCam = new ƒ.ComponentCamera();
+        //newCam.projectOrthographic(); 
+        Script.viewport.camera = newCam;
+        Script.viewport.camera.projectCentral(Script.canvas.clientWidth / Script.canvas.clientHeight, 5);
+        //viewport.camera.mtxPivot.translate(new ƒ.Vector3(0, 0, 0));
+        Script.viewport.camera.mtxPivot.rotateY(180);
+        Script.viewport.camera.mtxPivot.translateZ(-450);
+        Script.viewport.camera.mtxPivot.scale(new ƒ.Vector3(2, 1, 2));
+        return newCam;
+    }
+    function moveCam(_vector) {
+        _vector.transform(Script.camNode.mtxLocal, false);
+        _vector.scale(1 / 45);
+        Script.camNode.mtxLocal.translate(_vector);
+    }
+    Script.moveCam = moveCam;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
     var ƒ = FudgeCore;
     ƒ.Project.registerScriptNamespace(Script); // Register the namespace to FUDGE for serialization
     class CustomComponentScript extends ƒ.ComponentScript {
@@ -68,24 +97,23 @@ var Script;
             return setup;
         }
         static actDefault() {
-            console.log("Goomba default");
+            //dconsole.log("Goomba default");
         }
         static actFight(_machine) {
-            console.log("fight");
             let goomba = _machine.node;
             let direction = goomba.direction;
             if (Script.mario.direction == "left")
                 direction = "left";
             else
-                direction = "right";
+                direction = "rightaaa";
             let vector = new ƒ.Vector3(0, 0, 0);
             if (direction == "right") {
                 vector = new ƒ.Vector3((1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
-                goomba.position += 1 / 60;
+                goomba.mtxLocal.translation.x += 1 / 60;
             }
             else if (direction == "left") {
                 vector = new ƒ.Vector3(-(1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
-                goomba.position -= 1 / 60;
+                goomba.mtxLocal.translation.x -= 1 / 60;
             }
             vector.transform(_machine.node.mtxLocal, false);
             let rigidGoomba = _machine.node.getComponent(ƒ.ComponentRigidbody);
@@ -94,22 +122,63 @@ var Script;
             //this.actWalk(_machine);
         }
         static actWalk(_machine) {
-            console.log("walk");
             let goomba = _machine.node;
             let direction = goomba.direction;
-            if (Script.isBetween(goomba.position, goomba.minXPos + 1, goomba.maxXPos - 1)) {
-                console.log(direction);
-                let vector = new ƒ.Vector3(0, 0, 0);
+            let nextTile;
+            let vector = new ƒ.Vector3(0, 0, 0);
+            let found = false;
+            if (direction == "left") {
+                nextTile = Math.ceil(goomba.mtxLocal.translation.x - 2);
+                vector = new ƒ.Vector3(-(1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
+                console.log(vector.x);
+            }
+            else {
+                nextTile = Math.floor(goomba.mtxLocal.translation.x + 2);
+                vector = new ƒ.Vector3((1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
+                console.log(vector.x);
+            }
+            let groundParts = Script.graph.getChildrenByName("Environment")[0].getChildrenByName("Ground")[0].getChildren();
+            for (let groundPart of groundParts) {
+                let groundPiece = groundPart.getChildren();
+                for (let ground of groundPiece) {
+                    let nextPart = ground.mtxLocal.translation.x;
+                    if (nextTile == nextPart) {
+                        found = true;
+                    }
+                }
+            }
+            if (found == false) {
+                if (direction == "left")
+                    goomba.direction = "right";
+                else if (direction == "right")
+                    goomba.direction = "left";
+                goomba.flipSprite();
+            }
+            vector.transform(_machine.node.mtxLocal, false);
+            let rigidGoomba = _machine.node.getComponent(ƒ.ComponentRigidbody);
+            rigidGoomba.setVelocity(vector);
+            //_machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
+            /* let goomba: Goomba = <Goomba>_machine.node;
+            let direction: string = goomba.direction;
+            let nextTile: number;
+
+            if (direction == "left") {
+                nextTile = goomba.position
+            } */
+            /* if (isBetween(goomba.position, goomba.minXPos + 1, goomba.maxXPos - 1)) {
+                let vector: ƒ.Vector3 = new ƒ.Vector3(0, 0, 0);
                 if (direction == "right") {
                     vector = new ƒ.Vector3((1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
                     goomba.position += 1 / 60;
                 }
+
                 else if (direction == "left") {
                     vector = new ƒ.Vector3(-(1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
                     goomba.position -= 1 / 60;
                 }
+
                 vector.transform(_machine.node.mtxLocal, false);
-                let rigidGoomba = _machine.node.getComponent(ƒ.ComponentRigidbody);
+                let rigidGoomba: ƒ.ComponentRigidbody = _machine.node.getComponent(ƒ.ComponentRigidbody);
                 rigidGoomba.setVelocity(vector);
                 _machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
             }
@@ -122,20 +191,22 @@ var Script;
                     goomba.direction = "left";
                     goomba.position -= 1 / 30;
                 }
+
                 goomba.flipSprite();
-            }
+            } */
         }
         static actDie(_machine) {
             let goomba = _machine.node;
-            console.log("die");
             goomba.removeComponent(goomba.goombaStatemachine);
             goomba.removeComponent(goomba.rigidGoomba);
             //graph.getChildrenByName("Opponents")[0].removeChild(goomba);
-            Script.graph.removeChild(goomba);
+            Script.goombaParent.removeChild(goomba);
+            /* let index: number = goombas.indexOf(goomba);
+            goombas.splice(index, 1); */
             Script.gameState.points += Script.numberPointsGoomba;
         }
         static transitDefault(_machine) {
-            console.log("Transit to", _machine.stateNext);
+            //console.log("Transit to", _machine.stateNext);
         }
         hndEvent = (_event) => {
             switch (_event.type) {
@@ -182,9 +253,6 @@ var Script;
         sprite;
         direction;
         groundPart = 0;
-        position;
-        minXPos;
-        maxXPos;
         material;
         constructor() {
             super("Goomba");
@@ -195,12 +263,10 @@ var Script;
             this.addComponent(new ƒ.ComponentTransform());
             this.addComponent(new ƒ.ComponentMesh(mesh));
             this.addComponent(this.material);
-            /* let pos: SetPosition = new SetPosition();
-            this.addComponent(pos);
-            this.position = pos.createPosition(5, 60);  */
-            this.findPosition();
             this.mtxLocal.reset();
-            this.mtxLocal.translateX(this.position - 1);
+            /* let posComp: ƒ.Component = new SetPosition();
+            this.addComponent(posComp); */
+            this.mtxLocal.translateX(5);
             this.rigidGoomba = new ƒ.ComponentRigidbody();
             this.addComponent(this.rigidGoomba);
             this.rigidGoomba.effectRotation = new ƒ.Vector3(0, 0, 0);
@@ -209,7 +275,6 @@ var Script;
             this.goombaStatemachine = new Script.Enemy();
             this.addComponent(this.goombaStatemachine);
             this.spriteSetup();
-            //this.direction = createRandomDirection(); 
             this.direction = "right";
             this.rigidGoomba.addEventListener("ColliderEnteredCollision" /* COLLISION_ENTER */, (_event) => {
                 if (_event.cmpRigidbody.node.name == "Mario") {
@@ -221,15 +286,6 @@ var Script;
             if (this.mtxLocal.translation.y < -5) {
                 this.goombaStatemachine.transit(Script.JOB.DIE);
             }
-        }
-        die() {
-            /* gameState.points += numberPointsGoomba;
-            console.log("die");
-            this.removeComponent(this.goombaStatemachine);
-            this.removeComponent(this.rigidGoomba);
-            let index: number = goombas.indexOf(this);
-            goombas.splice(index, 1);
-            graph.getChildrenByName("Opponents")[0].removeChild(this); */
         }
         flipSprite() {
             this.sprite.mtxLocal.reset();
@@ -243,13 +299,6 @@ var Script;
             this.sprite.mtxLocal.scale(new ƒ.Vector3(2, 2, 1));
             this.addChild(this.sprite);
         }
-        findPosition() {
-            //this.groundPart = createRandomNumber(0, groundPositions.length); 
-            this.position = Script.createRandomNumber(Script.groundPositions[this.groundPart][0], Script.groundPositions[this.groundPart][1]);
-            console.log(this.position);
-            this.minXPos = Script.groundPositions[this.groundPart][0];
-            this.maxXPos = Script.groundPositions[this.groundPart][1];
-        }
     }
     Script.Goomba = Goomba;
 })(Script || (Script = {}));
@@ -262,10 +311,9 @@ var Script;
         type;
         rigidItem;
         xPos;
-        constructor(_name, _type, xPos) {
+        constructor(_name, _type) {
             super(_name);
             this.type = _type;
-            this.xPos = xPos;
             this.spawn();
         }
         async spawn() {
@@ -276,20 +324,15 @@ var Script;
             else
                 await texture.load("Sprites/box.png");
             let material = new ƒ.Material("MaterialItem", ƒ.ShaderGouraudTextured, new ƒ.CoatRemissiveTextured(new ƒ.Color(), texture));
-            let cmpTransform = new ƒ.ComponentTransform();
-            let cmpMesh = new ƒ.ComponentMesh(mesh);
-            let cmpMaterial = new ƒ.ComponentMaterial(material);
-            this.addComponent(cmpTransform);
-            this.addComponent(cmpMesh);
-            this.addComponent(cmpMaterial);
+            this.addComponent(new ƒ.ComponentTransform());
+            this.addComponent(new ƒ.ComponentMesh(mesh));
+            this.addComponent(new ƒ.ComponentMaterial(material));
             let rigidItem = new ƒ.ComponentRigidbody(0, ƒ.BODY_TYPE.STATIC);
             //rigidItem.typeBody = ƒ.BODY_TYPE.STATIC; 
             this.addComponent(rigidItem);
             this.mtxLocal.translateY(4);
-            this.mtxLocal.translateX(this.xPos);
-            //spawn a new box 
-            //create Image 
-            //look for position 
+            let posComp = new Script.SetPosition();
+            this.addComponent(posComp);
         }
         changeLook() {
             //hello 
@@ -300,30 +343,35 @@ var Script;
 var Script;
 (function (Script) {
     var ƒ = FudgeCore;
-    ƒ.Debug.info("Main Program Template running!");
     document.addEventListener("interactiveViewportStarted", start);
     Script.goombas = [];
     Script.numberPointsGoomba = 1000;
-    Script.groundPositions = [];
     let time;
     let config;
     let countdownTime;
     let numberBoxes;
     let numberOpponents;
-    Script.blockedNumbers = [12, 13, 14, 15, 22, 23, 24, 25, 26, 27, 28, 29, 33, 34, 35, 36, 37, 45, 46, 47, 48, 49, 50, 53, 54, 55, 73, 74, 75, 76, 77, 78, 79, 89, 90, 91];
+    Script.tileNumbers = [];
     async function start(_event) {
+        //get viewport and graph
         Script.viewport = _event.detail;
         Script.graph = Script.viewport.getBranch();
-        await getExternalData();
+        //get positions from ground parts, get external data and create Boxes
         getGroundParts();
+        await getExternalData();
+        createBoxes();
+        //create Mario
         Script.mario = new Script.Mario();
-        Script.graph.appendChild(Script.mario);
-        Script.mario.addComponent(createCamera());
-        //createCamera();
+        let marioParent = Script.graph.getChildrenByName("Avatar")[0];
+        marioParent.appendChild(Script.mario);
+        Script.setUpCam();
+        //create opponents
         for (let i = 0; i < 1; i++) {
             Script.goombas.push(new Script.Goomba());
-            Script.graph.appendChild(Script.goombas[i]);
+            Script.goombaParent = Script.graph.getChildrenByName("Opponents")[0];
+            Script.goombaParent.appendChild(Script.goombas[i]);
         }
+        //start timer
         time = new ƒ.Time();
         Script.timer = new ƒ.Timer(time, 1000, 0, updateTimer);
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);
@@ -335,7 +383,7 @@ var Script;
             for (let goomba of Script.goombas)
                 goomba.update();
         }
-        ƒ.Physics.simulate(); // if physics is included and used
+        ƒ.Physics.simulate();
         Script.viewport.draw();
         //ƒ.AudioManager.default.update();
     }
@@ -346,32 +394,39 @@ var Script;
         countdownTime = config["countdown"];
         numberBoxes = config["numBoxes"];
         numberOpponents = config["numOpponents"];
-        console.log(numberOpponents);
         Script.gameState = new Script.GameState(countdownTime);
-        console.log(Script.gameState);
-        let boxParent = Script.graph.getChildrenByName("Environment")[0].getChildrenByName("Boxes")[0];
-        //let environment: ƒ.Node = graph.getChildrenByName("Environment")[0].getChildrenByName("GroundParts")[0];
-        for (let i = 0; i < numberBoxes; i++) {
-            let item;
-            let randomPosX = createRandomNumber(5, 68);
-            for (let i = 0; i < Script.blockedNumbers.length; i++) {
-                if (randomPosX == Script.blockedNumbers[i]) {
-                    randomPosX -= 5;
-                }
-            }
-            if (createRandomNumber(0, 1) == 1)
-                item = new Script.Item("powerUpBox", "powerUpBox", randomPosX);
-            else
-                item = new Script.Item("itemBox", "box", randomPosX);
-            boxParent.appendChild(item);
-        }
     }
     function getGroundParts() {
-        let groundParts = Script.graph.getChildrenByName("Environment")[0].getChildrenByName("GroundParts")[0].getChildren();
+        let groundParts = Script.graph.getChildrenByName("Environment")[0].getChildrenByName("Ground")[0].getChildren();
         for (let groundPart of groundParts) {
-            let translateGround = groundPart.mtxLocal.translation.x;
-            let scaleGround = groundPart.mtxLocal.scaling.x;
-            Script.groundPositions.push([(translateGround - scaleGround / 2) + 1, (translateGround + scaleGround / 2) - 1]);
+            let groundPiece = groundPart.getChildren();
+            for (let ground of groundPiece) {
+                Script.tileNumbers.push(ground.mtxLocal.translation.x);
+            }
+        }
+        /* let obstacles: ƒ.Node = graph.getChildrenByName("Environment")[0].getChildrenByName("Obstacles")[0];
+        let pieces: ƒ.Node[] = obstacles.getChildren();
+    
+        for (let obstacleParent of pieces) {
+          let singleObstacle: ƒ.Node[] = obstacleParent.getChildren();
+    
+          for (let obstacle of singleObstacle) {
+            if (tileNumbers.includes(Math.floor(obstacle.mtxLocal.translation.x))) {
+              let index: number = tileNumbers.indexOf(obstacle.mtxLocal.translation.x);
+              tileNumbers.splice(index, 1);
+            }
+          }
+        } */
+    }
+    function createBoxes() {
+        let boxParent = Script.graph.getChildrenByName("Environment")[0].getChildrenByName("Boxes")[0];
+        for (let i = 0; i < numberBoxes; i++) {
+            let item;
+            if (createRandomNumber(0, 1) == 1)
+                item = new Script.Item("powerUpBox", "powerUpBox");
+            else
+                item = new Script.Item("itemBox", "box");
+            boxParent.appendChild(item);
         }
     }
     function updateTimer() {
@@ -379,17 +434,6 @@ var Script;
         if (Script.gameState.timer <= 0) {
             ƒ.Loop.removeEventListener("loopFrame" /* LOOP_FRAME */, update);
         }
-    }
-    function createCamera() {
-        let newCam = new ƒ.ComponentCamera();
-        //newCam.projectOrthographic(); 
-        Script.viewport.camera = newCam;
-        Script.viewport.camera.projectCentral(Script.canvas.clientWidth / Script.canvas.clientHeight, 5);
-        //viewport.camera.mtxPivot.translate(new ƒ.Vector3(0, 0, 0));
-        Script.viewport.camera.mtxPivot.rotateY(180);
-        Script.viewport.camera.mtxPivot.translateZ(-450);
-        Script.viewport.camera.mtxPivot.scale(new ƒ.Vector3(2, 1, 2));
-        return newCam;
     }
     function createRandomNumber(_min, _max) {
         return Math.floor(Math.random() * (_max - _min + 1)) + _min;
@@ -452,17 +496,17 @@ var Script;
             let mesh = new ƒ.MeshCube();
             let material = new ƒ.Material("MaterialMario", ƒ.ShaderLit, new ƒ.CoatColored());
             let cmpMaterial = new ƒ.ComponentMaterial(material);
-            //cmpMaterial.clrPrimary = ƒ.Color.CSS("#33bb21");
             cmpMaterial.clrPrimary = new ƒ.Color(0, 0, 0, 0);
             this.addComponent(new ƒ.ComponentTransform());
-            let meshComponent = new ƒ.ComponentMesh(mesh);
-            this.addComponent(meshComponent);
+            this.addComponent(new ƒ.ComponentMesh(mesh));
             this.addComponent(cmpMaterial);
+            this.mtxLocal.translateX(1);
             this.rigidMario = new ƒ.ComponentRigidbody();
             this.rigidMario.effectRotation = new ƒ.Vector3(0, 0, 0);
             this.addComponent(this.rigidMario);
             this.rigidMario.friction = 0;
             this.rigidMario.effectGravity = 15;
+            this.rigidMario.setVelocity(new ƒ.Vector3(-1, 0, 0));
             this.mtxLocal.scale(new ƒ.Vector3(1, 2, 1));
             this.direction = "right";
             this.spriteSetup();
@@ -470,7 +514,6 @@ var Script;
         update() {
             this.walk();
             this.jump();
-            this.checkPosition();
             this.checkDeath();
         }
         collectPowerUp() {
@@ -478,26 +521,6 @@ var Script;
         }
         playSounds() {
             //play Sound
-        }
-        checkPosition() {
-            let canvas = document.querySelector("canvas");
-            let width = canvas.width;
-            let posX = this.mtxLocal.translation.x;
-            console.log();
-            if (!Script.isBetween(posX, 3, width - 3)) {
-                if (posX < 150) {
-                    this.dispatchEvent(new CustomEvent("moveCamera", {
-                        bubbles: true,
-                        detail: "left"
-                    }));
-                }
-                else {
-                    this.dispatchEvent(new CustomEvent("moveCamera", {
-                        bubbles: true,
-                        detail: "right"
-                    }));
-                }
-            }
         }
         walk() {
             let strafe = ƒ.Keyboard.mapToTrit([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT], [ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]);
@@ -515,6 +538,7 @@ var Script;
                 this.sprite.mtxLocal.reset();
                 this.sprite.mtxLocal.scale(new ƒ.Vector3(3, 1.57, 1));
             }
+            Script.moveCam(vector);
         }
         jump() {
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.SPACE]) && canjump == true) {
@@ -559,13 +583,14 @@ var Script;
             // Don't start when running in editor
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
+            this.addEventListener("componentAdd" /* COMPONENT_ADD */, this.createPosition);
         }
-        createPosition(_rangeStart, _rangeEnd) {
-            let rand = null;
-            while (rand === null || Script.blockedNumbers.includes(rand)) {
-                rand = Math.round(Math.random() * (Script.createRandomNumber(_rangeStart, _rangeEnd)));
-            }
-            return rand;
+        createPosition() {
+            let randomPos = Script.createRandomNumber(5, Script.tileNumbers.length);
+            this.node.mtxLocal.translateX(Script.tileNumbers[randomPos]);
+            console.log(Script.tileNumbers[randomPos]);
+            console.log(this.node.mtxLocal.translation.x);
+            Script.tileNumbers.splice(randomPos, 1);
         }
     }
     Script.SetPosition = SetPosition;

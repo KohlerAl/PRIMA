@@ -14,16 +14,16 @@ namespace Script {
             // Don't start when running in editor
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
                 return;
+            this.addEventListener(ƒ.EVENT.COMPONENT_ADD, this.createPosition);
         }
 
-        public createPosition(_rangeStart: number, _rangeEnd: number): number {
 
-            let rand: number | null = null;
-
-            while (rand === null || blockedNumbers.includes(rand)) {
-                rand = Math.round(Math.random() * (createRandomNumber(_rangeStart, _rangeEnd))); 
-            }
-            return rand;
+        public createPosition(): void {
+            let randomPos: number = createRandomNumber(5, tileNumbers.length); 
+            this.node.mtxLocal.translateX(tileNumbers[randomPos]); 
+            console.log(tileNumbers[randomPos]); 
+            console.log( this.node.mtxLocal.translation.x)
+            tileNumbers.splice(randomPos, 1); 
         }
     }
 }

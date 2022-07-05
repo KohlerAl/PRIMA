@@ -1,4 +1,8 @@
 declare namespace Script {
+    function setUpCam(): void;
+    function moveCam(_vector: ƒ.Vector3): void;
+}
+declare namespace Script {
     import ƒ = FudgeCore;
     class CustomComponentScript extends ƒ.ComponentScript {
         static readonly iSubclass: number;
@@ -44,16 +48,11 @@ declare namespace Script {
         sprite: ƒAid.NodeSprite;
         direction: string;
         groundPart: number;
-        position: number;
-        minXPos: number;
-        maxXPos: number;
         material: ƒ.ComponentMaterial;
         constructor();
         update(): void;
-        die(): void;
         flipSprite(): void;
         private spriteSetup;
-        private findPosition;
     }
 }
 declare namespace Script {
@@ -63,7 +62,7 @@ declare namespace Script {
         type: string;
         rigidItem: ƒ.ComponentRigidbody;
         xPos: number;
-        constructor(_name: string, _type: string, xPos: number);
+        constructor(_name: string, _type: string);
         spawn(): Promise<void>;
         changeLook(): void;
     }
@@ -74,14 +73,14 @@ declare namespace Script {
     let viewport: ƒ.Viewport;
     let graph: ƒ.Node;
     let mario: Mario;
+    let camNode: ƒ.Node;
     let goombas: Goomba[];
+    let goombaParent: ƒ.Node;
     let gameState: GameState;
     let numberPointsGoomba: number;
     let animations: ƒAid.SpriteSheetAnimations;
-    let groundPositions: number[][];
-    let blockedPositions: number[];
     let timer: ƒ.Timer;
-    let blockedNumbers: number[];
+    let tileNumbers: number[];
     function update(_event: Event): void;
     function createRandomNumber(_min: number, _max: number): number;
     function createRandomDirection(): string;
@@ -104,7 +103,6 @@ declare namespace Script {
         update(): void;
         collectPowerUp(): void;
         playSounds(): void;
-        private checkPosition;
         private walk;
         private jump;
         private checkDeath;
@@ -117,7 +115,7 @@ declare namespace Script {
         static readonly iSubclass: number;
         message: string;
         constructor();
-        createPosition(_rangeStart: number, _rangeEnd: number): number;
+        createPosition(): void;
     }
 }
 declare namespace Script {
