@@ -23,7 +23,7 @@ var Script;
     }
     function moveCam(_vector) {
         _vector.transform(Script.camNode.mtxLocal, false);
-        _vector.scale(1 / 45);
+        _vector.scale(1 / 55);
         Script.camNode.mtxLocal.translate(_vector);
     }
     Script.moveCam = moveCam;
@@ -105,7 +105,7 @@ var Script;
             if (Script.mario.direction == "left")
                 direction = "left";
             else
-                direction = "rightaaa";
+                direction = "right";
             let vector = new ƒ.Vector3(0, 0, 0);
             if (direction == "right") {
                 vector = new ƒ.Vector3((1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
@@ -115,10 +115,10 @@ var Script;
                 vector = new ƒ.Vector3(-(1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
                 goomba.mtxLocal.translation.x -= 1 / 60;
             }
-            vector.transform(_machine.node.mtxLocal, false);
-            let rigidGoomba = _machine.node.getComponent(ƒ.ComponentRigidbody);
-            rigidGoomba.setVelocity(vector);
-            _machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
+            //vector.transform(_machine.node.mtxLocal, false);
+            //let rigidGoomba: ƒ.ComponentRigidbody = _machine.node.getComponent(ƒ.ComponentRigidbody);
+            //rigidGoomba.setVelocity(vector);
+            //_machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
             //this.actWalk(_machine);
         }
         static actWalk(_machine) {
@@ -130,12 +130,10 @@ var Script;
             if (direction == "left") {
                 nextTile = Math.ceil(goomba.mtxLocal.translation.x - 2);
                 vector = new ƒ.Vector3(-(1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
-                console.log(vector.x);
             }
             else {
                 nextTile = Math.floor(goomba.mtxLocal.translation.x + 2);
                 vector = new ƒ.Vector3((1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
-                console.log(vector.x);
             }
             let groundParts = Script.graph.getChildrenByName("Environment")[0].getChildrenByName("Ground")[0].getChildren();
             for (let groundPart of groundParts) {
@@ -155,7 +153,7 @@ var Script;
                 goomba.flipSprite();
             }
             vector.transform(_machine.node.mtxLocal, false);
-            let rigidGoomba = _machine.node.getComponent(ƒ.ComponentRigidbody);
+            let rigidGoomba = goomba.getComponent(ƒ.ComponentRigidbody);
             rigidGoomba.setVelocity(vector);
             //_machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
             /* let goomba: Goomba = <Goomba>_machine.node;
@@ -199,10 +197,9 @@ var Script;
             let goomba = _machine.node;
             goomba.removeComponent(goomba.goombaStatemachine);
             goomba.removeComponent(goomba.rigidGoomba);
-            //graph.getChildrenByName("Opponents")[0].removeChild(goomba);
             Script.goombaParent.removeChild(goomba);
-            /* let index: number = goombas.indexOf(goomba);
-            goombas.splice(index, 1); */
+            let index = Script.goombas.indexOf(goomba);
+            Script.goombas.splice(index, 1);
             Script.gameState.points += Script.numberPointsGoomba;
         }
         static transitDefault(_machine) {
@@ -264,13 +261,13 @@ var Script;
             this.addComponent(new ƒ.ComponentMesh(mesh));
             this.addComponent(this.material);
             this.mtxLocal.reset();
-            /* let posComp: ƒ.Component = new SetPosition();
-            this.addComponent(posComp); */
-            this.mtxLocal.translateX(5);
+            let posComp = new Script.SetPosition();
+            this.addComponent(posComp);
+            //this.mtxLocal.translateX(5);
             this.rigidGoomba = new ƒ.ComponentRigidbody();
             this.addComponent(this.rigidGoomba);
             this.rigidGoomba.effectRotation = new ƒ.Vector3(0, 0, 0);
-            this.rigidGoomba.effectGravity = 10;
+            this.rigidGoomba.effectGravity = 20;
             this.rigidGoomba.friction = 0;
             this.goombaStatemachine = new Script.Enemy();
             this.addComponent(this.goombaStatemachine);
@@ -279,6 +276,13 @@ var Script;
             this.rigidGoomba.addEventListener("ColliderEnteredCollision" /* COLLISION_ENTER */, (_event) => {
                 if (_event.cmpRigidbody.node.name == "Mario") {
                     this.goombaStatemachine.transit(Script.JOB.FIGHT);
+                    console.log("enter");
+                }
+            });
+            this.rigidGoomba.addEventListener("ColliderLeftCollision" /* COLLISION_EXIT */, (_event) => {
+                if (_event.cmpRigidbody.node.name == "Mario") {
+                    this.goombaStatemachine.transit(Script.JOB.WALK);
+                    console.log("exit");
                 }
             });
         }
@@ -307,10 +311,10 @@ var Script;
     var ƒ = FudgeCore;
     //import ƒAid = FudgeAid;
     class Item extends ƒ.Node {
-        lifespan;
         type;
         rigidItem;
         xPos;
+        looted = false;
         constructor(_name, _type) {
             super(_name);
             this.type = _type;
@@ -327,12 +331,25 @@ var Script;
             this.addComponent(new ƒ.ComponentTransform());
             this.addComponent(new ƒ.ComponentMesh(mesh));
             this.addComponent(new ƒ.ComponentMaterial(material));
-            let rigidItem = new ƒ.ComponentRigidbody(0, ƒ.BODY_TYPE.STATIC);
+            this.rigidItem = new ƒ.ComponentRigidbody(0, ƒ.BODY_TYPE.STATIC);
             //rigidItem.typeBody = ƒ.BODY_TYPE.STATIC; 
-            this.addComponent(rigidItem);
+            this.addComponent(this.rigidItem);
             this.mtxLocal.translateY(4);
             let posComp = new Script.SetPosition();
             this.addComponent(posComp);
+            this.manageHit();
+        }
+        manageHit() {
+            this.rigidItem.addEventListener("ColliderEnteredCollision" /* COLLISION_ENTER */, (_event) => {
+                if (_event.cmpRigidbody.node.name == "Mario") {
+                    console.log("enter");
+                    this.getItem();
+                }
+            });
+        }
+        getItem() {
+            console.log("hello");
+            // change Look 
         }
         changeLook() {
             //hello 
@@ -366,7 +383,7 @@ var Script;
         marioParent.appendChild(Script.mario);
         Script.setUpCam();
         //create opponents
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < numberOpponents; i++) {
             Script.goombas.push(new Script.Goomba());
             Script.goombaParent = Script.graph.getChildrenByName("Opponents")[0];
             Script.goombaParent.appendChild(Script.goombas[i]);
@@ -379,10 +396,8 @@ var Script;
     }
     function update(_event) {
         Script.mario.update();
-        if (Script.goombas.length > 0) {
-            for (let goomba of Script.goombas)
-                goomba.update();
-        }
+        for (let goomba of Script.goombas)
+            goomba.update();
         ƒ.Physics.simulate();
         Script.viewport.draw();
         //ƒ.AudioManager.default.update();
@@ -470,7 +485,7 @@ var Script;
         let sprite = new ƒAid.NodeSprite("Sprite");
         sprite.setAnimation(animation);
         sprite.setFrameDirection(1);
-        sprite.framerate = 5;
+        sprite.framerate = 6;
         let cmpTransfrom = new ƒ.ComponentTransform();
         sprite.addComponent(cmpTransfrom);
         return sprite;
@@ -588,8 +603,6 @@ var Script;
         createPosition() {
             let randomPos = Script.createRandomNumber(5, Script.tileNumbers.length);
             this.node.mtxLocal.translateX(Script.tileNumbers[randomPos]);
-            console.log(Script.tileNumbers[randomPos]);
-            console.log(this.node.mtxLocal.translation.x);
             Script.tileNumbers.splice(randomPos, 1);
         }
     }

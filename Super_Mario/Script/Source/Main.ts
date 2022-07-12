@@ -9,7 +9,7 @@ namespace Script {
   export let mario: Mario;
   export let camNode: ƒ.Node;
   export let goombas: Goomba[] = [];
-  export let goombaParent: ƒ.Node; 
+  export let goombaParent: ƒ.Node;
 
   export let gameState: GameState;
   export let numberPointsGoomba: number = 1000;
@@ -46,7 +46,7 @@ namespace Script {
     setUpCam();
 
     //create opponents
-    for (let i: number = 0; i < 1; i++) {
+    for (let i: number = 0; i < numberOpponents; i++) {
       goombas.push(new Goomba());
       goombaParent = graph.getChildrenByName("Opponents")[0];
       goombaParent.appendChild(goombas[i]);
@@ -61,10 +61,10 @@ namespace Script {
 
   export function update(_event: Event): void {
     mario.update();
-    if (goombas.length > 0) {
-      for (let goomba of goombas)
-        goomba.update();
-    }
+
+    for (let goomba of goombas)
+      goomba.update();
+
 
     ƒ.Physics.simulate();
     viewport.draw();

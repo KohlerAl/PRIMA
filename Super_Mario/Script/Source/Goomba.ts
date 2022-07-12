@@ -22,15 +22,15 @@ namespace Script {
             this.addComponent(this.material);
             this.mtxLocal.reset();
 
-            /* let posComp: ƒ.Component = new SetPosition(); 
-            this.addComponent(posComp); */
+            let posComp: ƒ.Component = new SetPosition(); 
+            this.addComponent(posComp);
 
-            this.mtxLocal.translateX(5);
+            //this.mtxLocal.translateX(5);
 
             this.rigidGoomba = new ƒ.ComponentRigidbody();
             this.addComponent(this.rigidGoomba);
             this.rigidGoomba.effectRotation = new ƒ.Vector3(0, 0, 0);
-            this.rigidGoomba.effectGravity = 10;
+            this.rigidGoomba.effectGravity = 20;
             this.rigidGoomba.friction = 0; 
 
             this.goombaStatemachine = new Enemy();
@@ -42,6 +42,14 @@ namespace Script {
             this.rigidGoomba.addEventListener(ƒ.EVENT_PHYSICS.COLLISION_ENTER, (_event: ƒ.EventPhysics) => {
                 if (_event.cmpRigidbody.node.name == "Mario") {
                     this.goombaStatemachine.transit(JOB.FIGHT);
+                    console.log("enter");
+                }
+            });
+
+            this.rigidGoomba.addEventListener(ƒ.EVENT_PHYSICS.COLLISION_EXIT, (_event: ƒ.EventPhysics) => {
+                if (_event.cmpRigidbody.node.name == "Mario") {
+                    this.goombaStatemachine.transit(JOB.WALK);
+                    console.log("exit");
                 }
             });
         }

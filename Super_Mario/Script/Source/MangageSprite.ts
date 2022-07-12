@@ -13,7 +13,7 @@ namespace Script {
         let sprite: ƒAid.NodeSprite = new ƒAid.NodeSprite("Sprite");
         sprite.setAnimation(animation);
         sprite.setFrameDirection(1);
-        sprite.framerate = 5;
+        sprite.framerate = 6;
 
         let cmpTransfrom: ƒ.ComponentTransform = new ƒ.ComponentTransform();
         sprite.addComponent(cmpTransfrom);

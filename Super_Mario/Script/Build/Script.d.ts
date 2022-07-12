@@ -58,12 +58,14 @@ declare namespace Script {
 declare namespace Script {
     import ƒ = FudgeCore;
     class Item extends ƒ.Node {
-        lifespan: number;
         type: string;
         rigidItem: ƒ.ComponentRigidbody;
         xPos: number;
+        looted: boolean;
         constructor(_name: string, _type: string);
         spawn(): Promise<void>;
+        manageHit(): void;
+        getItem(): void;
         changeLook(): void;
     }
 }

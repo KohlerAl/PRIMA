@@ -21,8 +21,6 @@ namespace Script {
         public createPosition(): void {
             let randomPos: number = createRandomNumber(5, tileNumbers.length); 
             this.node.mtxLocal.translateX(tileNumbers[randomPos]); 
-            console.log(tileNumbers[randomPos]); 
-            console.log( this.node.mtxLocal.translation.x)
             tileNumbers.splice(randomPos, 1); 
         }
     }

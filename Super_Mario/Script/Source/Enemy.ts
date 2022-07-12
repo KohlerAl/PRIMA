@@ -45,7 +45,7 @@ namespace Script {
                 direction = "left";
 
             else
-                direction = "rightaaa";
+                direction = "right";
 
 
             let vector: ƒ.Vector3 = new ƒ.Vector3(0, 0, 0);
@@ -59,10 +59,10 @@ namespace Script {
                 goomba.mtxLocal.translation.x -= 1 / 60;
             }
 
-            vector.transform(_machine.node.mtxLocal, false);
-            let rigidGoomba: ƒ.ComponentRigidbody = _machine.node.getComponent(ƒ.ComponentRigidbody);
-            rigidGoomba.setVelocity(vector);
-            _machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
+            //vector.transform(_machine.node.mtxLocal, false);
+            //let rigidGoomba: ƒ.ComponentRigidbody = _machine.node.getComponent(ƒ.ComponentRigidbody);
+            //rigidGoomba.setVelocity(vector);
+            //_machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
             //this.actWalk(_machine);
         }
 
@@ -77,13 +77,11 @@ namespace Script {
             if (direction == "left") {
                 nextTile = Math.ceil(goomba.mtxLocal.translation.x - 2);
                 vector = new ƒ.Vector3(-(1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
-                console.log(vector.x); 
             }
 
             else {
                 nextTile = Math.floor(goomba.mtxLocal.translation.x + 2);
                 vector = new ƒ.Vector3((1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
-                console.log(vector.x); 
             }
 
             let groundParts: ƒ.Node[] = graph.getChildrenByName("Environment")[0].getChildrenByName("Ground")[0].getChildren();
@@ -106,8 +104,9 @@ namespace Script {
 
                 goomba.flipSprite();
             }
+
             vector.transform(_machine.node.mtxLocal, false);
-            let rigidGoomba: ƒ.ComponentRigidbody = _machine.node.getComponent(ƒ.ComponentRigidbody);
+            let rigidGoomba: ƒ.ComponentRigidbody = goomba.getComponent(ƒ.ComponentRigidbody);
             rigidGoomba.setVelocity(vector);
             //_machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
 
@@ -154,12 +153,12 @@ namespace Script {
             let goomba: Goomba = <Goomba>_machine.node;
             goomba.removeComponent(goomba.goombaStatemachine);
             goomba.removeComponent(goomba.rigidGoomba);
-            //graph.getChildrenByName("Opponents")[0].removeChild(goomba);
             goombaParent.removeChild(goomba);
-            /* let index: number = goombas.indexOf(goomba);
-            goombas.splice(index, 1); */
-            gameState.points += numberPointsGoomba;
 
+            let index: number = goombas.indexOf(goomba);
+            goombas.splice(index, 1);
+
+            gameState.points += numberPointsGoomba;
         }
 
         private static transitDefault(_machine: Enemy): void {

@@ -26,7 +26,7 @@ namespace Script {
 
     export function moveCam(_vector: ƒ.Vector3): void {
         _vector.transform(camNode.mtxLocal, false);
-        _vector.scale(1 / 45);
+        _vector.scale(1 / 55);
         camNode.mtxLocal.translate(_vector);
     }
 }
