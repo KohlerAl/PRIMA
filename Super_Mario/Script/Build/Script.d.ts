@@ -3,6 +3,19 @@ declare namespace Script {
     function moveCam(_vector: ƒ.Vector3): void;
 }
 declare namespace Script {
+    class Coin extends ƒ.Node {
+        positionX: number;
+        positionY: number;
+        lifespan: number;
+        parentItem: Item;
+        coinSound: ƒ.ComponentAudio;
+        constructor(_x: number, _y: number);
+        spawn(): Promise<void>;
+        animateCoin(): void;
+        countdown(): void;
+    }
+}
+declare namespace Script {
     import ƒ = FudgeCore;
     class CustomComponentScript extends ƒ.ComponentScript {
         static readonly iSubclass: number;
@@ -61,12 +74,14 @@ declare namespace Script {
         type: string;
         rigidItem: ƒ.ComponentRigidbody;
         xPos: number;
+        material: ƒ.Material;
+        coin: Coin;
         looted: boolean;
         constructor(_name: string, _type: string);
         spawn(): Promise<void>;
         manageHit(): void;
-        getItem(): void;
-        changeLook(): void;
+        getCoin(): void;
+        changeLook(): Promise<void>;
     }
 }
 declare namespace Script {
@@ -101,6 +116,7 @@ declare namespace Script {
         sprite: ƒAid.NodeSprite;
         direction: string;
         jumpcooldown: number;
+        jumpSound: ƒ.ComponentAudio;
         constructor();
         update(): void;
         collectPowerUp(): void;

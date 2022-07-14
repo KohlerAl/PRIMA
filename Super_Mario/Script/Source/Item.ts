@@ -6,6 +6,8 @@ namespace Script {
         type: string;
         rigidItem: ƒ.ComponentRigidbody;
         xPos: number;
+        material: ƒ.Material;
+        coin: Coin;
 
         looted: boolean = false;
 
@@ -23,10 +25,10 @@ namespace Script {
             else
                 await texture.load("Sprites/box.png");
 
-            let material: ƒ.Material = new ƒ.Material("MaterialItem", ƒ.ShaderGouraudTextured, new ƒ.CoatRemissiveTextured(new ƒ.Color(), texture));
+            this.material = new ƒ.Material("MaterialItem", ƒ.ShaderGouraudTextured, new ƒ.CoatRemissiveTextured(new ƒ.Color(), texture));
             this.addComponent(new ƒ.ComponentTransform());
             this.addComponent(new ƒ.ComponentMesh(mesh));
-            this.addComponent(new ƒ.ComponentMaterial(material));
+            this.addComponent(new ƒ.ComponentMaterial(this.material));
             this.rigidItem = new ƒ.ComponentRigidbody(0, ƒ.BODY_TYPE.STATIC);
             //rigidItem.typeBody = ƒ.BODY_TYPE.STATIC; 
             this.addComponent(this.rigidItem);
@@ -35,26 +37,43 @@ namespace Script {
             let posComp: ƒ.Component = new SetPosition();
             this.addComponent(posComp);
 
-            this.manageHit(); 
+            this.manageHit();
         }
 
         manageHit(): void {
             this.rigidItem.addEventListener(ƒ.EVENT_PHYSICS.COLLISION_ENTER, (_event: ƒ.EventPhysics) => {
                 if (_event.cmpRigidbody.node.name == "Mario") {
-                    console.log("enter");
-                    this.getItem(); 
+                    this.getCoin();
                 }
             });
         }
 
-        getItem(): void {
-            console.log("hello"); 
-            // change Look 
+        getCoin(): void {
+            if (this.looted == false) {
+                this.looted = true;
+                this.changeLook();
+                let coin: Coin = new Coin(this.mtxLocal.translation.x, 5);
+
+                let environment: ƒ.Node = graph.getChildrenByName("Environment")[0];
+                let coinsParent: ƒ.Node = environment.getChildrenByName("Coins")[0];
+                coinsParent.appendChild(coin);
+
+                window.setTimeout(
+                    function (): void {
+                        coinsParent.removeChild(coin);
+                    },
+                    coin.lifespan
+                );
+            }
         }
 
 
-        changeLook(): void {
-            //hello 
+        async changeLook(): Promise<void> {
+            let texture: ƒ.TextureImage = new ƒ.TextureImage();
+            await texture.load("Sprites/emptyBox.png");
+            //this.material = new ƒ.Material("MaterialItem", ƒ.ShaderGouraudTextured, new ƒ.CoatRemissiveTextured(new ƒ.Color(), texture)); 
+            this.material.coat = new ƒ.CoatRemissiveTextured(new ƒ.Color(), texture);
+            //this.addComponent(new ƒ.ComponentMaterial(this.material)); 
         }
     }
 }

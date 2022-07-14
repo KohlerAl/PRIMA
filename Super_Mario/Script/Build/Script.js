@@ -30,6 +30,64 @@ var Script;
 })(Script || (Script = {}));
 var Script;
 (function (Script) {
+    class Coin extends ƒ.Node {
+        positionX;
+        positionY;
+        lifespan = 1000;
+        parentItem;
+        coinSound;
+        constructor(_x, _y) {
+            super("Coin");
+            this.positionX = _x;
+            this.positionY = _y;
+            this.coinSound = Script.graph.getChildrenByName("Sounds")[0].getChildrenByName("Coin")[0].getComponents(ƒ.ComponentAudio)[0];
+            this.spawn();
+            this.animateCoin();
+        }
+        async spawn() {
+            let mesh = new ƒ.MeshCube();
+            let texture = new ƒ.TextureImage();
+            await texture.load("Sprites/coin.png");
+            let material = new ƒ.Material("MaterialItem", ƒ.ShaderGouraudTextured, new ƒ.CoatRemissiveTextured(new ƒ.Color(), texture));
+            this.addComponent(new ƒ.ComponentTransform());
+            this.addComponent(new ƒ.ComponentMesh(mesh));
+            this.addComponent(new ƒ.ComponentMaterial(material));
+            this.mtxLocal.translateX(this.positionX);
+            this.mtxLocal.translateY(this.positionY);
+            this.coinSound.play(true);
+        }
+        animateCoin() {
+            let animseq = new ƒ.AnimationSequence();
+            animseq.addKey(new ƒ.AnimationKey(0, 5));
+            animseq.addKey(new ƒ.AnimationKey(750, 6.5));
+            animseq.addKey(new ƒ.AnimationKey(1000, 5));
+            let animStructure = {
+                components: {
+                    ComponentTransform: [
+                        {
+                            "ƒ.ComponentTransform": {
+                                mtxLocal: {
+                                    translation: {
+                                        y: animseq
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            };
+            let animation = new ƒ.Animation("testAnimation", animStructure);
+            let cmpAnimator = new ƒ.ComponentAnimator(animation);
+            this.addComponent(cmpAnimator);
+        }
+        countdown() {
+            this.lifespan -= 1;
+        }
+    }
+    Script.Coin = Coin;
+})(Script || (Script = {}));
+var Script;
+(function (Script) {
     var ƒ = FudgeCore;
     ƒ.Project.registerScriptNamespace(Script); // Register the namespace to FUDGE for serialization
     class CustomComponentScript extends ƒ.ComponentScript {
@@ -115,10 +173,10 @@ var Script;
                 vector = new ƒ.Vector3(-(1.5 * ƒ.Loop.timeFrameGame) / 15, 0, 0);
                 goomba.mtxLocal.translation.x -= 1 / 60;
             }
-            //vector.transform(_machine.node.mtxLocal, false);
-            //let rigidGoomba: ƒ.ComponentRigidbody = _machine.node.getComponent(ƒ.ComponentRigidbody);
-            //rigidGoomba.setVelocity(vector);
-            //_machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
+            vector.transform(_machine.node.mtxLocal, false);
+            let rigidGoomba = _machine.node.getComponent(ƒ.ComponentRigidbody);
+            rigidGoomba.setVelocity(vector);
+            _machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
             //this.actWalk(_machine);
         }
         static actWalk(_machine) {
@@ -276,13 +334,20 @@ var Script;
             this.rigidGoomba.addEventListener("ColliderEnteredCollision" /* COLLISION_ENTER */, (_event) => {
                 if (_event.cmpRigidbody.node.name == "Mario") {
                     this.goombaStatemachine.transit(Script.JOB.FIGHT);
-                    console.log("enter");
+                }
+                if (_event.cmpRigidbody.node.name == "Goomba") {
+                    let otherGoomba = _event.cmpRigidbody.node;
+                    if (otherGoomba.direction == "left") {
+                        this.direction = "right";
+                    }
+                    else {
+                        this.direction = "left";
+                    }
                 }
             });
             this.rigidGoomba.addEventListener("ColliderLeftCollision" /* COLLISION_EXIT */, (_event) => {
                 if (_event.cmpRigidbody.node.name == "Mario") {
                     this.goombaStatemachine.transit(Script.JOB.WALK);
-                    console.log("exit");
                 }
             });
         }
@@ -314,6 +379,8 @@ var Script;
         type;
         rigidItem;
         xPos;
+        material;
+        coin;
         looted = false;
         constructor(_name, _type) {
             super(_name);
@@ -327,10 +394,10 @@ var Script;
                 await texture.load("Sprites/powerUpBox.png");
             else
                 await texture.load("Sprites/box.png");
-            let material = new ƒ.Material("MaterialItem", ƒ.ShaderGouraudTextured, new ƒ.CoatRemissiveTextured(new ƒ.Color(), texture));
+            this.material = new ƒ.Material("MaterialItem", ƒ.ShaderGouraudTextured, new ƒ.CoatRemissiveTextured(new ƒ.Color(), texture));
             this.addComponent(new ƒ.ComponentTransform());
             this.addComponent(new ƒ.ComponentMesh(mesh));
-            this.addComponent(new ƒ.ComponentMaterial(material));
+            this.addComponent(new ƒ.ComponentMaterial(this.material));
             this.rigidItem = new ƒ.ComponentRigidbody(0, ƒ.BODY_TYPE.STATIC);
             //rigidItem.typeBody = ƒ.BODY_TYPE.STATIC; 
             this.addComponent(this.rigidItem);
@@ -342,17 +409,29 @@ var Script;
         manageHit() {
             this.rigidItem.addEventListener("ColliderEnteredCollision" /* COLLISION_ENTER */, (_event) => {
                 if (_event.cmpRigidbody.node.name == "Mario") {
-                    console.log("enter");
-                    this.getItem();
+                    this.getCoin();
                 }
             });
         }
-        getItem() {
-            console.log("hello");
-            // change Look 
+        getCoin() {
+            if (this.looted == false) {
+                this.looted = true;
+                this.changeLook();
+                let coin = new Script.Coin(this.mtxLocal.translation.x, 5);
+                let environment = Script.graph.getChildrenByName("Environment")[0];
+                let coinsParent = environment.getChildrenByName("Coins")[0];
+                coinsParent.appendChild(coin);
+                window.setTimeout(function () {
+                    coinsParent.removeChild(coin);
+                }, coin.lifespan);
+            }
         }
-        changeLook() {
-            //hello 
+        async changeLook() {
+            let texture = new ƒ.TextureImage();
+            await texture.load("Sprites/emptyBox.png");
+            //this.material = new ƒ.Material("MaterialItem", ƒ.ShaderGouraudTextured, new ƒ.CoatRemissiveTextured(new ƒ.Color(), texture)); 
+            this.material.coat = new ƒ.CoatRemissiveTextured(new ƒ.Color(), texture);
+            //this.addComponent(new ƒ.ComponentMaterial(this.material)); 
         }
     }
     Script.Item = Item;
@@ -363,6 +442,7 @@ var Script;
     document.addEventListener("interactiveViewportStarted", start);
     Script.goombas = [];
     Script.numberPointsGoomba = 1000;
+    let deathSound;
     let time;
     let config;
     let countdownTime;
@@ -391,6 +471,7 @@ var Script;
         //start timer
         time = new ƒ.Time();
         Script.timer = new ƒ.Timer(time, 1000, 0, updateTimer);
+        ƒ.AudioManager.default.listenTo(Script.graph);
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
@@ -400,7 +481,7 @@ var Script;
             goomba.update();
         ƒ.Physics.simulate();
         Script.viewport.draw();
-        //ƒ.AudioManager.default.update();
+        ƒ.AudioManager.default.update();
     }
     Script.update = update;
     async function getExternalData() {
@@ -506,6 +587,7 @@ var Script;
         sprite;
         direction;
         jumpcooldown = 1500;
+        jumpSound;
         constructor() {
             super("Mario");
             let mesh = new ƒ.MeshCube();
@@ -525,6 +607,7 @@ var Script;
             this.mtxLocal.scale(new ƒ.Vector3(1, 2, 1));
             this.direction = "right";
             this.spriteSetup();
+            this.jumpSound = Script.graph.getChildrenByName("Sounds")[0].getChildrenByName("Jump")[0].getComponents(ƒ.ComponentAudio)[0];
         }
         update() {
             this.walk();
@@ -539,7 +622,7 @@ var Script;
         }
         walk() {
             let strafe = ƒ.Keyboard.mapToTrit([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT], [ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]);
-            let vector = new ƒ.Vector3(-(1.5 * strafe * ƒ.Loop.timeFrameGame) / 10, 0, 0);
+            let vector = new ƒ.Vector3(-(2.5 * strafe * ƒ.Loop.timeFrameGame) / 10, 0, 0);
             vector.transform(this.mtxLocal, false);
             this.rigidMario.setVelocity(vector);
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT])) {
@@ -558,6 +641,7 @@ var Script;
         jump() {
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.SPACE]) && canjump == true) {
                 canjump = false;
+                this.jumpSound.play(true);
                 if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT]))
                     this.rigidMario.applyLinearImpulse(new ƒ.Vector3(-50, 150, 0));
                 else if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]))

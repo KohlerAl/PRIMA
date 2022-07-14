@@ -7,7 +7,7 @@ namespace Script {
         direction: string;
         groundPart: number = 0;
 
-        material: ƒ.ComponentMaterial; 
+        material: ƒ.ComponentMaterial;
 
         constructor() {
             super("Goomba");
@@ -22,7 +22,7 @@ namespace Script {
             this.addComponent(this.material);
             this.mtxLocal.reset();
 
-            let posComp: ƒ.Component = new SetPosition(); 
+            let posComp: ƒ.Component = new SetPosition();
             this.addComponent(posComp);
 
             //this.mtxLocal.translateX(5);
@@ -31,7 +31,7 @@ namespace Script {
             this.addComponent(this.rigidGoomba);
             this.rigidGoomba.effectRotation = new ƒ.Vector3(0, 0, 0);
             this.rigidGoomba.effectGravity = 20;
-            this.rigidGoomba.friction = 0; 
+            this.rigidGoomba.friction = 0;
 
             this.goombaStatemachine = new Enemy();
             this.addComponent(this.goombaStatemachine);
@@ -42,21 +42,28 @@ namespace Script {
             this.rigidGoomba.addEventListener(ƒ.EVENT_PHYSICS.COLLISION_ENTER, (_event: ƒ.EventPhysics) => {
                 if (_event.cmpRigidbody.node.name == "Mario") {
                     this.goombaStatemachine.transit(JOB.FIGHT);
-                    console.log("enter");
+                }
+                if (_event.cmpRigidbody.node.name == "Goomba") {
+                    let otherGoomba: Goomba = <Goomba>_event.cmpRigidbody.node;
+                    if (otherGoomba.direction == "left") {
+                        this.direction = "right";
+                    }
+                    else {
+                        this.direction = "left";
+                    }
                 }
             });
 
             this.rigidGoomba.addEventListener(ƒ.EVENT_PHYSICS.COLLISION_EXIT, (_event: ƒ.EventPhysics) => {
                 if (_event.cmpRigidbody.node.name == "Mario") {
                     this.goombaStatemachine.transit(JOB.WALK);
-                    console.log("exit");
                 }
             });
         }
 
         public update(): void {
             if (this.mtxLocal.translation.y < -5) {
-                this.goombaStatemachine.transit(JOB.DIE); 
+                this.goombaStatemachine.transit(JOB.DIE);
             }
         }
 

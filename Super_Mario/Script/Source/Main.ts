@@ -16,6 +16,8 @@ namespace Script {
 
   export let animations: ƒAid.SpriteSheetAnimations;
 
+  let deathSound: ƒ.ComponentAudio; 
+
   interface ExternalData {
     [name: string]: number;
   }
@@ -55,6 +57,7 @@ namespace Script {
     //start timer
     time = new ƒ.Time();
     timer = new ƒ.Timer(time, 1000, 0, updateTimer);
+    ƒ.AudioManager.default.listenTo(graph);
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
     ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
   }
@@ -68,7 +71,7 @@ namespace Script {
 
     ƒ.Physics.simulate();
     viewport.draw();
-    //ƒ.AudioManager.default.update();
+    ƒ.AudioManager.default.update();
   }
 
   async function getExternalData(): Promise<void> {

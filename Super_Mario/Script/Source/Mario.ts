@@ -9,6 +9,8 @@ namespace Script {
         direction: string;
         jumpcooldown: number = 1500;
 
+        jumpSound: ƒ.ComponentAudio;
+
         constructor() {
             super("Mario");
 
@@ -17,7 +19,7 @@ namespace Script {
             let cmpMaterial: ƒ.ComponentMaterial = new ƒ.ComponentMaterial(material);
             cmpMaterial.clrPrimary = new ƒ.Color(0, 0, 0, 0);
             this.addComponent(new ƒ.ComponentTransform());
-            this.addComponent( new ƒ.ComponentMesh(mesh)); 
+            this.addComponent(new ƒ.ComponentMesh(mesh));
             this.addComponent(cmpMaterial);
 
             this.mtxLocal.translateX(1);
@@ -32,6 +34,8 @@ namespace Script {
             this.direction = "right";
 
             this.spriteSetup();
+
+            this.jumpSound = graph.getChildrenByName("Sounds")[0].getChildrenByName("Jump")[0].getComponents(ƒ.ComponentAudio)[0];
         }
 
         public update(): void {
@@ -50,7 +54,7 @@ namespace Script {
 
         private walk(): void {
             let strafe: number = ƒ.Keyboard.mapToTrit([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT], [ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]);
-            let vector: ƒ.Vector3 = new ƒ.Vector3(-(1.5 * strafe * ƒ.Loop.timeFrameGame) / 10, 0, 0);
+            let vector: ƒ.Vector3 = new ƒ.Vector3(-(2.5 * strafe * ƒ.Loop.timeFrameGame) / 10, 0, 0);
             vector.transform(this.mtxLocal, false);
             this.rigidMario.setVelocity(vector);
 
@@ -67,12 +71,13 @@ namespace Script {
                 this.sprite.mtxLocal.scale(new ƒ.Vector3(3, 1.57, 1));
             }
 
-            moveCam(vector); 
+            moveCam(vector);
         }
 
         private jump(): void {
             if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.SPACE]) && canjump == true) {
                 canjump = false;
+                this.jumpSound.play(true); 
                 if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT]))
                     this.rigidMario.applyLinearImpulse(new ƒ.Vector3(-50, 150, 0));
                 else if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]))
@@ -93,7 +98,7 @@ namespace Script {
             if (this.mtxLocal.translation.y < -1) {
                 graph.removeChild(this);
                 ƒ.Loop.removeEventListener(ƒ.EVENT.LOOP_FRAME, update);
-                timer.clear(); 
+                timer.clear();
             }
         }
 

@@ -188,6 +188,30 @@
       }
     }
   },
+  "Audio|2022-07-14T08:39:35.402Z|82077": {
+    "ƒ.Audio": {
+      "url": "Sounds\\coin.mp3",
+      "idResource": "Audio|2022-07-14T08:39:35.402Z|82077",
+      "name": "Sounds\\coin.mp3",
+      "type": "Audio"
+    }
+  },
+  "Audio|2022-07-14T08:39:38.683Z|40836": {
+    "ƒ.Audio": {
+      "url": "Sounds\\jump.mp3",
+      "idResource": "Audio|2022-07-14T08:39:38.683Z|40836",
+      "name": "Sounds\\jump.mp3",
+      "type": "Audio"
+    }
+  },
+  "Audio|2022-07-14T08:39:27.859Z|88473": {
+    "ƒ.Audio": {
+      "url": "Sounds\\adios.mp3",
+      "idResource": "Audio|2022-07-14T08:39:27.859Z|88473",
+      "name": "Sounds\\adios.mp3",
+      "type": "Audio"
+    }
+  },
   "Graph|2022-05-24T17:31:01.983Z|19489": {
     "ƒ.Graph": {
       "name": "Game",
@@ -259,7 +283,7 @@
               },
               {
                 "ƒ.Node": {
-                  "name": "PowerUps",
+                  "name": "Coins",
                   "active": true,
                   "components": {},
                   "children": []
@@ -7612,6 +7636,75 @@
               ]
             },
             "children": []
+          }
+        },
+        {
+          "ƒ.Node": {
+            "name": "Sounds",
+            "active": true,
+            "components": {},
+            "children": [
+              {
+                "ƒ.Node": {
+                  "name": "Coin",
+                  "active": true,
+                  "components": {
+                    "ComponentAudio": [
+                      {
+                        "ƒ.ComponentAudio": {
+                          "active": true,
+                          "idResource": "Audio|2022-07-14T08:39:35.402Z|82077",
+                          "playing": false,
+                          "loop": false,
+                          "volume": 0.5
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
+                }
+              },
+              {
+                "ƒ.Node": {
+                  "name": "Jump",
+                  "active": true,
+                  "components": {
+                    "ComponentAudio": [
+                      {
+                        "ƒ.ComponentAudio": {
+                          "active": true,
+                          "idResource": "Audio|2022-07-14T08:39:38.683Z|40836",
+                          "playing": false,
+                          "loop": false,
+                          "volume": 0.5
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
+                }
+              },
+              {
+                "ƒ.Node": {
+                  "name": "Death",
+                  "active": true,
+                  "components": {
+                    "ComponentAudio": [
+                      {
+                        "ƒ.ComponentAudio": {
+                          "active": true,
+                          "idResource": "Audio|2022-07-14T08:39:27.859Z|88473",
+                          "playing": false,
+                          "loop": false,
+                          "volume": 0.5
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
+                }
+              }
+            ]
           }
         }
       ],

@@ -59,10 +59,10 @@ namespace Script {
                 goomba.mtxLocal.translation.x -= 1 / 60;
             }
 
-            //vector.transform(_machine.node.mtxLocal, false);
-            //let rigidGoomba: ƒ.ComponentRigidbody = _machine.node.getComponent(ƒ.ComponentRigidbody);
-            //rigidGoomba.setVelocity(vector);
-            //_machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
+            vector.transform(_machine.node.mtxLocal, false);
+            let rigidGoomba: ƒ.ComponentRigidbody = _machine.node.getComponent(ƒ.ComponentRigidbody);
+            rigidGoomba.setVelocity(vector);
+            _machine.node.mtxLocal.translate(new ƒ.Vector3(1 / 60, 0, 0));
             //this.actWalk(_machine);
         }
 
