@@ -442,7 +442,6 @@ var Script;
     document.addEventListener("interactiveViewportStarted", start);
     Script.goombas = [];
     Script.numberPointsGoomba = 1000;
-    let deathSound;
     let time;
     let config;
     let countdownTime;
@@ -468,6 +467,8 @@ var Script;
             Script.goombaParent = Script.graph.getChildrenByName("Opponents")[0];
             Script.goombaParent.appendChild(Script.goombas[i]);
         }
+        Script.graph.addEventListener("gameEnd", endGame);
+        Script.deathSound = Script.graph.getChildrenByName("Sounds")[0].getChildrenByName("Death")[0].getComponents(ƒ.ComponentAudio)[0];
         //start timer
         time = new ƒ.Time();
         Script.timer = new ƒ.Timer(time, 1000, 0, updateTimer);
@@ -500,19 +501,6 @@ var Script;
                 Script.tileNumbers.push(ground.mtxLocal.translation.x);
             }
         }
-        /* let obstacles: ƒ.Node = graph.getChildrenByName("Environment")[0].getChildrenByName("Obstacles")[0];
-        let pieces: ƒ.Node[] = obstacles.getChildren();
-    
-        for (let obstacleParent of pieces) {
-          let singleObstacle: ƒ.Node[] = obstacleParent.getChildren();
-    
-          for (let obstacle of singleObstacle) {
-            if (tileNumbers.includes(Math.floor(obstacle.mtxLocal.translation.x))) {
-              let index: number = tileNumbers.indexOf(obstacle.mtxLocal.translation.x);
-              tileNumbers.splice(index, 1);
-            }
-          }
-        } */
     }
     function createBoxes() {
         let boxParent = Script.graph.getChildrenByName("Environment")[0].getChildrenByName("Boxes")[0];
@@ -530,6 +518,26 @@ var Script;
         if (Script.gameState.timer <= 0) {
             ƒ.Loop.removeEventListener("loopFrame" /* LOOP_FRAME */, update);
         }
+    }
+    function endGame(_event) {
+        let canvas = document.querySelector("canvas");
+        canvas.style.display = "none";
+        let vui = document.querySelector("#vui");
+        vui.style.display = "none";
+        let endScreen = document.querySelector("#endScreen");
+        endScreen.style.display = "block";
+        let detail = _event.detail;
+        if (detail == "marioDie") {
+            Script.deathSound.play(true);
+            let p = document.createElement("p");
+            p.innerHTML = "Game Over";
+            endScreen.appendChild(p);
+        }
+        ƒ.Loop.removeEventListener("loopFrame" /* LOOP_FRAME */, update);
+        window.setTimeout(function () {
+            Script.timer.clear();
+            Script.graph.removeAllChildren();
+        }, 5000);
     }
     function createRandomNumber(_min, _max) {
         return Math.floor(Math.random() * (_max - _min + 1)) + _min;
@@ -614,12 +622,6 @@ var Script;
             this.jump();
             this.checkDeath();
         }
-        collectPowerUp() {
-            //collect PowerUp
-        }
-        playSounds() {
-            //play Sound
-        }
         walk() {
             let strafe = ƒ.Keyboard.mapToTrit([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT], [ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]);
             let vector = new ƒ.Vector3(-(2.5 * strafe * ƒ.Loop.timeFrameGame) / 10, 0, 0);
@@ -655,9 +657,10 @@ var Script;
         }
         checkDeath() {
             if (this.mtxLocal.translation.y < -1) {
-                Script.graph.removeChild(this);
-                ƒ.Loop.removeEventListener("loopFrame" /* LOOP_FRAME */, Script.update);
-                Script.timer.clear();
+                Script.mario.dispatchEvent(new CustomEvent("gameEnd", {
+                    bubbles: true,
+                    detail: "marioDie"
+                }));
             }
         }
         async spriteSetup() {

@@ -44,14 +44,6 @@ namespace Script {
             this.checkDeath();
         }
 
-        public collectPowerUp(): void {
-            //collect PowerUp
-        }
-
-        public playSounds(): void {
-            //play Sound
-        }
-
         private walk(): void {
             let strafe: number = ƒ.Keyboard.mapToTrit([ƒ.KEYBOARD_CODE.A, ƒ.KEYBOARD_CODE.ARROW_LEFT], [ƒ.KEYBOARD_CODE.D, ƒ.KEYBOARD_CODE.ARROW_RIGHT]);
             let vector: ƒ.Vector3 = new ƒ.Vector3(-(2.5 * strafe * ƒ.Loop.timeFrameGame) / 10, 0, 0);
@@ -96,9 +88,10 @@ namespace Script {
 
         private checkDeath(): void {
             if (this.mtxLocal.translation.y < -1) {
-                graph.removeChild(this);
-                ƒ.Loop.removeEventListener(ƒ.EVENT.LOOP_FRAME, update);
-                timer.clear();
+                mario.dispatchEvent(new CustomEvent("gameEnd", {
+                    bubbles: true,
+                    detail: "marioDie"
+                }));
             }
         }
 

@@ -96,6 +96,7 @@ declare namespace Script {
     let gameState: GameState;
     let numberPointsGoomba: number;
     let animations: ƒAid.SpriteSheetAnimations;
+    let deathSound: ƒ.ComponentAudio;
     let timer: ƒ.Timer;
     let tileNumbers: number[];
     function update(_event: Event): void;
@@ -119,8 +120,6 @@ declare namespace Script {
         jumpSound: ƒ.ComponentAudio;
         constructor();
         update(): void;
-        collectPowerUp(): void;
-        playSounds(): void;
         private walk;
         private jump;
         private checkDeath;

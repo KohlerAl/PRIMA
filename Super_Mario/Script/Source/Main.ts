@@ -16,7 +16,7 @@ namespace Script {
 
   export let animations: ƒAid.SpriteSheetAnimations;
 
-  let deathSound: ƒ.ComponentAudio; 
+  export let deathSound: ƒ.ComponentAudio;
 
   interface ExternalData {
     [name: string]: number;
@@ -54,6 +54,9 @@ namespace Script {
       goombaParent.appendChild(goombas[i]);
     }
 
+    graph.addEventListener("gameEnd", endGame);
+
+    deathSound = graph.getChildrenByName("Sounds")[0].getChildrenByName("Death")[0].getComponents(ƒ.ComponentAudio)[0];
     //start timer
     time = new ƒ.Time();
     timer = new ƒ.Timer(time, 1000, 0, updateTimer);
@@ -95,20 +98,6 @@ namespace Script {
 
       }
     }
-
-    /* let obstacles: ƒ.Node = graph.getChildrenByName("Environment")[0].getChildrenByName("Obstacles")[0];
-    let pieces: ƒ.Node[] = obstacles.getChildren();
-
-    for (let obstacleParent of pieces) {
-      let singleObstacle: ƒ.Node[] = obstacleParent.getChildren();
-
-      for (let obstacle of singleObstacle) {
-        if (tileNumbers.includes(Math.floor(obstacle.mtxLocal.translation.x))) {
-          let index: number = tileNumbers.indexOf(obstacle.mtxLocal.translation.x);
-          tileNumbers.splice(index, 1);
-        }
-      }
-    } */
   }
 
   function createBoxes(): void {
@@ -123,7 +112,6 @@ namespace Script {
         item = new Item("itemBox", "box");
 
       boxParent.appendChild(item);
-
     }
   }
 
@@ -133,6 +121,33 @@ namespace Script {
     if (gameState.timer <= 0) {
       ƒ.Loop.removeEventListener(ƒ.EVENT.LOOP_FRAME, update);
     }
+  }
+
+  function endGame(_event: CustomEvent): void {
+
+    let canvas: HTMLCanvasElement = <HTMLCanvasElement>document.querySelector("canvas");
+    canvas.style.display = "none";
+    let vui: HTMLDivElement = <HTMLDivElement>document.querySelector("#vui");
+    vui.style.display = "none";
+
+    let endScreen: HTMLDivElement = <HTMLDivElement>document.querySelector("#endScreen");
+    endScreen.style.display = "block";
+
+    let detail: string = _event.detail;
+    if (detail == "marioDie") {
+
+      deathSound.play(true);
+      let p: HTMLParagraphElement = document.createElement("p");
+      p.innerHTML = "Game Over";
+      endScreen.appendChild(p);
+    }
+
+    
+    ƒ.Loop.removeEventListener(ƒ.EVENT.LOOP_FRAME, update);
+    window.setTimeout(function (): void {
+      timer.clear();
+      graph.removeAllChildren();
+    }, 5000);
   }
 
   export function createRandomNumber(_min: number, _max: number): number {
