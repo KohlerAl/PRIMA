@@ -533,7 +533,6 @@ var Script;
         }
     }
     function endGame(_event) {
-        let points = Script.gameState.points;
         let canvas = document.querySelector("canvas");
         canvas.style.display = "none";
         let vui = document.querySelector("#vui");
@@ -544,12 +543,12 @@ var Script;
         let detail = _event.detail;
         if (detail == "marioDie") {
             Script.deathSound.play(true);
-            p.innerHTML = "Game Over <br> You achieved " + points + " points and managed to defeat " + (numberOpponents - Script.goombas.length) + " goombas";
+            p.innerHTML = "Game Over <br> You achieved " + Script.gameState.points + " points and managed to defeat " + (numberOpponents - Script.goombas.length) + " goombas";
             endScreen.appendChild(p);
         }
         else if (detail == "marioWin") {
             Script.winSound.play(true);
-            p.innerHTML = "Congratulations! You win! <br> You achieved " + points + " points in " + (countdownTime - Script.gameState.timer) + " seconds";
+            p.innerHTML = "Congratulations! You win! <br> You achieved " + Script.gameState.points + " points in " + (countdownTime - Script.gameState.timer) + " seconds";
             endScreen.appendChild(p);
         }
         ƒ.Loop.removeEventListener("loopFrame" /* LOOP_FRAME */, update);

@@ -126,7 +126,6 @@ namespace Script {
   }
 
   function endGame(_event: CustomEvent): void {
-    let points: number = gameState.points;
     let canvas: HTMLCanvasElement = <HTMLCanvasElement>document.querySelector("canvas");
     canvas.style.display = "none";
     let vui: HTMLDivElement = <HTMLDivElement>document.querySelector("#vui");
@@ -139,13 +138,13 @@ namespace Script {
     let detail: string = _event.detail;
     if (detail == "marioDie") {
       deathSound.play(true);
-      p.innerHTML = "Game Over <br> You achieved " + points + " points and managed to defeat " + (numberOpponents - goombas.length) + " goombas" ;
+      p.innerHTML = "Game Over <br> You achieved " + gameState.points + " points and managed to defeat " + (numberOpponents - goombas.length) + " goombas" ;
       endScreen.appendChild(p);
     }
 
     else if (detail == "marioWin") {
       winSound.play(true);
-      p.innerHTML = "Congratulations! You win! <br> You achieved " + points + " points in " + (countdownTime - gameState.timer) + " seconds" ;
+      p.innerHTML = "Congratulations! You win! <br> You achieved " + gameState.points + " points in " + (countdownTime - gameState.timer) + " seconds" ;
       endScreen.appendChild(p);
     }
 
