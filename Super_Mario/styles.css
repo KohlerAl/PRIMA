@@ -1,6 +1,6 @@
 @font-face {
   font-family: mario;
-  src: url(Font/SuperMario256.ttf); 
+  src: url(Font/SuperMario256.ttf);
 }
 
 html,
@@ -18,7 +18,7 @@ body {
 
 dialog {
   text-align: center;
-  
+
 }
 
 canvas.fullscreen {
@@ -35,11 +35,11 @@ canvas.fullscreen {
 }
 
 input {
-  border: none; 
+  border: none;
   font-family: mario;
-  font-size: 25px; 
-  width: 120px; 
-  color: #fdcd10; 
+  font-size: 25px;
+  width: 120px;
+  color: #fdcd10;
   background: transparent;
 }
 
@@ -48,4 +48,10 @@ input {
   position: absolute;
   width: 100%;
   height: 100%;
+}
+
+#endScreen p {
+  height: 100%;
+  width: 100%;
+  text-align: center;
 }

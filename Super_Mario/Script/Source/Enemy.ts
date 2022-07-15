@@ -151,12 +151,20 @@ namespace Script {
 
         private static actDie(_machine: Enemy): void {
             let goomba: Goomba = <Goomba>_machine.node;
+            let index: number = goombas.indexOf(goomba);
+            goombas.splice(index, 1);
+            if (goombas.length == 0) {
+                goomba.dispatchEvent(new CustomEvent("gameEnd", {
+                    bubbles: true,
+                    detail: "marioWin"
+                }));
+            }
             goomba.removeComponent(goomba.goombaStatemachine);
             goomba.removeComponent(goomba.rigidGoomba);
             goombaParent.removeChild(goomba);
 
-            let index: number = goombas.indexOf(goomba);
-            goombas.splice(index, 1);
+
+            
 
             gameState.points += numberPointsGoomba;
         }

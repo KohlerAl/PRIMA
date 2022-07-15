@@ -5,6 +5,7 @@ namespace Script {
         lifespan: number = 1000;
         parentItem: Item; 
         coinSound: ƒ.ComponentAudio;
+        coinPoints: number = 500; 
 
         constructor(_x: number, _y: number) {
             super("Coin");
@@ -12,6 +13,7 @@ namespace Script {
             this.positionY = _y;
             this.coinSound = graph.getChildrenByName("Sounds")[0].getChildrenByName("Coin")[0].getComponents(ƒ.ComponentAudio)[0];
             this.spawn();
+            gameState.points += this.coinPoints; 
             this.animateCoin();
         }
 

@@ -7656,7 +7656,7 @@
                           "idResource": "Audio|2022-07-14T08:39:35.402Z|82077",
                           "playing": false,
                           "loop": false,
-                          "volume": 0.5
+                          "volume": 0.30000001192092896
                         }
                       }
                     ]
@@ -7676,7 +7676,7 @@
                           "idResource": "Audio|2022-07-14T08:39:38.683Z|40836",
                           "playing": false,
                           "loop": false,
-                          "volume": 0.5
+                          "volume": 0.20000001788139343
                         }
                       }
                     ]
@@ -7697,6 +7697,26 @@
                           "playing": false,
                           "loop": false,
                           "volume": 0.5
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
+                }
+              },
+              {
+                "ƒ.Node": {
+                  "name": "Win",
+                  "active": true,
+                  "components": {
+                    "ComponentAudio": [
+                      {
+                        "ƒ.ComponentAudio": {
+                          "active": true,
+                          "idResource": "Audio|2022-07-14T12:40:06.993Z|05851",
+                          "playing": false,
+                          "loop": false,
+                          "volume": 1
                         }
                       }
                     ]
@@ -7817,6 +7837,14 @@
       "children": [],
       "idResource": "Graph|2022-05-30T13:43:12.642Z|89076",
       "type": "Graph"
+    }
+  },
+  "Audio|2022-07-14T12:40:06.993Z|05851": {
+    "ƒ.Audio": {
+      "url": "Sounds\\win.mp3",
+      "idResource": "Audio|2022-07-14T12:40:06.993Z|05851",
+      "name": "Sounds\\win.mp3",
+      "type": "Audio"
     }
   }
 }

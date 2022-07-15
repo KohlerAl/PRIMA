@@ -36,12 +36,14 @@ var Script;
         lifespan = 1000;
         parentItem;
         coinSound;
+        coinPoints = 500;
         constructor(_x, _y) {
             super("Coin");
             this.positionX = _x;
             this.positionY = _y;
             this.coinSound = Script.graph.getChildrenByName("Sounds")[0].getChildrenByName("Coin")[0].getComponents(ƒ.ComponentAudio)[0];
             this.spawn();
+            Script.gameState.points += this.coinPoints;
             this.animateCoin();
         }
         async spawn() {
@@ -253,11 +255,17 @@ var Script;
         }
         static actDie(_machine) {
             let goomba = _machine.node;
+            let index = Script.goombas.indexOf(goomba);
+            Script.goombas.splice(index, 1);
+            if (Script.goombas.length == 0) {
+                goomba.dispatchEvent(new CustomEvent("gameEnd", {
+                    bubbles: true,
+                    detail: "marioWin"
+                }));
+            }
             goomba.removeComponent(goomba.goombaStatemachine);
             goomba.removeComponent(goomba.rigidGoomba);
             Script.goombaParent.removeChild(goomba);
-            let index = Script.goombas.indexOf(goomba);
-            Script.goombas.splice(index, 1);
             Script.gameState.points += Script.numberPointsGoomba;
         }
         static transitDefault(_machine) {
@@ -469,6 +477,7 @@ var Script;
         }
         Script.graph.addEventListener("gameEnd", endGame);
         Script.deathSound = Script.graph.getChildrenByName("Sounds")[0].getChildrenByName("Death")[0].getComponents(ƒ.ComponentAudio)[0];
+        Script.winSound = Script.graph.getChildrenByName("Sounds")[0].getChildrenByName("Win")[0].getComponents(ƒ.ComponentAudio)[0];
         //start timer
         time = new ƒ.Time();
         Script.timer = new ƒ.Timer(time, 1000, 0, updateTimer);
@@ -516,21 +525,31 @@ var Script;
     function updateTimer() {
         Script.gameState.timer -= 1;
         if (Script.gameState.timer <= 0) {
-            ƒ.Loop.removeEventListener("loopFrame" /* LOOP_FRAME */, update);
+            Script.timer.clear();
+            Script.mario.dispatchEvent(new CustomEvent("gameEnd", {
+                bubbles: true,
+                detail: "marioDie"
+            }));
         }
     }
     function endGame(_event) {
+        let points = Script.gameState.points;
         let canvas = document.querySelector("canvas");
         canvas.style.display = "none";
         let vui = document.querySelector("#vui");
         vui.style.display = "none";
         let endScreen = document.querySelector("#endScreen");
         endScreen.style.display = "block";
+        let p = document.createElement("p");
         let detail = _event.detail;
         if (detail == "marioDie") {
             Script.deathSound.play(true);
-            let p = document.createElement("p");
-            p.innerHTML = "Game Over";
+            p.innerHTML = "Game Over <br> You achieved " + points + " points and managed to defeat " + (numberOpponents - Script.goombas.length) + " goombas";
+            endScreen.appendChild(p);
+        }
+        else if (detail == "marioWin") {
+            Script.winSound.play(true);
+            p.innerHTML = "Congratulations! You win! <br> You achieved " + points + " points in " + (countdownTime - Script.gameState.timer) + " seconds";
             endScreen.appendChild(p);
         }
         ƒ.Loop.removeEventListener("loopFrame" /* LOOP_FRAME */, update);

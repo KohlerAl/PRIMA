@@ -9,6 +9,7 @@ declare namespace Script {
         lifespan: number;
         parentItem: Item;
         coinSound: ƒ.ComponentAudio;
+        coinPoints: number;
         constructor(_x: number, _y: number);
         spawn(): Promise<void>;
         animateCoin(): void;
@@ -86,7 +87,6 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
-    import ƒAid = FudgeAid;
     let viewport: ƒ.Viewport;
     let graph: ƒ.Node;
     let mario: Mario;
@@ -95,8 +95,8 @@ declare namespace Script {
     let goombaParent: ƒ.Node;
     let gameState: GameState;
     let numberPointsGoomba: number;
-    let animations: ƒAid.SpriteSheetAnimations;
     let deathSound: ƒ.ComponentAudio;
+    let winSound: ƒ.ComponentAudio;
     let timer: ƒ.Timer;
     let tileNumbers: number[];
     function update(_event: Event): void;

@@ -1,6 +1,5 @@
 namespace Script {
   import ƒ = FudgeCore;
-  import ƒAid = FudgeAid;
 
   export let viewport: ƒ.Viewport;
   document.addEventListener("interactiveViewportStarted", <EventListener><unknown>start);
@@ -14,9 +13,9 @@ namespace Script {
   export let gameState: GameState;
   export let numberPointsGoomba: number = 1000;
 
-  export let animations: ƒAid.SpriteSheetAnimations;
 
   export let deathSound: ƒ.ComponentAudio;
+  export let winSound: ƒ.ComponentAudio;
 
   interface ExternalData {
     [name: string]: number;
@@ -57,6 +56,7 @@ namespace Script {
     graph.addEventListener("gameEnd", endGame);
 
     deathSound = graph.getChildrenByName("Sounds")[0].getChildrenByName("Death")[0].getComponents(ƒ.ComponentAudio)[0];
+    winSound = graph.getChildrenByName("Sounds")[0].getChildrenByName("Win")[0].getComponents(ƒ.ComponentAudio)[0];
     //start timer
     time = new ƒ.Time();
     timer = new ƒ.Timer(time, 1000, 0, updateTimer);
@@ -70,7 +70,6 @@ namespace Script {
 
     for (let goomba of goombas)
       goomba.update();
-
 
     ƒ.Physics.simulate();
     viewport.draw();
@@ -117,14 +116,17 @@ namespace Script {
 
   function updateTimer(): void {
     gameState.timer -= 1;
-
     if (gameState.timer <= 0) {
-      ƒ.Loop.removeEventListener(ƒ.EVENT.LOOP_FRAME, update);
+      timer.clear();
+      mario.dispatchEvent(new CustomEvent("gameEnd", {
+        bubbles: true,
+        detail: "marioDie"
+      }));
     }
   }
 
   function endGame(_event: CustomEvent): void {
-
+    let points: number = gameState.points;
     let canvas: HTMLCanvasElement = <HTMLCanvasElement>document.querySelector("canvas");
     canvas.style.display = "none";
     let vui: HTMLDivElement = <HTMLDivElement>document.querySelector("#vui");
@@ -133,21 +135,28 @@ namespace Script {
     let endScreen: HTMLDivElement = <HTMLDivElement>document.querySelector("#endScreen");
     endScreen.style.display = "block";
 
+    let p: HTMLParagraphElement = document.createElement("p");
     let detail: string = _event.detail;
     if (detail == "marioDie") {
-
       deathSound.play(true);
-      let p: HTMLParagraphElement = document.createElement("p");
-      p.innerHTML = "Game Over";
+      p.innerHTML = "Game Over <br> You achieved " + points + " points and managed to defeat " + (numberOpponents - goombas.length) + " goombas" ;
       endScreen.appendChild(p);
     }
 
-    
+    else if (detail == "marioWin") {
+      winSound.play(true);
+      p.innerHTML = "Congratulations! You win! <br> You achieved " + points + " points in " + (countdownTime - gameState.timer) + " seconds" ;
+      endScreen.appendChild(p);
+    }
+
+
     ƒ.Loop.removeEventListener(ƒ.EVENT.LOOP_FRAME, update);
-    window.setTimeout(function (): void {
-      timer.clear();
-      graph.removeAllChildren();
-    }, 5000);
+    window.setTimeout(
+      function (): void {
+        timer.clear();
+        graph.removeAllChildren();
+      },
+      5000);
   }
 
   export function createRandomNumber(_min: number, _max: number): number {
