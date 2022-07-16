@@ -11,7 +11,7 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-image: url("Sprites/background.png");
+  background-image: url("Sprites/background_big.png");
   background-repeat: no-repeat;
   background-size: cover;
 }
